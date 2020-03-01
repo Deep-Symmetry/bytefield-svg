@@ -1,0 +1,10 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src"]
+
+ :dependencies
+ [[org.clojure/tools.reader "1.3.2"]]
+
+ :builds {:lib {:target      :node-library
+                :output-to   "lib.js"
+                :exports-var org.deepsymmetry.bytefield.core/generate}}}

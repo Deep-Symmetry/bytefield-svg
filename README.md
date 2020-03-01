@@ -10,8 +10,8 @@ running:
     node test.js >test.svg
 
 (The [`test.js`
-file](https://github.com/Deep-Symmetry/bytefield-svg/test.js) is
-present in the project).
+file](https://github.com/Deep-Symmetry/bytefield-svg/blob/master/test.js)
+is present in the project).
 
 The plan is to make this available through `npm` once it is stable,
 and to collaborate on getting it built into an Asciidoctor extension.

@@ -9,7 +9,7 @@ running:
 
     node test.js >test.svg
 
-(The [`test.js` file](http:test.js) is present in the project).
+(The [`test.js` file](https:/test.js) is present in the project).
 
 The plan is to make this available through `npm` once it is stable,
 and to collaborate on getting it built into an Asciidoctor extension.

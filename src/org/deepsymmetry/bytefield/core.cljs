@@ -321,6 +321,11 @@
           (doseq [expr (rest args)]  ; Evaluate any body expressions in the new scope.
             (limited-eval expr scope line column)))))))
 
+(defn- quote-form
+  "Implements the `quote` special form."
+  [args _ _ _]
+  args)  ; Simply returns its arguments unevaluated.
+
 (def special-forms
   "All the symbols which get special handing in our domain-specific
   language. Keys are what they get represented by in the parsed form,
@@ -329,9 +334,11 @@
   {::and   and-form
    ::def   def-form
    ::do    do-form
-   ::doseq doseq-form})
+   ::doseq doseq-form
    ::let   let-form
    ::or    or-form
+   ::quote quote-form})
+
 
 (def core-bindings
   "The Clojure core library functions we want to make available for building diagrams."
@@ -631,6 +638,7 @@
     'doseq ::doseq
     'let   ::let
     'or    ::or
+    'quote ::quote
 
     ;; Values used to track the current state of the diagram being created:
     'box-index 0 ; Row offset of the next box to be drawn.
@@ -728,12 +736,6 @@
              column (rt/get-column-number reader)
              expr   (read-expr)]
         (when (not= eof expr)
-          (if (= expr (symbol "'")) ; A quote at the top level just means we discard the next expression.
-            (let [quoted (edn/read opts reader)]
-              (when (= eof quoted)
-                (throw (js/Error. (str "EOF reading quoted expression starting at line " line ", column " column)
-                                  nil line))))
-            (limited-eval expr {} line column)) ; Evaluate the line normally.
+          (limited-eval expr {} line column)
           (recur (rt/get-line-number reader) (rt/get-column-number reader) (read-expr))))
-
       (emit-svg))))

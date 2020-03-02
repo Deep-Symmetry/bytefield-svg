@@ -1,0 +1,33 @@
+{
+  "name": "bytefield-svg",
+  "version": "0.1.0",
+  "description": "Generate byte field diagrams in SVG format from a Clojure/EDN DSL",
+  "main": "lib.js",
+  "dependencies": {
+    "source-map-support": "^0.5.16"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test.js >test.svg"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Deep-Symmetry/bytefield-svg.git"
+  },
+  "keywords": [
+    "diagram",
+    "svg",
+    "clojure",
+    "edn"
+  ],
+  "author": {
+    "name": "James Elliott",
+    "email": "james@deepsymmetry.org"
+  },
+  "license": "EPL-2.0",
+
+  "bugs": {
+    "url": "https://github.com/Deep-Symmetry/bytefield-svg/issues"
+  },
+  "homepage": "https://github.com/Deep-Symmetry/bytefield-svg#readme"
+}

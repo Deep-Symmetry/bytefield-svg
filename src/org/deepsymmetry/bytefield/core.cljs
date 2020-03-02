@@ -242,6 +242,18 @@
   [error line column]
   (str error " in expression starting on line " line ", column " column))
 
+(defn- def-form
+  "Implements the `def` special form."
+  [args scope line column]
+  (when-not (= 2 (count args))
+    (throw (js/Error. (build-error-message "do must have two arguments" line column)
+                      nil line)))
+  (let [[sym raw-v] args]
+    (when-not (symbol? sym)
+      (throw (js/Error. (build-error-message (str sym " is not a symbol in def") line column)
+                        nil line)))
+    (swap! *globals* assoc sym (limited-eval raw-v scope line column))))
+
 (defn- and-form
   "Implements the `and` special form."
   [args scope line column]
@@ -260,6 +272,33 @@
       (if-let [current (limited-eval (first remainder) scope line column)]
         current
         (recur (rest remainder))))))
+
+(defn- do-form
+  "Implements the `do` special form."
+  [args scope line column]
+  (doseq [expr args]
+    (limited-eval expr scope line column)))
+
+(defn- let-form
+  "Implements the `let` special form."
+  [args scope line column]
+  (let [bindings (first args)]
+    (when-not (and (vector? bindings) (pos? (count bindings)) (zero? (mod (count bindings) 2)))
+      (throw (js/Error. (build-error-message
+                         "do must be followed by a non-empty binding vector with an even number of elements"
+                         line column)
+                        nil line)))
+    (loop [scope              scope
+           [sym raw-v & more] bindings]
+      (when-not (symbol? sym)
+        (throw (js/Error. (build-error-message (str sym " is not a symbol in do binding") line column)
+                          nil line)))
+      (let [scope {:bindings {sym (limited-eval raw-v scope line column)}  ; Bind to a new inner scope.
+                   :next     scope}]
+        (if (empty? more)
+          (doseq [expr (rest args)]  ; Evaluate any body expressions in the fully-assembled scope.
+            (limited-eval expr scope line column))
+          (recur scope more))))))  ; Continue accumulating bindings.
 
 (defn- doseq-form
   "Implements the `doseq` special form."
@@ -288,8 +327,11 @@
   values are the functions that implement their meanings when
   evaluating the form."
   {::and   and-form
-   ::or    or-form
+   ::def   def-form
+   ::do    do-form
    ::doseq doseq-form})
+   ::let   let-form
+   ::or    or-form
 
 (def core-bindings
   "The Clojure core library functions we want to make available for building diagrams."
@@ -584,8 +626,11 @@
 
     ;; Special forms we handle when evaluating diagram code.
     'and   ::and
-    'or    ::or
+    'def   ::def
+    'do    ::do
     'doseq ::doseq
+    'let   ::let
+    'or    ::or
 
     ;; Values used to track the current state of the diagram being created:
     'box-index 0 ; Row offset of the next box to be drawn.

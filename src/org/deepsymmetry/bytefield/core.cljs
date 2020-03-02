@@ -601,7 +601,11 @@
 (defn emit-svg
   "Outputs the finished SVG."
   []
-  (xml/emit (apply svg/svg ('svg-body @*globals*))))
+  (let [result @*globals*]
+    (xml/emit (apply svg/svg {:width (+ ('left-margin result) ('right-margin result)
+                                         (* ('box-width result) ('boxes-per-row result)))
+                              :height (+ ('diagram-y result) ('bottom-margin result))}
+                     ('svg-body result)))))
 
 (defn resolve-symbol
   "Locate a symbol in the scope chain or the global symbol table."

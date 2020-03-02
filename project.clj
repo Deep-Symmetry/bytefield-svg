@@ -5,7 +5,8 @@
             :url  "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/clojurescript "1.10.597"]
-                 [org.clojure/tools.reader "1.3.2"]]
+                 [org.clojure/tools.reader "1.3.2"]
+                 [org.clojars.brunchboy/analemma "1.1.0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 

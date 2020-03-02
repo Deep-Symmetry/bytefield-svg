@@ -3,14 +3,13 @@
   "version": "0.1.0",
   "description": "Generate byte field diagrams in SVG format from a Clojure/EDN DSL",
   "main": "lib.js",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "shadow-cljs": "^2.8.90",
     "source-map-support": "^0.5.16"
   },
-  "devDependencies": {
-    "shadow-cljs": "^2.8.90"
-  },
-    "scripts": {
-     "build": "shadow-cljs compile lib",
+  "scripts": {
+    "build": "shadow-cljs compile lib",
     "test": "test.js >test.svg"
   },
   "repository": {

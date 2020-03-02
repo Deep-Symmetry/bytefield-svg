@@ -6,8 +6,8 @@
             [clojure.set :as set]
             [clojure.string :as str]
             [cljs.tools.reader.reader-types :as rt]
-            [org.deepsymmetry.bytefield.svg :as svg]
-            [org.deepsymmetry.bytefield.xml :as xml])
+            [analemma.svg :as svg]
+            [analemma.xml :as xml])
   (:require-macros [org.deepsymmetry.bytefield.macros :refer [self-bind-symbols]]))
 
 ;; Default style definitions.

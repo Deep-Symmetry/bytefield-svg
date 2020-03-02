@@ -3,7 +3,8 @@
  ["src"]
 
  :dependencies
- [[org.clojure/tools.reader "1.3.2"]]
+ [[org.clojure/tools.reader "1.3.2"]
+  [org.clojars.brunchboy/analemma "1.1.0"]]
 
  :builds {:lib {:target      :node-library
                 :output-to   "lib.js"

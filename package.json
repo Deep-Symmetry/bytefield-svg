@@ -6,8 +6,11 @@
   "dependencies": {
     "source-map-support": "^0.5.16"
   },
-  "devDependencies": {},
-  "scripts": {
+  "devDependencies": {
+    "shadow-cljs": "^2.8.90"
+  },
+    "scripts": {
+     "build": "shadow-cljs compile lib",
     "test": "test.js >test.svg"
   },
   "repository": {
@@ -25,7 +28,6 @@
     "email": "james@deepsymmetry.org"
   },
   "license": "EPL-2.0",
-
   "bugs": {
     "url": "https://github.com/Deep-Symmetry/bytefield-svg/issues"
   },

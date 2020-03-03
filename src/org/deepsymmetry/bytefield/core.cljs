@@ -167,18 +167,16 @@
   Defaults are established for the font size and family, but they can
   be overridden in `options`, and other SVG attributes can be passed
   that way as well."
-  ([hex]
-   (hex-text hex nil))
-  ([hex {:keys [font-size font-family]
-         :or   {font-size   18
-                font-family hex-family}
-         :as   options}]
-   (svg/text (merge (dissoc options :label :subscript)
-                    {:font-size         font-size
-                     :font-family       font-family
-                     :dominant-baseline "middle"
-                     :text-anchor       "middle"})
-             hex)))
+  [hex & {:keys [font-size font-family]
+          :or     {font-size   18
+                   font-family hex-family}
+          :as     options}]
+  (svg/text (merge (dissoc options :label :subscript)
+                   {:font-size         font-size
+                    :font-family       font-family
+                    :dominant-baseline "middle"
+                    :text-anchor       "middle"})
+            hex))
 
 (defn draw-group-label-header
   "Creates a small borderless box used to draw the textual label headers

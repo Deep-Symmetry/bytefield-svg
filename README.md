@@ -2,7 +2,7 @@
 
 A Node module for generating byte field diagrams inspired by the LaTeX
 `bytefield` package using a Clojure-based domain specific language
-(now built on top of https://github.com/borkdude/sci[sci].
+(now built on top of https://github.com/borkdude/sci.
 
 [![License](https://img.shields.io/badge/License-Eclipse%20Public%20License%202.0-blue.svg)](#license)
 

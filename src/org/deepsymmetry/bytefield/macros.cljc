@@ -3,6 +3,7 @@
 
 (defmacro self-bind-symbols
   "Builds a map in which each of the supplied list of symbols is mapped
-  to itself."
+  to itself (minus any namespace that the symbol might have had)."
   [syms]
-  `(zipmap '[~@syms] ~syms))
+  (let [syms-without-ns (map (comp symbol name) syms)]
+    `(zipmap '[~@syms-without-ns] ~syms)))

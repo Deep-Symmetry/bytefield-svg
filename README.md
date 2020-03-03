@@ -8,7 +8,7 @@ A Node module for generating byte field diagrams inspired by the LaTeX
 ## Status
 
 This is at the proof-of-concept stage, but can already generate
-diagramas like [this one](https://deepsymmetry.org/images/test.svg) by
+diagrams like [this one](https://deepsymmetry.org/images/test.svg) by
 running:
 
     node test.js >test.svg

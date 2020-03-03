@@ -1,13 +1,11 @@
 (ns org.deepsymmetry.bytefield.core
-  "Provides a safe yet robust EDN subset of the Clojure programming
+  "Provides a safe yet robust subset of the Clojure programming
   language, tailored to the task of building SVG diagrams in the style
   of the LaTeX `bytefield` package."
-  (:require [clojure.edn :as edn]
-            [clojure.set :as set]
-            [clojure.string :as str]
-            [cljs.tools.reader.reader-types :as rt]
+  (:require [clojure.string :as str]
             [analemma.svg :as svg]
-            [analemma.xml :as xml])
+            [analemma.xml :as xml]
+            [sci.core :as sci])
   (:require-macros [org.deepsymmetry.bytefield.macros :refer [self-bind-symbols]]))
 
 ;; Default style definitions.
@@ -25,7 +23,10 @@
 ;; The global symbol table used when evaluating diagram source.
 
 (def ^:dynamic *globals*
-  "Holds the globals during the building of a diagram."
+  "Holds the globals during the building of a diagram. Dynamically bound
+  to a new atom for each thread that calls `generate`, so that can be
+  thread-safe. In retrospect, that was over-engineering, but hey... it
+  might be used in a web context someday?"
   nil)
 
 
@@ -36,7 +37,7 @@
 (defn append-svg
   "Adds another svg element to the body being built up."
   [element]
-  (swap! *globals* update 'svg-body concat [element]))
+  (sci/alter-var-root ('svg-body @*globals*) concat [element]))
 
 
 (defn draw-column-headers
@@ -53,9 +54,9 @@
              font-size   11
              font-family "Courier New, monospace"}
       :as   options}]
-  (let [y    (+ ('diagram-y @*globals*) (* 0.5 height))
-        body (for [i (range ('boxes-per-row @*globals*))]
-               (let [x (+ ('left-margin @*globals*) (* (+ i 0.5) ('box-width @*globals*)))]
+  (let [y    (+ @('diagram-y @*globals*) (* 0.5 height))
+        body (for [i (range @('boxes-per-row @*globals*))]
+               (let [x (+ @('left-margin @*globals*) (* (+ i 0.5) @('box-width @*globals*)))]
                  (svg/text (merge (dissoc options :labels :height)
                                   {:x                 x
                                    :y                 y
@@ -64,10 +65,8 @@
                                    :dominant-baseline "middle"
                                    :text-anchor       "middle"})
                            (nth labels i))))]
-    (swap! *globals* (fn [current]
-                       (-> current
-                           (update 'diagram-y + height)
-                       (update 'svg-body concat body))))))
+    (sci/alter-var-root ('diagram-y @*globals*) + height)
+    (sci/alter-var-root ('svg-body @*globals*) concat body)))
 
 (defn draw-row-header
   "Generates the label in the left margin which identifies the starting
@@ -79,8 +78,8 @@
             :or   {font-size   11
                    font-family "Courier New, monospace"}
             :as   options}]
-  (let [x (- ('left-margin @*globals*) 5)
-        y (+ ('diagram-y @*globals*) (* 0.5 ('row-height @*globals*)))]
+  (let [x (- @('left-margin @*globals*) 5)
+        y (+ @('diagram-y @*globals*) (* 0.5 @('row-height @*globals*)))]
     (append-svg (svg/text (merge options
                                  {:x                 x
                                   :y                 y
@@ -101,11 +100,9 @@
   The height of the row defaults to `row-height` but can be overridden
   by passing a different value with `:height`."
   [& {:keys [height]
-      :or   {height ('row-height @*globals*)}}]
-  (swap! *globals* (fn [current]
-                     (-> current
-                         (update 'diagram-y + height)
-                         (assoc 'box-index 0)))))
+      :or   {height @('row-height @*globals*)}}]
+  (sci/alter-var-root ('diagram-y @*globals*) + height)
+  (sci/alter-var-root ('box-index @*globals*) (constantly 0)))
 
 (defn draw-box
   "Draws a single byte or bit box in the current row at the current
@@ -119,11 +116,11 @@
   [& {:keys [text span borders fill height]
       :or   {span    1
              borders #{:left :right :top :bottom}
-             height  ('row-height @*globals*)}}]
-  (let [left   (+ ('left-margin @*globals*) (* ('box-index @*globals*) ('box-width @*globals*)))
-        width  (* span ('box-width @*globals*))
+             height  @('row-height @*globals*)}}]
+  (let [left   (+ @('left-margin @*globals*) (* @('box-index @*globals*) @('box-width @*globals*)))
+        width  (* span @('box-width @*globals*))
         right  (+ left width)
-        top    ('diagram-y @*globals*)
+        top    @('diagram-y @*globals*)
         bottom (+ top height)]
     (when fill (append-svg (svg/rect left top height width :fill fill)))
     (when (borders :top) (draw-line left top right top))
@@ -136,7 +133,7 @@
                              :y (+ top 1 (/ height 2.0))
                              :dominant-baseline "middle"
                              :text-anchor "middle")))
-    (swap! *globals* update 'box-index + span)))
+    (sci/alter-var-root ('box-index @*globals*) + span)))
 
 (defn label-text
   "Builds an SVG text object to represent a named value, with an
@@ -200,10 +197,10 @@
       :or   {height 70
              gap    10
              edge   15}}]
-  (let [y      ('diagram-y @*globals*)
+  (let [y      @('diagram-y @*globals*)
         top    (+ y edge)
-        left   ('left-margin @*globals*)
-        right  (+ left (* ('box-width @*globals*) ('boxes-per-row @*globals*)))
+        left   @('left-margin @*globals*)
+        right  (+ left (* @('box-width @*globals*) @('boxes-per-row @*globals*)))
         bottom (+ y (- height edge))]
     (draw-line left y left top)
     (draw-line right y right top)
@@ -215,7 +212,7 @@
     (draw-line left (+ top gap) left bottom)
     (draw-line left bottom left (+ y height))
     (draw-line right bottom right (+ y height)))
-  (swap! *globals* update 'diagram-y + height))
+  (sci/alter-var-root ('diagram-y @*globals*) + height))
 
 (defn draw-bottom
   "Ends the diagram by drawing a line across the box area. Needed if the
@@ -223,326 +220,16 @@
   row of boxes, which would extend the height of the diagram without
   adding useful information."
   []
-  (let [y    ('diagram-y @*globals*)
-        left ('left-margin @*globals*)]
-    (draw-line left y (+ left (* ('box-width @*globals*) ('boxes-per-row @*globals*))) y)))
+  (let [y    @('diagram-y @*globals*)
+        left @('left-margin @*globals*)]
+    (draw-line left y (+ left (* @('box-width @*globals*) @('boxes-per-row @*globals*))) y)))
 
 
 
-;; The parser/evaluator for our domain-specific language, a subset of
-;; Clojure which requires no compilation at runtime, and which cannot
-;; do dangerous things like Java interop, arbitrary I/O, or infinite
-;; iteration.
-
-(declare limited-eval) ; Need to forward declare our evaluator because of mutual recursion.
-
-(defn- build-error-message
-  "Adds information about the location where an error occurred in a
-  standard format."
-  [error line column]
-  (str error " in expression starting on line " line ", column " column))
-
-(defn- def-form
-  "Implements the `def` special form."
-  [args scope line column]
-  (when-not (= 2 (count args))
-    (throw (js/Error. (build-error-message "do must have two arguments" line column)
-                      nil line)))
-  (let [[sym raw-v] args]
-    (when-not (symbol? sym)
-      (throw (js/Error. (build-error-message (str sym " is not a symbol in def") line column)
-                        nil line)))
-    (swap! *globals* assoc sym (limited-eval raw-v scope line column))))
-
-(defn- and-form
-  "Implements the `and` special form."
-  [args scope line column]
-  (loop [remainder args
-         result    true]
-    (if (empty? remainder)
-      result
-      (when-let [current (limited-eval (first remainder) scope line column)]
-        (recur (rest remainder) current)))))
-
-(defn- or-form
-  "Implements the `or` special form."
-  [args scope line column]
-  (loop [remainder args]
-    (when (seq remainder)
-      (if-let [current (limited-eval (first remainder) scope line column)]
-        current
-        (recur (rest remainder))))))
-
-(defn- do-form
-  "Implements the `do` special form."
-  [args scope line column]
-  (doseq [expr args]
-    (limited-eval expr scope line column)))
-
-(defn- let-form
-  "Implements the `let` special form."
-  [args scope line column]
-  (let [bindings (first args)]
-    (when-not (and (vector? bindings) (pos? (count bindings)) (zero? (mod (count bindings) 2)))
-      (throw (js/Error. (build-error-message
-                         "do must be followed by a non-empty binding vector with an even number of elements"
-                         line column)
-                        nil line)))
-    (loop [scope              scope
-           [sym raw-v & more] bindings]
-      (when-not (symbol? sym)
-        (throw (js/Error. (build-error-message (str sym " is not a symbol in do binding") line column)
-                          nil line)))
-      (let [scope {:bindings {sym (limited-eval raw-v scope line column)}  ; Bind to a new inner scope.
-                   :next     scope}]
-        (if (empty? more)
-          (doseq [expr (rest args)]  ; Evaluate any body expressions in the fully-assembled scope.
-            (limited-eval expr scope line column))
-          (recur scope more))))))  ; Continue accumulating bindings.
-
-(defn- doseq-form
-  "Implements the `doseq` special form."
-  [args scope line column]
-  (let [bindings (first args)]
-    (when-not (and (vector? bindings) (= 2 (count bindings)))
-      (throw (js/Error. (build-error-message "doseq must be followed by a two-element binding vector" line column)
-                        nil line)))
-    (let [[sym raw-vs] bindings
-          vs           (limited-eval raw-vs scope line column)]
-      (when-not (symbol? sym)
-        (throw (js/Error. (build-error-message (str sym " is not a symbol in doseq binding") line column)
-                          nil line)))
-      (when-not (seqable? vs)
-        (throw (js/Error. (build-error-message (str raw-vs " cannot be used as sequence in doseq binding") line column)
-                          nil line)))
-      (doseq [v vs]  ; Iterate over the sequence provided.
-        (let [scope {:bindings {sym v}  ; Bind the symbol as a new inner scope.
-                     :next     scope}]
-          (doseq [expr (rest args)]  ; Evaluate any body expressions in the new scope.
-            (limited-eval expr scope line column)))))))
-
-(defn- quote-form
-  "Implements the `quote` special form."
-  [args _ _ _]
-  args)  ; Simply returns its arguments unevaluated.
-
-(def special-forms
-  "All the symbols which get special handing in our domain-specific
-  language. Keys are what they get represented by in the parsed form,
-  values are the functions that implement their meanings when
-  evaluating the form."
-  {::and   and-form
-   ::def   def-form
-   ::do    do-form
-   ::doseq doseq-form
-   ::let   let-form
-   ::or    or-form
-   ::quote quote-form})
-
-
-(def core-bindings
-  "The Clojure core library functions we want to make available for building diagrams."
-  (self-bind-symbols [*
-                      +
-                      -
-                      /
-                      <
-                      <=
-                      =
-                      ==
-                      >
-                      >=
-                      apply
-                      assoc
-                      assoc-in
-                      bit-and
-                      bit-and-not
-                      bit-clear
-                      bit-flip
-                      bit-not
-                      bit-or
-                      bit-set
-                      bit-shift-left
-                      bit-shift-right
-                      bit-test
-                      bit-xor
-                      boolean
-                      bounded-count
-                      butlast
-                      byte
-                      char
-                      comp
-                      compare
-                      concat
-                      conj
-                      cons
-                      constantly
-                      contains?
-                      count
-                      dec
-                      dedupe
-                      disj
-                      dissoc
-                      distinct
-                      distinct?
-                      double
-                      drop
-                      drop-last
-                      drop-while
-                      empty
-                      empty?
-                      even?
-                      every-pred
-                      every?
-                      false?
-                      ffirst
-                      filter
-                      filterv
-                      find
-                      first
-                      flatten
-                      float
-                      fnext
-                      fnil
-                      frequencies
-                      get
-                      get-in
-                      group-by
-                      hash-map
-                      hash-set
-                      identical?
-                      identity
-                      inc
-                      inst-ms
-                      int
-                      interleave
-                      interpose
-                      into
-                      juxt
-                      keep
-                      keep-indexed
-                      key
-                      keys
-                      keyword
-                      last
-                      list
-                      list*
-                      long
-                      map
-                      map-indexed
-                      mapcat
-                      mapv
-                      max
-                      max-key
-                      merge
-                      merge-with
-                      min
-                      min-key
-                      mod
-                      name
-                      next
-                      nfirst
-                      nil?
-                      nnext
-                      not
-                      not-any?
-                      not-empty
-                      not-every?
-                      not=
-                      nth
-                      nthnext
-                      nthrest
-                      odd?
-                      partial
-                      partition
-                      partition-all
-                      partition-by
-                      peek
-                      pop
-                      pos?
-                      quot
-                      rand
-                      rand-int
-                      rand-nth
-                      random-sample
-                      reduce
-                      reduce-kv
-                      reduced
-                      reductions
-                      rem
-                      remove
-                      replace
-                      rest
-                      reverse
-                      rseq
-                      rsubseq
-                      run!
-                      second
-                      select-keys
-                      seq
-                      sequence
-                      set
-                      set/difference
-                      set/index
-                      set/intersection
-                      set/join
-                      set/map-invert
-                      set/project
-                      set/rename
-                      set/rename-keys
-                      set/select
-                      set/subset?
-                      set/superset?
-                      set/union
-                      short
-                      shuffle
-                      some
-                      some-fn
-                      some?
-                      sort
-                      sort-by
-                      sorted-map
-                      sorted-map-by
-                      sorted-set
-                      sorted-set-by
-                      split-at
-                      split-with
-                      str
-                      str/blank?
-                      str/capitalize
-                      str/ends-with?
-                      str/includes?
-                      str/join
-                      str/lower-case
-                      str/replace
-                      str/replace-first
-                      str/reverse
-                      str/split
-                      str/split-lines
-                      str/starts-with?
-                      str/trim
-                      str/trim-newline
-                      str/triml
-                      str/trimr
-                      str/upper-case
-                      subs
-                      subseq
-                      subvec
-                      symbol
-                      take
-                      take-last
-                      take-nth
-                      take-while
-                      unreduced
-                      unsigned-bit-shift-right
-                      update
-                      update-in
-                      val
-                      vals
-                      vec
-                      vector
-                      zero?
-                      zipmap]))
+;; Set up the context for the parser/evaluator for our domain-specific
+;; language, a subset of Clojure which requires no compilation at
+;; runtime, and which cannot do dangerous things like Java interop,
+;; arbitrary I/O, or infinite iteration.
 
 (def xml-bindings
   "The Analemma XML-manipulation functions we make available for
@@ -631,111 +318,41 @@
     'cyan   "#a0fafa"
     'purple "#e4b5f7"
 
-    ;; Special forms we handle when evaluating diagram code.
-    'and   ::and
-    'def   ::def
-    'do    ::do
-    'doseq ::doseq
-    'let   ::let
-    'or    ::or
-    'quote ::quote
-
     ;; Values used to track the current state of the diagram being created:
     'box-index 0 ; Row offset of the next box to be drawn.
     'diagram-y 5 ; The y coordinate of the top of the next row to be drawn.
-    'svg-body  '()} ; Diagram gets built up here, SVG wrapper added at end once height known.
+    'svg-body  '()}))
 
-   ;; The groups of functions that we make available for use by diagram code.
-   core-bindings
-   svg-bindings
-   xml-bindings
-   diagram-bindings))
+(defn- build-vars
+  "Creates the sci vars to populate the symbol table for the
+  interpreter."
+  []
+  (reduce  (fn [acc [k v]]
+             (assoc acc k (sci/new-var k v)))
+          {}
+          initial-globals))
 
-(defn emit-svg
+(defn- emit-svg
   "Outputs the finished SVG."
   []
   (let [result @*globals*]
-    (xml/emit (apply svg/svg {:width (+ ('left-margin result) ('right-margin result)
-                                         (* ('box-width result) ('boxes-per-row result)))
-                              :height (+ ('diagram-y result) ('bottom-margin result))}
-                     ('svg-body result)))))
-
-(defn resolve-symbol
-  "Locate a symbol in the scope chain or the global symbol table."
-  [sym scope line column]
-  (if (str/starts-with? (name sym) "'")
-    ;; This is a quoted symbol, so just return a symbol without the leading quote mark.
-    (symbol (subs (name sym) 1))
-    ;; Try looking the symbol up in the scope chain.
-    (if-let [result (get-in scope [:bindings sym])]
-      result
-      (if-let [next-scope (:next scope)]
-        (recur sym next-scope line column)  ; Haven't reached the end of the scope chain yet.
-        ;; Not found in scope chain, look it up in the global symbol table.
-        (let [not-found (js/Object.)
-              result (get @*globals* sym not-found)]
-          (if (= result not-found)
-            (throw (js/Error. (build-error-message (str "Unbound symbol " sym) line column) nil line))
-            result))))))
-
-(defn limited-eval
-  "A bare-bones expression evaluator focused on safely executing
-  instructions to build a diagram. `expr` is the parsed expression,
-  `scope` is the chain of lexical scopes, and `line` is the line
-  number at which the expression started."
-  [expr scope line column]
-  (cond
-    (symbol? expr)  ; Symbols get looked up in the scope chain and global symbol table.
-    (resolve-symbol expr scope line column)
-
-    (list? expr)  ; Lists are function calls. Evaluate the function, and if it looks good, its arguments and call.
-    (let [f (limited-eval (first expr) scope line column)]
-      (cond
-        (contains? special-forms f)  ; Special forms get evaluated in their own unique ways.
-        (let [handler (special-forms f)]
-          (handler (rest expr) scope line column))
-
-        (ifn? f) ; Ordinary functions get applied to the evaluated remainder of the list.
-        (apply f (map #(limited-eval % scope line column) (rest expr)))
-
-        :else
-        (throw (js/Error. (build-error-message (str (first expr) " (" f ") is not a function") line column)
-                          nil line))))
-
-    (vector? expr)  ; Vectors just need their elements recursively evaluated.
-    (mapv #(limited-eval % scope line column) expr)
-
-    (set? expr)  ; Sets, too, just need their elements recurively evaluated.
-    (set (map #(limited-eval % scope line column) expr))
-
-    (map? expr)  ; Maps get their keys and values recursively evaluated.
-    (reduce-kv (fn [m k v]
-                 (assoc m (limited-eval k scope line column) (limited-eval v scope line column)))
-               {}
-               expr)
-
-    :else ; We don't have anything special to do with this, just return it.
-    expr))
+    (xml/emit (apply svg/svg {:width (+ @('left-margin result) @('right-margin result)
+                                         (* @('box-width result) @('boxes-per-row result)))
+                              :height (+ @('diagram-y result) @('bottom-margin result))}
+                     @('svg-body result)))))
 
 (defn generate
-  "Accepts EDN-based diagram specification string and returns the
+  "Accepts Clojure-based diagram specification string and returns the
   corresponding SVG string."
   [source]
-  (binding [*globals* (atom initial-globals)]
-    (let [reader    (rt/indexing-push-back-reader source)
-          eof       (js/Object.)
-          opts      {:eof eof}
-          read-expr (fn []
-                      (try
-                        (edn/read opts reader)
-                        (catch js/Error _
-                          (throw (js/Error. (str "Problem reading diagram at line " (rt/get-line-number reader)
-                                                 ", column " (rt/get-column-number reader))
-                                            nil (rt/get-line-number reader))))))]
-      (loop [line   (rt/get-line-number reader)
-             column (rt/get-column-number reader)
-             expr   (read-expr)]
-        (when (not= eof expr)
-          (limited-eval expr {} line column)
-          (recur (rt/get-line-number reader) (rt/get-column-number reader) (read-expr))))
+  (binding [*globals* (atom (build-vars))]
+    (let [env  (atom {})
+          opts {:preset     :termination-safe
+                :env        env
+                :namespaces {'user (merge diagram-bindings @*globals*)
+                             'svg  svg-bindings
+                             'xml  xml-bindings}}]
+      (sci/eval-string "(require '[xml])" opts)
+      (sci/eval-string "(require '[svg])" opts)
+      (sci/eval-string source opts)
       (emit-svg))))

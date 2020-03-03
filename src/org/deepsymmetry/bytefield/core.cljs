@@ -349,10 +349,10 @@
     (let [env  (atom {})
           opts {:preset     :termination-safe
                 :env        env
-                :namespaces {'user (merge diagram-bindings @*globals*)
-                             'svg  svg-bindings
-                             'xml  xml-bindings}}]
-      (sci/eval-string "(require '[xml])" opts)
-      (sci/eval-string "(require '[svg])" opts)
+                :namespaces {'user         (merge diagram-bindings @*globals*)
+                             'analemma.svg svg-bindings
+                             'analemma.xml xml-bindings}}]
+      (sci/eval-string "(require '[analemma.xml :as xml])" opts)
+      (sci/eval-string "(require '[analemma.svg :as svg])" opts)
       (sci/eval-string source opts)
       (emit-svg))))

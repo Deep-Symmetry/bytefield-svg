@@ -1,13 +1,14 @@
 # bytefield-svg
 
 A Node module for generating byte field diagrams inspired by the LaTeX
-`bytefield` package using a Clojure-based domain specific language.
+`bytefield` package using a Clojure-based domain specific language
+(now built on top of https://github.com/borkdude/sci[sci].
 
 [![License](https://img.shields.io/badge/License-Eclipse%20Public%20License%202.0-blue.svg)](#license)
 
 ## Status
 
-This is at the proof-of-concept stage, but can already generate
+This is just past the proof-of-concept stage, and can already generate
 diagrams like [this one](https://deepsymmetry.org/images/test.svg) by
 running:
 
@@ -23,7 +24,7 @@ extension.
 To compile the library, install
 [shadow-cljs](https://github.com/thheller/shadow-cljs), and run:
 
-    shadow-cljs compile lib
+    npm run build
 
 This will create the file `lib.js`. At that point, you can try
 building the test SVG file as shown above.

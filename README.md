@@ -19,12 +19,16 @@ running:
 file](https://github.com/Deep-Symmetry/bytefield-svg/blob/master/test.js)
 is present in the project).
 
-The plan is to collaborate on getting this built into an Asciidoctor
-extension.
+David Jencks has been helping build a framework that will run this as
+an Antora extension. Until the appropriate version of Antora is
+released, it needs to run on unreleased branches, but that is already
+working very well. The [new version of the dysentery DJ Link Packet
+Analysis](https://djl-analysis.deepsymmetry.org) is being built using
+this approach.
 
-To compile the library, install
-[shadow-cljs](https://github.com/thheller/shadow-cljs), and run:
+To compile the library, run:
 
+    npm install
     npm run build
 
 This will create the file `lib.js`. At that point, you can try

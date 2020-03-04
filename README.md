@@ -20,10 +20,10 @@ file](https://github.com/Deep-Symmetry/bytefield-svg/blob/master/test.js)
 is present in the project).
 
 [David Jencks](https://gitlab.com/djencks) has been helping build a
-framework that will run this as an Antora extension. Until the
-appropriate version of Antora is released, it needs to run on
-unreleased branches, but that is already working very well. The [new
-version of the dysentery DJ Link Packet
+framework that will run this as an Asciidoctor extension hosted by an
+Antora plugin. Until plugin support has been merged into Antora and
+released, it needs to run on unreleased branches, but that is already
+working very well. The [new version of the dysentery DJ Link Packet
 Analysis](https://djl-analysis.deepsymmetry.org) is being built using
 this approach.
 

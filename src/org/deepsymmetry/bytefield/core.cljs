@@ -328,13 +328,6 @@
     'serif-family serif-family
     'hex-family   hex-family
 
-    ;; Some nice default background colors, used in `remotedb` message headers.
-    'green  "#a0ffa0"
-    'yellow "#ffffa0"
-    'pink   "#ffb0a0"
-    'cyan   "#a0fafa"
-    'purple "#e4b5f7"
-
     ;; Values used to track the current state of the diagram being created:
     'box-index 0 ; Row offset of the next box to be drawn.
     'diagram-y 5 ; The y coordinate of the top of the next row to be drawn.

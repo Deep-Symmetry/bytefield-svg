@@ -135,6 +135,24 @@
                              :text-anchor "middle")))
     (sci/alter-var-root ('box-index @*globals*) + span)))
 
+(defn plain-text
+  "Builds an SVG text object for an ordinary informational string.
+  Defaults are established for the font size, family, and style, but
+  they can be overridden in `options`, and other SVG attributes can be
+  passed that way as well."
+  ([label]
+   (plain-text label nil))
+  ([label {:keys [font-size font-family]
+           :or   {font-size   18
+                  font-family serif-family}
+           :as   options}]
+   (apply svg/text [(merge (dissoc options :label :subscript)
+                           {:font-size         font-size
+                            :font-family       font-family
+                            :dominant-baseline "middle"
+                            :text-anchor       "middle"})
+                    label])))
+
 (defn label-text
   "Builds an SVG text object to represent a named value, with an
   optional subscript. Defaults are established for the font size,
@@ -289,6 +307,7 @@
                       draw-group-label-header
                       draw-line
                       draw-row-header
+                      plain-text
                       hex-text
                       label-text
                       next-row]))

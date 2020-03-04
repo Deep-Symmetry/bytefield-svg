@@ -30,7 +30,10 @@ Analysis](https://djl-analysis.deepsymmetry.org) is being built using
 this approach. Follow that link if you want to see exactly why this
 was created.
 
-To compile the library, run:
+It has not yet been published to npm; I am holding off on doing that
+until the DSL stabilizes a bit in the course of converting the LaTeX
+documents I developed this for. I expect it will be ready in a week or
+two. Until then, clone the repository and build it by running:
 
     npm install
     npm run build
@@ -43,7 +46,7 @@ building the test SVG file as shown above.
 <a href="http://deepsymmetry.org"><img align="right" alt="Deep Symmetry"
  src="doc/assets/DS-logo-bw-200-padded-left.png" width="216" height="123"></a>
 
-Copyright 2020 [Deep Symmetry, LLC](http://deepsymmetry.org)
+Copyright © 2020 [Deep Symmetry, LLC](http://deepsymmetry.org)
 
 Distributed under the [Eclipse Public License
 2.0](https://opensource.org/licenses/EPL-2.0). By using this software

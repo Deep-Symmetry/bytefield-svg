@@ -33,13 +33,19 @@ was created.
 It has not yet been published to npm; I am holding off on doing that
 until the DSL stabilizes a bit in the course of converting the LaTeX
 documents I developed this for. I expect it will be ready in a week or
-two. Until then, clone the repository and build it by running:
+two. Until then, clone the repository and build it by making sure you
+have [Node.js](https://nodejs.org/en/) and the [Clojure CLI
+tools](https://clojure.org/guides/getting_started) installed, and run:
 
     npm install
     npm run build
 
 This will create the file `lib.js`. At that point, you can try
 building the test SVG file as shown above.
+
+To check for outdated dependencies, you can run:
+
+    clojure -A:outdated
 
 ## License
 

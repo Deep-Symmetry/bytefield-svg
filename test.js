@@ -4,11 +4,11 @@ var generate = require('./lib.js');
 
 var diagram = `
 ;; Some nice default background colors, used to distinguish header sections.
-(def green "#a0ffa0")
-(def yellow "#ffffa0")
-(def pink "#ffb0a0")
-(def cyan "#a0fafa")
-(def purple "#e4b5f7")
+(defattrs :bg-green {:fill "#a0ffa0"})
+(defattrs :bg-yellow {:fill "#ffffa0"})
+(defattrs :bg-pink {:fill "#ffb0a0"})
+(defattrs :bg-cyan {:fill "#a0fafa"})
+(defattrs :bg-purple {:fill "#e4b5f7"})
 
 (defn draw-remotedb-header
   "Generates the byte and field labels and standard header fields of a
@@ -21,74 +21,65 @@ var diagram = `
   (draw-group-label-header 3 "type")
   (draw-group-label-header 2 "args")
   (draw-group-label-header 1 "tags")
-  (next-row :height 18)
+  (next-row 18)
 
   (draw-row-header "00")
-  (draw-box :text (hex-text "11") :fill green)
-  (draw-box :span 4 :text (hex-text "872349ae") :fill green)
-  (draw-box :text (hex-text "11") :fill yellow)
-  (draw-box :span 4 :text (label-text "TxID") :fill yellow)
-  (draw-box :text (hex-text "10") :fill pink)
-  (draw-box :span 2 :text (hex-text kind :font-weight "bold") :fill pink)
-  (draw-box :text (hex-text "0f") :fill cyan)
-  (draw-box :text (hex-text args :font-weight "bold") :fill cyan)
-  (draw-box :text (hex-text "14") :fill purple)
+  (draw-box 0x11 :bg-green)
+  (draw-box 0x872349ae [{:span 4} :bg-green])
+  (draw-box 0x11 :bg-yellow)
+  (draw-box (text "TxID" :math) [{:span 4} :bg-yellow])
+  (draw-box 0x10 :bg-pink)
+  (draw-box (hex-text kind 4 [:bold]) [{:span 2} :bg-pink])
+  (draw-box 0x0f :bg-cyan)
+  (draw-box (hex-text args 2 [:bold]) :bg-cyan)
+  (draw-box 0x14 :bg-purple)
   (next-row)
 
   (draw-row-header "10")
-  (draw-box :span 4 :text (svg/text {:font-size         18
-                                     :font-family       hex-family
-                                     :dominant-baseline "middle"
-                                     :text-anchor       "middle"}
-                                    "0000000c "
-                                    (svg/tspan {:font-family       serif-family
-                                                :font-size         16
-                                                :font-weight       "light"
-                                                :dominant-baseline "middle"}
-                                               "(12)"))
-            :fill purple)
-  (draw-box :text (hex-text "06" :font-weight "bold") :borders #{:left :top :bottom} :fill purple)
-  (doseq [val ["06" "06" "03" "06" "06" "06" "06" "03"]]
-    (draw-box :text (hex-text val :font-weight "bold") :borders #{:top :bottom} :fill purple))
-  (doseq [val ["00" "00"]]
-    (draw-box :text (hex-text val) :borders #{:top :bottom} :fill purple))
-  (draw-box :text (hex-text "00") :borders #{:right :top :bottom} :fill purple)
+  (draw-box (text "0000000c" :hex [[:plain {:font-weight "light" :font-size 16}] " (12)"])
+            [{:span 4} :bg-purple])
+  (draw-box (hex-text 6 2 [:hex :bold]) [:box-first :bg-purple])
+  (doseq [val [6 6 3 6 6 6 6 3]]
+    (draw-box (hex-text val 2 [:bold]) [:box-related :bg-purple]))
+  (doseq [val [0 0]]
+    (draw-box val [:box-related :bg-purple]))
+  (draw-box 0 [:box-last :bg-purple])
   (next-row))
 
 ;; Figure 48: Cue point response message.
 
-(draw-remotedb-header "4702" "09")
+(draw-remotedb-header 0x4702 9)
 
 (draw-row-header "20")
-(draw-box :text (hex-text "11"))
-(draw-box :span 4 :text (hex-text "00002104"))
-(draw-box :text (hex-text "11"))
-(draw-box :span 4 :text (hex-text "00000000"))
-(draw-box :text (hex-text "11"))
-(draw-box :span 4 :text (label-text "length" "1"))
-(draw-box :text (hex-text "14"))
+(draw-box 0x11)
+(draw-box 0x2104 {:span 4})
+(draw-box 0x11)
+(draw-box 0 {:span 4})
+(draw-box 0x11)
+(draw-box (text "length" [:math] [:sub 1]) {:span 4})
+(draw-box 0x14)
 (next-row)
 
 (draw-row-header "30")
-(draw-box :span 4 :text (label-text "length" "1"))
-(draw-box :span 12 :text (plain-text "Cue and loop point bytes") :borders #{:left :right :top})
+(draw-box (text "length" [:math] [:sub 1]) {:span 4})
+(draw-box "Cue and loop point bytes" [{:span 12} :box-above])
 (next-row)
 (draw-gap)
 
-(draw-box)
-(draw-box :text (hex-text "11"))
-(draw-box :span 4 :text (hex-text "00000036"))
-(draw-box :text (hex-text "11"))
-(draw-box :span 4 :text (label-text "num" "hot"))
-(draw-box :text (hex-text "11"))
-(draw-box :span 4 :text (label-text "num" "cue"))
+(draw-box nil :box-below)
+(draw-box 0x11)
+(draw-box 0x36 {:span 4})
+(draw-box 0x11)
+(draw-box (text "num" [:math] [:sub "hot"]) {:span 4})
+(draw-box 0x11)
+(draw-box (text "num" [:math] [:sub "cue"]) {:span 4})
 (next-row)
 
-(draw-box :text (hex-text "11"))
-(draw-box :span 4 :text (label-text "length" "2"))
-(draw-box :text (hex-text "14"))
-(draw-box :span 4 :text (label-text "length" "2"))
-(draw-box :span 6 :text (plain-text "Unknown bytes") :borders #{:left :right :top})
+(draw-box 0x11)
+(draw-box (text "length" [:math] [:sub 2]) {:span 4})
+(draw-box 0x14)
+(draw-box (text "length" [:math] [:sub 2]) {:span 4})
+(draw-box "Unknown bytes" [{:span 6} :box-above])
 (next-row)
 (draw-gap)
 (draw-bottom)

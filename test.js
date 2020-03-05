@@ -29,18 +29,18 @@ var diagram = `
   (draw-box 0x11 :bg-yellow)
   (draw-box (text "TxID" :math) [{:span 4} :bg-yellow])
   (draw-box 0x10 :bg-pink)
-  (draw-box (hex-text kind 4 [:bold]) [{:span 2} :bg-pink])
+  (draw-box (hex-text kind 4 :bold) [{:span 2} :bg-pink])
   (draw-box 0x0f :bg-cyan)
-  (draw-box (hex-text args 2 [:bold]) :bg-cyan)
+  (draw-box (hex-text args 2 :bold) :bg-cyan)
   (draw-box 0x14 :bg-purple)
   (next-row)
 
   (draw-row-header "10")
   (draw-box (text "0000000c" :hex [[:plain {:font-weight "light" :font-size 16}] " (12)"])
             [{:span 4} :bg-purple])
-  (draw-box (hex-text 6 2 [:hex :bold]) [:box-first :bg-purple])
+  (draw-box (hex-text 6 2 :bold) [:box-first :bg-purple])
   (doseq [val [6 6 3 6 6 6 6 3]]
-    (draw-box (hex-text val 2 [:bold]) [:box-related :bg-purple]))
+    (draw-box (hex-text val 2 :bold) [:box-related :bg-purple]))
   (doseq [val [0 0]]
     (draw-box val [:box-related :bg-purple]))
   (draw-box 0 [:box-last :bg-purple])

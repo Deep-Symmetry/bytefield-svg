@@ -426,12 +426,11 @@
 
    :dotted {:stroke-dasharray "1,1"} ; Style for dotted lines.
 
-   :box-first   {:borders #{:left :top :bottom}}   ; Style for first of a group of related boxes.
-   :box-related {:borders #{:top :bottom}}         ; Style for internal box in a related group.
-   :box-last    {:borders #{:right :top :bottom}}  ; Style for last of a group of related boxes.
-   :box-above   {:borders #{:left :right :top}}    ; Style for open box at end of line before a gap.
-   :box-below   {:borders #{:left :right :bottom}} ; Style for open box at start of line after a gap.
-   })
+   :box-first   {:borders #{:left :top :bottom}}  ; Style for first of a group of related boxes.
+   :box-related {:borders #{:top :bottom}}        ; Style for internal box in a related group.
+   :box-last    {:borders #{:right :top :bottom}} ; Style for last of a group of related boxes.
+   :box-above   {:borders #{:left :right :top}}   ; Style for box open to row below.
+   :box-below   {:borders #{:left :right :bottom}}}) ; Style for box open to row above.
 
 (def initial-globals
   "The contents of the global symbol table that will be established at

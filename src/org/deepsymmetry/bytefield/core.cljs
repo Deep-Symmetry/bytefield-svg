@@ -45,7 +45,7 @@
     spec
 
     (keyword? spec)  ; A keyword gets looked up as a named attribute map.
-    (let [defs @('named-attributes @*globals*)]
+    (let [defs @@('named-attributes @*globals*)]
       (if-let [m (spec defs)]
         m
         (throw (js/Error. (str "Could not resolve attribute spec: " spec)))))
@@ -102,12 +102,12 @@
   [k m]
   (when-not (keyword? k) (throw (js/Error. (str "first argument to defattrs must be a keyword, received: " k))))
   (when-not (map? m) (throw (js/Error. (str "second argument to defattrs must be a map, received: " m))))
-  (sci/alter-var-root ('named-attributes @*globals*) assoc k m))
+  (swap! @('named-attributes @*globals*) assoc k m))
 
 (defn append-svg
   "Adds another svg element to the body being built up."
   [element]
-  (sci/alter-var-root ('svg-body @*globals*) concat [element]))
+  (swap! @('diagram-state @*globals*) update :svg-body concat [element]))
 
 
 (defn draw-column-headers
@@ -125,7 +125,7 @@
                 font-size   11
                 font-family "Courier New, monospace"}
          :as   options} (eval-attribute-spec attr-spec)
-        y               (+ @('diagram-y @*globals*) (* 0.5 height))
+        y               (+ (:y @@('diagram-state @*globals*)) (* 0.5 height))
         body            (for [i (range @('boxes-per-row @*globals*))]
                           (let [x (+ @('left-margin @*globals*) (* (+ i 0.5) @('box-width @*globals*)))]
                             (svg/text (merge (dissoc options :labels :height)
@@ -136,8 +136,11 @@
                                               :dominant-baseline "middle"
                                               :text-anchor       "middle"})
                                       (nth labels i))))]
-    (sci/alter-var-root ('diagram-y @*globals*) + height)
-    (sci/alter-var-root ('svg-body @*globals*) concat body)))
+    (swap! @('diagram-state @*globals*)
+          (fn [current]
+            (-> current
+                (update :y + height)
+                (update :svg-body concat body))))))
 
 (defn draw-row-header
   "Generates the label in the left margin which identifies the starting
@@ -160,7 +163,7 @@
                  dominant-baseline "middle"}
           :as   options} (eval-attribute-spec attr-spec)
          x               (- @('left-margin @*globals*) 5)
-         y               (+ @('diagram-y @*globals*) (* 0.5 @('row-height @*globals*)))]
+         y               (+ (:y @@('diagram-state @*globals*)) (* 0.5 @('row-height @*globals*)))]
      (if (sequential? label)
        ;; The caller has already generated the SVG for the label, just position it.
        (append-svg (xml/merge-attrs label (select-keys options [:x :y :text-anchor :dominant-baseline])))
@@ -195,14 +198,20 @@
                                 :stroke-width stroke-width})]))))
 
 (defn next-row
-  "Advances drawing to the next row of boxes, reseting the index to 0.
+  "Advances drawing to the next row of boxes, resetting the column to 0,
+  incrementing the row, and adding the row height to the y coordinate.
   The height of the row defaults to `row-height` but can be overridden
-  by passing a different value."
+  by passing a different value. Also calculates the starting byte
+  address of the new row."
   ([]
    (next-row @('row-height @*globals*)))
   ([height]
-   (sci/alter-var-root ('diagram-y @*globals*) + height)
-   (sci/alter-var-root ('box-index @*globals*) (constantly 0))))
+   (swap! @('diagram-state @*globals*)
+          (fn [current]
+            (-> current
+                (update :y + height)
+                (assoc :column 0)
+                (update :address + @('boxes-per-row @*globals*)))))))
 
 (defn hex-text
   "Formats a number as an SVG text object containing a hexadecimal
@@ -274,11 +283,14 @@
                 borders #{:left :right :top :bottom}
                 height  @('row-height @*globals*)}} (eval-attribute-spec attr-spec)
 
-        left   (+ @('left-margin @*globals*) (* @('box-index @*globals*) @('box-width @*globals*)))
+        column (:column @@('diagram-state @*globals*))
+        left   (+ @('left-margin @*globals*) (* column @('box-width @*globals*)))
         width  (* span @('box-width @*globals*))
         right  (+ left width)
-        top    @('diagram-y @*globals*)
+        top    (:y @@('diagram-state @*globals*))
         bottom (+ top height)]
+    (when (> (+ column span) @('boxes-per-row @*globals*))
+      (throw (js/Error "draw-box called with span larger than remaining columns in row")))
     (when fill (append-svg (svg/rect left top height width :fill fill)))
     (when (borders :top) (draw-line left top right top))
     (when (borders :bottom) (draw-line left bottom right bottom))
@@ -286,11 +298,13 @@
     (when (borders :left) (draw-line left top left bottom))
     (when label
       (let [label (xml/merge-attrs (format-box-label label span)
-                                   {:x                 (/ (+ left right) 2.0)
-                                    :y                 (+ top 1 (/ height 2.0))
-                                    :text-anchor       "middle"})]
+                                   {:x           (/ (+ left right) 2.0)
+                                    :y           (+ top 1 (/ height 2.0))
+                                    :text-anchor "middle"})]
         (append-svg (center-baseline label))))
-    (sci/alter-var-root ('box-index @*globals*) + span)))
+    (swap! @('diagram-state @*globals*) update :column + span))
+  ;; TODO: Here is where we need to auto-next-row.
+  )
 
 (defn draw-group-label-header
   "Creates a small borderless box used to draw the textual label headers
@@ -311,7 +325,8 @@
       :or   {height 70
              gap    10
              edge   15}}]
-  (let [y      @('diagram-y @*globals*)
+  ;; TODO: (next-row) here, I think. Check diagram source to confirm universailty.
+  (let [y      (:y @@('diagram-state @*globals*))
         top    (+ y edge)
         left   @('left-margin @*globals*)
         right  (+ left (* @('box-width @*globals*) @('boxes-per-row @*globals*)))
@@ -324,7 +339,11 @@
     (draw-line left (+ top gap) left bottom)
     (draw-line left bottom left (+ y height))
     (draw-line right bottom right (+ y height)))
-  (sci/alter-var-root ('diagram-y @*globals*) + height))
+  (swap! @('diagram-state @*globals*)
+         (fn [current]
+           (-> current
+               (update :y + height)
+               (assoc :gap? true)))))
 
 (defn draw-bottom
   "Ends the diagram by drawing a line across the box area. Needed if the
@@ -332,7 +351,7 @@
   row of boxes, which would extend the height of the diagram without
   adding useful information."
   []
-  (let [y    @('diagram-y @*globals*)
+  (let [y    (:y @@('diagram-state @*globals*))
         left @('left-margin @*globals*)]
     (draw-line left y (+ left (* @('box-width @*globals*) @('boxes-per-row @*globals*))) y)))
 
@@ -432,9 +451,10 @@
    :box-above   {:borders #{:left :right :top}}   ; Style for box open to row below.
    :box-below   {:borders #{:left :right :bottom}}}) ; Style for box open to row above.
 
-(def initial-globals
-  "The contents of the global symbol table that will be established at
-  the start of reading a diagram definition."
+(defn build-initial-globals
+  "Creates the contents of the global symbol table that will be
+  established at the start of reading a diagram definition."
+  []
   (merge
    {'left-margin   40 ; Space for row offsets and other leading marginalia.
     'right-margin  1  ; Space at the right, currently just enough to avoid clipping the rightmost box edges.
@@ -444,12 +464,14 @@
     'boxes-per-row 16 ; How many individual byte/bit boxes fit on each row.
     'row-height    30 ; The height of a standard row of boxes.
 
-    'named-attributes initial-named-attributes ; The lookup table for shorthand attribute map specifications.
+    'named-attributes (atom initial-named-attributes) ; Lookup table for shorthand attribute map specifications.
 
     ;; Values used to track the current state of the diagram being created:
-    'box-index 0 ; Row offset of the next box to be drawn.
-    'diagram-y 5 ; The y coordinate of the top of the next row to be drawn.
-    'svg-body  '()}))
+    'diagram-state (atom {:column   0     ; Column of the next box to be drawn.
+                          :y        1     ; Y coordinate of the top of the next row to be drawn.
+                          :address  0     ; Memory address of the first byte in the current row.
+                          :gap?     false ; Has a gap been drawn (making :address relative).
+                          :svg-body '()})})) ; Gathers the SVG description as the diagram is built up.
 
 (defn- build-vars
   "Creates the sci vars to populate the symbol table for the
@@ -458,7 +480,7 @@
   (reduce  (fn [acc [k v]]
              (assoc acc k (sci/new-var k v)))
           {}
-          initial-globals))
+          (build-initial-globals)))
 
 (defn- emit-svg
   "Outputs the finished SVG."
@@ -466,8 +488,8 @@
   (let [result @*globals*]
     (xml/emit (apply svg/svg {:width (+ @('left-margin result) @('right-margin result)
                                          (* @('box-width result) @('boxes-per-row result)))
-                              :height (+ @('diagram-y result) @('bottom-margin result))}
-                     @('svg-body result)))))
+                              :height (+ (:y @@('diagram-state @*globals*)) @('bottom-margin result))}
+                     (:svg-body @@('diagram-state @*globals*))))))
 
 (defn generate
   "Accepts Clojure-based diagram specification string and returns the

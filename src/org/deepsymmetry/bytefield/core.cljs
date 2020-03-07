@@ -276,6 +276,27 @@
       (swap! @('diagram-state @*globals*) update :address + boxes)
       (when header-fn (draw-row-header (header-fn @@('diagram-state @*globals*)))))))  ; Draw header for new row.
 
+(defn- interpret-box-border
+  "Given a box border element key (`:top`, `:bottom`, `:left`, or
+  `:right`), the value supplied for the box's `:borders` attribute,
+  and the default style with which the current border would be drawn,
+  returns the style that should be used, or `nil` if this border line
+  should not be drawn."
+  [k borders default]
+  (let [spec (k borders)]
+    (cond
+      (not spec)  ; The border was omitted from the spec, so should not be drawn.
+      nil
+
+      (= spec k)  ; The border seems to just be a set, and this value was present, use default style.
+      default
+
+      (or (keyword? spec) (map? spec) (sequential? spec))  ; It's an attribute definition for the border style.
+      (eval-attribute-spec spec)
+
+      :else  ; It's something else truthy, so use the default style.
+      default)))
+
 (defn draw-box
   "Draws a single byte or bit box in the current row at the current
   index. `label` can either be a number (which will be converted to a
@@ -308,10 +329,11 @@
     (when (> (+ column span) @('boxes-per-row @*globals*))
       (throw (js/Error "draw-box called with span larger than remaining columns in row")))
     (when fill (append-svg (svg/rect left top height width :fill fill)))
-    (when (borders :top) (draw-line left top right top))
-    (when (borders :bottom) (draw-line left bottom right bottom))
-    (when (borders :right) (draw-line right top right bottom))
-    (when (borders :left) (draw-line left top left bottom))
+    (when-let [style (interpret-box-border :top borders :border-unrelated)] (draw-line left top right top style))
+    (when-let [style (interpret-box-border :bottom borders :border-unrelated)]
+      (draw-line left bottom right bottom style))
+    (when-let [style (interpret-box-border :right borders :border-unrelated)] (draw-line right top right bottom style))
+    (when-let [style (interpret-box-border :left borders :border-unrelated)] (draw-line left top left bottom style))
     (when label
       (let [label (xml/merge-attrs (format-box-label label span)
                                    {:x           (/ (+ left right) 2.0)
@@ -463,6 +485,9 @@
    :bold  {:font-weight "bold"} ; Adds bolding to the font style.
 
    :dotted {:stroke-dasharray "1,1"} ; Style for dotted lines.
+
+   :border-unrelated {}                        ; Line style for borders between unrelated cells: use defaults.
+   :border-related   {:stroke-dasharray "1,3"} ; Line style for borders between related cells.
 
    :box-first   {:borders #{:left :top :bottom}}  ; Style for first of a group of related boxes.
    :box-related {:borders #{:top :bottom}}        ; Style for internal box in a related group.

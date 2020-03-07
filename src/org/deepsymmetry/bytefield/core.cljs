@@ -320,6 +320,16 @@
         (append-svg (center-baseline label))))
     (swap! @('diagram-state @*globals*) update :column + span)))
 
+(defn draw-boxes
+  "Draws multiple boxes with the same attributes for each. Calls
+  `draw-box` with each value in `labels`, passing `attr-spec` (if one
+  was supplied) on each call."
+  ([labels]
+   (draw-boxes labels nil))
+  ([labels attr-spec]
+   (doseq [label labels]
+     (draw-box label attr-spec))))
+
 (defn draw-gap
   "Draws an indication of discontinuity. Takes a full row, the default
   height is 70 and the default gap is 10, and the default edge on
@@ -428,6 +438,7 @@
                       defattrs
                       draw-bottom
                       draw-box
+                      draw-boxes
                       draw-column-headers
                       draw-gap
                       draw-line

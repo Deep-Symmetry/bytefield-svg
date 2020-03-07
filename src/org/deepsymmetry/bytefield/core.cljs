@@ -552,4 +552,6 @@
       (sci/eval-string "(require '[analemma.xml :as xml])" opts)
       (sci/eval-string "(require '[analemma.svg :as svg])" opts)
       (sci/eval-string source opts)
+      (when (pos? (:column @@('diagram-state @*globals*)))
+        (next-row))  ; Finish off the last row.
       (emit-svg))))

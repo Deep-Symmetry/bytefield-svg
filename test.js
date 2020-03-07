@@ -16,9 +16,9 @@ var diagram = `
   Arguments are the number of colums to span and the text of the
   label."
   [span label]
-  (draw-box (text label [:math {:font-size 12}]) {:span span
-                                                  :borders      #{}
-                                                  :height       14}))
+  (draw-box (text label [:math {:font-size 12}]) {:span    span
+                                                  :borders #{}
+                                                  :height  14}))
 
 (defn draw-remotedb-header
   "Generates the byte and field labels and standard header fields of a

@@ -173,7 +173,7 @@
                                  :text-anchor       "end"})]
      (if (sequential? label)
        ;; The caller has already generated the SVG for the label, just position it.
-       (append-svg (xml/merge-attrs label (select-keys style [:x :y :text-anchor :dominant-baseline])))
+       (append-svg (xml/merge-attrs label (select-keys style [:x :y :text-anchor])))
        ;; We are both building and positioning the SVG text object.
        (append-svg (svg/text style (str label)))))))
 
@@ -468,10 +468,11 @@
 
   This function is called with the current diagram state map. Defaults
   to the styling set up in the `:hex` attribute definition but with a
-  font size of 11 and explicitly \"normal\" font style, but these
-  can be overridden by using `defattrs` to set up up an attribute spec
-  named `:row-header`. Other SVG text attributes can be supplied in
-  that attribute definition, and they will be passed along.
+  font size of 11, explicitly \"normal\" font style, and dominant
+  baseline of \"middle\", but these can be overridden by using
+  `defattrs` to set up up an attribute spec named `:row-header`. Other
+  SVG text attributes can be supplied in that attribute definition,
+  and they will be passed along.
 
   The font family and style of the _i+_ post-gap prefix default to the
   values in the default `:math` attribute definition, but this can be
@@ -482,11 +483,12 @@
         defs       @@('named-attributes @*globals*)
         attr-spec  (:row-header defs)
         hex        (merge (:hex defs)
-                          {:font-size  11
-                           :font-style "normal"}
+                          {:font-size         11
+                           :font-style        "normal"
+                           :dominant-baseline "middle"}
                           attr-spec)
         math       (merge (:math defs)
-                          (select-keys hex [:font-size])
+                          (select-keys hex [:font-size :dominant-baseline])
                           (when-let [family (:math-family attr-spec)]
                             {:font-family family})
                           (when-let [style (:math-style attr-spec)]

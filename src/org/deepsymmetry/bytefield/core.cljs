@@ -115,7 +115,7 @@
   default uses the lower-case hex digits in increasing order, but you
   can specify your own list of `:labels` as an attribute. Normally
   consumes 14 vertical pixels, but you can specify a different
-  `:height`. Defaults to a `:font-size` of 7 and `:font-family` of
+  `:height`. Defaults to a `:font-size` of 11 and `:font-family` of
   \"Courier New\" but these can be overridden as well. Other SVG text
   attributes can be supplied, and they will be passed along."
   [attr-spec]
@@ -163,19 +163,19 @@
                  dominant-baseline "middle"}
           :as   options} (eval-attribute-spec attr-spec)
          x               (- @('left-margin @*globals*) 5)
-         y               (+ (:y @@('diagram-state @*globals*)) (* 0.5 @('row-height @*globals*)))]
+         y               (+ (:y @@('diagram-state @*globals*)) (* 0.5 @('row-height @*globals*)))
+         style           (merge options
+                                {:x                 x
+                                 :y                 y
+                                 :font-family       font-family
+                                 :font-size         font-size
+                                 :dominant-baseline dominant-baseline
+                                 :text-anchor       "end"})]
      (if (sequential? label)
        ;; The caller has already generated the SVG for the label, just position it.
-       (append-svg (xml/merge-attrs label (select-keys options [:x :y :text-anchor :dominant-baseline])))
+       (append-svg (xml/merge-attrs label (select-keys style [:x :y :text-anchor :dominant-baseline])))
        ;; We are both building and positioning the SVG text object.
-       (append-svg (svg/text (merge options
-                                    {:x                 x
-                                     :y                 y
-                                     :font-family       font-family
-                                     :font-size         font-size
-                                     :dominant-baseline dominant-baseline
-                                     :text-anchor       "end"})
-                             (str label)))))))
+       (append-svg (svg/text style (str label)))))))
 
 (defn draw-line
   "Adds a line to the SVG being built up. `:stroke` defaults to black,
@@ -201,8 +201,9 @@
   "Advances drawing to the next row of boxes, resetting the column to 0,
   incrementing the row, and adding the row height to the y coordinate.
   The height of the row defaults to `row-height` but can be overridden
-  by passing a different value. Also calculates the starting byte
-  address of the new row."
+  by passing a different value. Does not update the row byte address
+  value because this function is also called by user code to draw
+  informational rows."
   ([]
    (next-row @('row-height @*globals*)))
   ([height]
@@ -210,8 +211,7 @@
           (fn [current]
             (-> current
                 (update :y + height)
-                (assoc :column 0)
-                (update :address + @('boxes-per-row @*globals*)))))))
+                (assoc :column 0))))))
 
 (defn hex-text
   "Formats a number as an SVG text object containing a hexadecimal
@@ -262,6 +262,20 @@
         centered-tag (xml/add-attrs tag :dominant-baseline "middle")]
     (apply xml/set-content (cons centered-tag centered-content))))
 
+(defn- auto-advance-row
+  "If we are about to draw a box just past the end of a row, advance to
+  the next row, drawing the header(s) as needed."
+  []
+  (let [{:keys [column address] :as state} @@('diagram-state @*globals*)
+        boxes                              @('boxes-per-row @*globals*)
+        header-fn                          @('row-header-fn @*globals*)]
+    (when (= column boxes)  ; We have filled the current row, so auto-advance.
+      (when (zero? address)  ; This was the first row, so draw its header now we know we need headers.
+        (when header-fn (draw-row-header (header-fn state))))
+      (next-row)
+      (swap! @('diagram-state @*globals*) update :address + boxes)
+      (when header-fn (draw-row-header (header-fn @@('diagram-state @*globals*)))))))  ; Draw header for new row.
+
 (defn draw-box
   "Draws a single byte or bit box in the current row at the current
   index. `label` can either be a number (which will be converted to a
@@ -275,9 +289,11 @@
   but you can supply the set you want drawn in `:borders`. The
   background can be filled with a color passed with `:fill`. Box
   height defaults to `row-height`, but that can be changed with
-  `:height` (you will need to supply the same height override when
+  `:height` if you are drawing special header rows rather than normal
+  byte boxes (you will need to supply the same height override when
   calling `next-row`)."
   [label attr-spec]
+  (auto-advance-row)
   (let [{:keys [span borders fill height]
          :or   {span    1
                 borders #{:left :right :top :bottom}
@@ -302,30 +318,20 @@
                                     :y           (+ top 1 (/ height 2.0))
                                     :text-anchor "middle"})]
         (append-svg (center-baseline label))))
-    (swap! @('diagram-state @*globals*) update :column + span))
-  ;; TODO: Here is where we need to auto-next-row.
-  )
-
-(defn draw-group-label-header
-  "Creates a small borderless box used to draw the textual label headers
-  used below the byte labels for `remotedb` message diagrams.
-  Arguments are the number of colums to span and the text of the
-  label."
-  [span label]
-  (draw-box (text label [:math {:font-size 12}]) {:span span
-                                                  :borders      #{}
-                                                  :height       14}))
+    (swap! @('diagram-state @*globals*) update :column + span)))
 
 (defn draw-gap
   "Draws an indication of discontinuity. Takes a full row, the default
-  height is 50 and the default gap is 10, and the default edge on
+  height is 70 and the default gap is 10, and the default edge on
   either side of the gap is 5, but all can be overridden with keyword
-  arguments."
+  arguments. Advances to the next row before drawing."
   [& {:keys [height gap edge]
       :or   {height 70
              gap    10
              edge   15}}]
-  ;; TODO: (next-row) here, I think. Check diagram source to confirm universailty.
+  (when (not= (:column @@('diagram-state @*globals*)) @('boxes-per-row @*globals*))
+    (throw (js/error "draw-gap called when not at the end of a row")))
+  (auto-advance-row)
   (let [y      (:y @@('diagram-state @*globals*))
         top    (+ y edge)
         left   @('left-margin @*globals*)
@@ -339,11 +345,14 @@
     (draw-line left (+ top gap) left bottom)
     (draw-line left bottom left (+ y height))
     (draw-line right bottom right (+ y height)))
-  (swap! @('diagram-state @*globals*)
-         (fn [current]
-           (-> current
-               (update :y + height)
-               (assoc :gap? true)))))
+  (let [state     (swap! @('diagram-state @*globals*)
+                         (fn [current]
+                           (-> current
+                               (update :y + height)
+                               (assoc :address 0)
+                               (assoc :gap? true))))
+        header-fn @('row-header-fn @*globals*)]
+    (when header-fn (draw-row-header (header-fn state)))))
 
 (defn draw-bottom
   "Ends the diagram by drawing a line across the box area. Needed if the
@@ -421,7 +430,6 @@
                       draw-box
                       draw-column-headers
                       draw-gap
-                      draw-group-label-header
                       draw-line
                       draw-row-header
                       hex-text
@@ -451,6 +459,42 @@
    :box-above   {:borders #{:left :right :top}}   ; Style for box open to row below.
    :box-below   {:borders #{:left :right :bottom}}}) ; Style for box open to row above.
 
+(defn default-row-header-fn
+  "Returns an SVG text object containing the header for the current row
+  in the default style, a hex value of at least two digits based on
+  the current row address. If a gap has been generated, prefix that
+  with _i+_ to indicate that it is relative to the first byte after
+  the gap.
+
+  This function is called with the current diagram state map. Defaults
+  to the styling set up in the `:hex` attribute definition but with a
+  font size of 11 and explicitly \"normal\" font style, but these
+  can be overridden by using `defattrs` to set up up an attribute spec
+  named `:row-header`. Other SVG text attributes can be supplied in
+  that attribute definition, and they will be passed along.
+
+  The font family and style of the _i+_ post-gap prefix default to the
+  values in the default `:math` attribute definition, but this can be
+  overridden by setting `:math-family` and `:math-style` in the
+  `:row-header` attribute definition."
+  [{:keys [address gap?]}]
+  (let [addr-label (cl-format nil "~2,'0x" address)
+        defs       @@('named-attributes @*globals*)
+        attr-spec  (:row-header defs)
+        hex        (merge (:hex defs)
+                          {:font-size  11
+                           :font-style "normal"}
+                          attr-spec)
+        math       (merge (:math defs)
+                          (select-keys hex [:font-size])
+                          (when-let [family (:math-family attr-spec)]
+                            {:font-family family})
+                          (when-let [style (:math-style attr-spec)]
+                            {:font-style style}))]
+    (if gap?
+      (text "i+" math [hex addr-label])
+      (text addr-label hex))))
+
 (defn build-initial-globals
   "Creates the contents of the global symbol table that will be
   established at the start of reading a diagram definition."
@@ -465,6 +509,7 @@
     'row-height    30 ; The height of a standard row of boxes.
 
     'named-attributes (atom initial-named-attributes) ; Lookup table for shorthand attribute map specifications.
+    'row-header-fn    default-row-header-fn           ; Used to generate row header text when required.
 
     ;; Values used to track the current state of the diagram being created:
     'diagram-state (atom {:column   0     ; Column of the next box to be drawn.

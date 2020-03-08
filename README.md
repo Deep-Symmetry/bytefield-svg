@@ -17,7 +17,10 @@ running:
 
 (The [`test.js`
 file](https://github.com/Deep-Symmetry/bytefield-svg/blob/master/test.js)
-is present in the project).
+is present in the project, and with some well-designed helper
+functions in that project's own include file, the source for an even
+more attractive version of the diagram shrinks to
+[this](https://github.com/Deep-Symmetry/dysentery/blob/379555f21244354c4dc0c9711c8cb3a3552bc64b/doc/modules/ROOT/examples/dbserver_shared.edn)).
 
 [David Jencks](https://gitlab.com/djencks) has been helping build a
 framework that will run this as an

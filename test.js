@@ -65,8 +65,7 @@ var diagram = `
 (draw-box 0x14)
 
 (draw-box (text "length" [:math] [:sub 1]) {:span 4})
-(draw-box "Cue and loop point bytes" [{:span 12} :box-above])
-(draw-gap)
+(draw-gap "Cue and loop point bytes")
 
 (draw-box nil :box-below)
 (draw-box 0x11)
@@ -80,8 +79,7 @@ var diagram = `
 (draw-box (text "length" [:math] [:sub 2]) {:span 4})
 (draw-box 0x14)
 (draw-box (text "length" [:math] [:sub 2]) {:span 4})
-(draw-box "Unknown bytes" [{:span 6} :box-above])
-(draw-gap)
+(draw-gap "Unknown bytes" {:min-label-columns 6})
 (draw-bottom)
 `;
 

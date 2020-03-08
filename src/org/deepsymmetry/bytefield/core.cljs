@@ -392,37 +392,67 @@
 
 (defn draw-gap
   "Draws an indication of discontinuity. Takes a full row, the default
-  height is 70 and the default gap is 10, and the default edge on
-  either side of the gap is 5, but all can be overridden with keyword
-  arguments. Advances to the next row before drawing."
-  [& {:keys [height gap edge]
-      :or   {height 70
-             gap    10
-             edge   15}}]
-  (when (not= (:column @@('diagram-state @*globals*)) @('boxes-per-row @*globals*))
-    (throw (js/error "draw-gap called when not at the end of a row")))
-  (auto-advance-row)
-  (let [y      (:y @@('diagram-state @*globals*))
-        top    (+ y edge)
-        left   @('left-margin @*globals*)
-        right  (+ left (* @('box-width @*globals*) @('boxes-per-row @*globals*)))
-        bottom (+ y (- height edge))]
-    (draw-line left y left top)
-    (draw-line right y right top)
-    (draw-line left top right (- bottom gap) :dotted)
-    (draw-line right y right (- bottom gap))
-    (draw-line left (+ top gap) right bottom :dotted)
-    (draw-line left (+ top gap) left bottom)
-    (draw-line left bottom left (+ y height))
-    (draw-line right bottom right (+ y height)))
-  (let [state     (swap! @('diagram-state @*globals*)
-                         (fn [current]
-                           (-> current
-                               (update :y + height)
-                               (assoc :address 0)
-                               (assoc :gap? true))))
-        header-fn @('row-header-fn @*globals*)]
-    (when header-fn (draw-row-header (header-fn state)))))
+  total `:height` is 70, the default `:gap` distance within that is
+  10, the default `:edge` height on either side of the gap is 15, and
+  the default `:gap-style` used to draw the gap edges is `:dotted` but
+  all of these can be overridden through the optional attribute spec.
+  Advances to the next row before drawing.
+
+  If `label` is provided, draws it to identify the content of the
+  gap. If there are at least `:min-label-columns` (which defaults to
+  8) remaining on the current row, will center the label in the
+  remaining space on that row before drawing the gap. Otherwise it
+  will advance to the next row, draw the label centered on the entire
+  row, then draw the gap."
+  ([]
+   (draw-gap nil nil))
+  ([label]
+   (draw-gap label nil))
+  ([label attr-spec]
+   (let [{:keys [height gap edge gap-style min-label-columns]
+          :or   {gap-style         (eval-attribute-spec :dotted)
+                 height            70
+                 gap               10
+                 edge              15
+                 min-label-columns 8}} (eval-attribute-spec attr-spec)
+
+         column (:column @@('diagram-state @*globals*))
+         boxes  @('boxes-per-row @*globals*)]
+     (if label
+       ;; We are supposed to draw a label.
+       (if (<= min-label-columns (- boxes column))
+         (draw-box label [{:span (- boxes column)} :box-above]) ; And there is room for it on the current line.
+         (do ; The label doesn't fit on the current line.
+           (draw-box nil [{:span (- boxes column)} :box-above]) ; Finish off current line with emptiness.
+           (auto-advance-row)
+           (draw-box label [{:span boxes :borders #{:left :right}}]))) ; Put the label on its own line.
+       ;; We are not supposed to draw a label, so just finish the current line if needed.
+       (when (not= column boxes)
+         (draw-box nil [{:span (- boxes column)} :box-above]))) ; Finish off current line with emptiness.
+
+     ;; Move on to a new row to draw the gap.
+     (auto-advance-row)
+     (let [y      (:y @@('diagram-state @*globals*))
+           top    (+ y edge)
+           left   @('left-margin @*globals*)
+           right  (+ left (* @('box-width @*globals*) @('boxes-per-row @*globals*)))
+           bottom (+ y (- height edge))]
+       (draw-line left y left top)
+       (draw-line right y right top)
+       (draw-line left top right (- bottom gap) gap-style)
+       (draw-line right y right (- bottom gap))
+       (draw-line left (+ top gap) right bottom gap-style)
+       (draw-line left (+ top gap) left bottom)
+       (draw-line left bottom left (+ y height))
+       (draw-line right bottom right (+ y height)))
+     (let [state     (swap! @('diagram-state @*globals*)
+                            (fn [current]
+                              (-> current
+                                  (update :y + height)
+                                  (assoc :address 0)
+                                  (assoc :gap? true))))
+           header-fn @('row-header-fn @*globals*)]
+       (when header-fn (draw-row-header (header-fn state)))))))
 
 (defn draw-bottom
   "Ends the diagram by drawing a line across the box area. Needed if the

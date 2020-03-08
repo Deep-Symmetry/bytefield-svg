@@ -534,6 +534,7 @@
                       draw-gap
                       draw-line
                       draw-row-header
+                      eval-attribute-spec
                       hex-text
                       next-row
                       text

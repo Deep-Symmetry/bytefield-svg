@@ -403,14 +403,21 @@
   8) remaining on the current row, will center the label in the
   remaining space on that row before drawing the gap. Otherwise it
   will advance to the next row, draw the label centered on the entire
-  row, then draw the gap."
+  row, then draw the gap.
+
+  When finishing off the previous row, the box is drawn by default in
+  the standard `:box-above` style. You can change that by passing
+  different attributes under the `:box-above-style` key (for example,
+  use `{:box-above-style :box-above-related}` if the gap relates to
+  the preceding box)."
   ([]
    (draw-gap nil nil))
   ([label]
    (draw-gap label nil))
   ([label attr-spec]
-   (let [{:keys [height gap edge gap-style min-label-columns]
+   (let [{:keys [height gap edge gap-style box-above-style min-label-columns]
           :or   {gap-style         (eval-attribute-spec :dotted)
+                 box-above-style   (eval-attribute-spec :box-above)
                  height            70
                  gap               10
                  edge              15
@@ -421,9 +428,9 @@
      (if label
        ;; We are supposed to draw a label.
        (if (<= min-label-columns (- boxes column))
-         (draw-box label [{:span (- boxes column)} :box-above]) ; And there is room for it on the current line.
+         (draw-box label [{:span (- boxes column)} box-above-style]) ; And there is room for it on the current line.
          (do ; The label doesn't fit on the current line.
-           (draw-box nil [{:span (- boxes column)} :box-above]) ; Finish off current line with emptiness.
+           (draw-box nil [{:span (- boxes column)} box-above-style]) ; Finish off current line with emptiness.
            (auto-advance-row)
            (draw-box label [{:span boxes :borders #{:left :right}}]))) ; Put the label on its own line.
        ;; We are not supposed to draw a label, so just finish the current line if needed.
@@ -559,20 +566,23 @@
    :border-unrelated {}                        ; Line style for borders between unrelated cells: use defaults.
    :border-related   {:stroke-dasharray "1,3"} ; Line style for borders between related cells.
 
-   :box-first   {:borders {:left   :border-unrelated ; Style for first of a row of related boxes.
-                           :right  :border-related
-                           :top    :border-unrelated
-                           :bottom :border-unrelated}}
-   :box-related {:borders {:left   :border-related ; Style for internal box in a related row.
-                           :top    :border-unrelated
-                           :right  :border-related
-                           :bottom :border-unrelated}}
-   :box-last    {:borders {:left   :border-related ; Style for last of a group of related boxes.
-                           :right  :border-unrelated
-                           :top    :border-unrelated
-                           :bottom :border-unrelated}}
-   :box-above   {:borders #{:left :right :top}} ; Style for box open to row below.
-   :box-below   {:borders #{:left :right :bottom}}}) ; Style for box open to row above.
+   :box-first         {:borders {:left   :border-unrelated ; Style for first of a row of related boxes.
+                                 :right  :border-related
+                                 :top    :border-unrelated
+                                 :bottom :border-unrelated}}
+   :box-related       {:borders {:left   :border-related ; Style for internal box in a related row.
+                                 :top    :border-unrelated
+                                 :right  :border-related
+                                 :bottom :border-unrelated}}
+   :box-last          {:borders {:left   :border-related ; Style for last of a group of related boxes.
+                                 :right  :border-unrelated
+                                 :top    :border-unrelated
+                                 :bottom :border-unrelated}}
+   :box-above         {:borders #{:left :right :top}} ; Style for box open to row below.
+   :box-above-related {:borders {:left  :border-related ; Stle for box open to row below, related to previous box.
+                                 :right :border-unrelated
+                                 :top   :border-unrelated}}
+   :box-below         {:borders #{:left :right :bottom}}}) ; Style for box open to row above.
 
 (defn default-row-header-fn
   "Returns an SVG text object containing the header for the current row

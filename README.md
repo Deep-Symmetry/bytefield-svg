@@ -9,9 +9,8 @@ Clojure Interpreter).
 
 ## Status
 
-This is just past the proof-of-concept stage, and can already generate
-diagrams like [this one](https://deepsymmetry.org/images/test.svg) by
-running:
+The DSL seems feature-complete, and can generate diagrams like [this
+one](https://deepsymmetry.org/images/test.svg) by running:
 
     node test.js >test.svg
 
@@ -34,10 +33,11 @@ this approach. Follow that link if you want to see exactly why this
 was created.
 
 It has not yet been published to npm; I am holding off on doing that
-until the DSL stabilizes a bit in the course of converting the LaTeX
-documents I developed this for. I expect it will be ready in a week or
-two. Until then, clone the repository and build it by making sure you
-have [Node.js](https://nodejs.org/en/) and the [Clojure CLI
+until the DSL has proven itself in the course of converting the LaTeX
+documents I developed this for. The DSL and this package itself needs
+to be documented as well. I expect it will be ready in a week or two.
+Until then, clone the repository and build it by making sure you have
+[Node.js](https://nodejs.org/en/) and the [Clojure CLI
 tools](https://clojure.org/guides/getting_started) installed, and run:
 
     npm install

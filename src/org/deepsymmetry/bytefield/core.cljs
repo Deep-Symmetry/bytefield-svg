@@ -302,8 +302,11 @@
   index. `label` can either be a number (which will be converted to a
   hex-styled hexadecimal string with two digits for each cell the box
   spans), a pre-constructed SVG text object (which will be rendered
-  as-is), or a string (which will be converted to a plain-styled SVG
-  text object), or `nil`, to have no label at all.
+  as-is), a string (which will be converted to a plain-styled SVG text
+  object), a function (which will be called with the arguments `left`,
+  `top`, `width`, and `height` describing the box boundaries, and can
+  draw whatever it wants using analemma structures and `append-svg`),
+  or `nil`, to have no label at all.
 
   The default size box is that of a single byte but this can be
   overridden with the `:span` attribute. Normally draws all borders,
@@ -313,34 +316,38 @@
   `:height` if you are drawing special header rows rather than normal
   byte boxes (you will need to supply the same height override when
   calling `next-row`)."
-  [label attr-spec]
-  (auto-advance-row)
-  (let [{:keys [span borders fill height]
-         :or   {span    1
-                borders #{:left :right :top :bottom}
-                height  @('row-height @*globals*)}} (eval-attribute-spec attr-spec)
+  ([label]
+   (draw-box label nil))
+  ([label attr-spec]
+   (auto-advance-row)
+   (let [{:keys [span borders fill height]
+          :or   {span    1
+                 borders #{:left :right :top :bottom}
+                 height  @('row-height @*globals*)}} (eval-attribute-spec attr-spec)
 
-        column (:column @@('diagram-state @*globals*))
-        left   (+ @('left-margin @*globals*) (* column @('box-width @*globals*)))
-        width  (* span @('box-width @*globals*))
-        right  (+ left width)
-        top    (:y @@('diagram-state @*globals*))
-        bottom (+ top height)]
-    (when (> (+ column span) @('boxes-per-row @*globals*))
-      (throw (js/Error "draw-box called with span larger than remaining columns in row")))
-    (when fill (append-svg (svg/rect left top height width :fill fill)))
-    (when-let [style (interpret-box-border :top borders :border-unrelated)] (draw-line left top right top style))
-    (when-let [style (interpret-box-border :bottom borders :border-unrelated)]
-      (draw-line left bottom right bottom style))
-    (when-let [style (interpret-box-border :right borders :border-unrelated)] (draw-line right top right bottom style))
-    (when-let [style (interpret-box-border :left borders :border-unrelated)] (draw-line left top left bottom style))
-    (when label
-      (let [label (xml/merge-attrs (format-box-label label span)
-                                   {:x           (/ (+ left right) 2.0)
-                                    :y           (+ top 1 (/ height 2.0))
-                                    :text-anchor "middle"})]
-        (append-svg (center-baseline label))))
-    (swap! @('diagram-state @*globals*) update :column + span)))
+         column (:column @@('diagram-state @*globals*))
+         left   (+ @('left-margin @*globals*) (* column @('box-width @*globals*)))
+         width  (* span @('box-width @*globals*))
+         right  (+ left width)
+         top    (:y @@('diagram-state @*globals*))
+         bottom (+ top height)]
+     (when (> (+ column span) @('boxes-per-row @*globals*))
+       (throw (js/Error "draw-box called with span larger than remaining columns in row")))
+     (when fill (append-svg (svg/rect left top height width :fill fill)))
+     (when-let [style (interpret-box-border :top borders :border-unrelated)] (draw-line left top right top style))
+     (when-let [style (interpret-box-border :bottom borders :border-unrelated)]
+       (draw-line left bottom right bottom style))
+     (when-let [style (interpret-box-border :right borders :border-unrelated)] (draw-line right top right bottom style))
+     (when-let [style (interpret-box-border :left borders :border-unrelated)] (draw-line left top left bottom style))
+     (when label
+       (if (fn? label)
+         (label left top width height)  ; Box being drawn by custom function.
+         (let [label (xml/merge-attrs (format-box-label label span)  ; Normal label.
+                                      {:x           (/ (+ left right) 2.0)
+                                       :y           (+ top 1 (/ height 2.0))
+                                       :text-anchor "middle"})]
+           (append-svg (center-baseline label)))))
+     (swap! @('diagram-state @*globals*) update :column + span))))
 
 (defn draw-boxes
   "Draws multiple boxes with the same attributes for each. Calls
@@ -536,10 +543,10 @@
                       draw-bottom
                       draw-box
                       draw-boxes
-                      draw-related-boxes
                       draw-column-headers
                       draw-gap
                       draw-line
+                      draw-related-boxes
                       draw-row-header
                       eval-attribute-spec
                       hex-text

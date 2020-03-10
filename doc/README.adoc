@@ -17,4 +17,4 @@ a shared execution environment.
 
 == Diagram Drawing Functions
 
-> TODO: Document
+> TODO: Document, including links to relevant Analemma docs.

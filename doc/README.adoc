@@ -18,3 +18,12 @@ a shared execution environment.
 == Diagram Drawing Functions
 
 > TODO: Document, including links to relevant Analemma docs.
+
+And here is an example of how to draw a box with a custom label function:
+
+[source,clojure]
+----
+(draw-box (fn [left top width height]
+            (draw-line left top (+ left width) (+ top height))
+            (draw-line left (+ top height) (+ left width) top)))
+----

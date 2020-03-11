@@ -385,13 +385,15 @@
   ([labels]
    (draw-related-boxes labels nil))
   ([labels attr-spec]
-   (let [attrs   (eval-attribute-spec attr-spec)
-         address (:address @@('diagram-state @*globals*))
-         end     (+ address (* (:span attrs 1) (count labels)))]
+   (let [attrs                      (eval-attribute-spec attr-spec)
+         {:keys [:address :column]} @@('diagram-state @*globals*)
+         start                      (+ address column)
+         span                       (:span attrs 1)
+         end                        (+ start (* span (count labels)))]
      ;; TODO: Is there a more idiomatic/elegant way to do this?
      (doseq [[i label] (map-indexed (fn [i label] [i label]) labels)]
        (let [borders (into {} (map (fn [border]
-                                     [border (if (related? (+ address i) address end border)
+                                     [border (if (related? (+ start (* span i)) start end border)
                                                :border-related
                                                :border-unrelated)])
                                    [:left :right :top :bottom]))]

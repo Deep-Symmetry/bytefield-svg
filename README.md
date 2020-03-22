@@ -50,6 +50,15 @@ To check for outdated dependencies, you can run:
 
     clojure -A:outdated
 
+## Releasing
+
+To cut a release, check for outdated dependencies as above, update the
+version in `package.json`, tag and push to GitHub, then run:
+
+    npm install
+    npm run release
+    npm publish
+
 ## License
 
 <a href="http://deepsymmetry.org"><img align="right" alt="Deep Symmetry"

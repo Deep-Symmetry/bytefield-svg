@@ -50,30 +50,25 @@ for this to work you need to build and run one of David's [Antora fork
 branches](https://gitlab.com/djencks/antora/-/tree/issue-585-with-377-582-git-credential-plugin).
 
 Once those things are released, this will be a lot easier. If you want
-to brave it before then, the [build
-script](https://github.com/Deep-Symmetry/dysentery/blob/master/doc/build.sh)
-for the above-linked documentation site shows one way to do it (that
-script is further complicated because it also installs another as-yet
-unreleased plugin of David's, for integrating LUNR search into the
-site).
+to brave it before then, there are
+[instructions](https://github.com/Deep-Symmetry/dysentery/tree/master/doc)
+showing how to locally build the dysentery project documentation site,
+which set up and use those special versions.
 
 ## Building
 
-To build a development build from source, clone the repository and
-make sure you have [Node.js](https://nodejs.org/en/) and the [Clojure
-CLI tools](https://clojure.org/guides/getting_started) installed, then
+To build a development build of `bytefield-svg` from source, clone the
+repository and make sure you have [Node.js](https://nodejs.org/en/)
+and the [Clojure CLI
+tools](https://clojure.org/guides/getting_started) installed, then
 from the top-level directory of your cloned repo run:
 
     npm install
     npm run build
 
-This will create the file `lib.js`. At that point, you can try
-building the test SVG file:
-
-## Local Testing
-
-Once built, you can generate diagrams like [this
-one](https://deepsymmetry.org/images/test.svg) by running:
+This will create the file `lib.js`. At that point, you can generate
+diagrams like [this one](https://deepsymmetry.org/images/test.svg) by
+running:
 
     node test.js >test.svg
 

@@ -9,7 +9,70 @@ Clojure Interpreter).
 
 ## Status
 
-The DSL seems feature-complete, and can generate diagrams like [this
+The DSL has been nicely validated by porting all of the LaTeX
+documents I needed it for to an [Antora documentation
+site](https://djl-analysis.deepsymmetry.org/djl-analysis/track_metadata.html).
+
+It has been published to npm, so you can install it by simply running:
+
+    npm install bytefield-svg
+
+
+I am currently in the process of documenting the DSL and this package
+itself.
+
+If all you want to do is build an SVG from the DSL, you can simply
+write JavaScript to do it, once you've installed `bytefield-svg`:
+
+```javascript
+var generate = require('bytefield-svg');
+
+var diagram = `
+;; Put your diagram DSL here...
+`;
+
+process.stdout.write(generate(diagram));
+```
+
+And then you can just run it, assuming you saved it as `diagram.js`,
+like so:
+
+    node diagram.js >diagram.svg
+
+But the package's main purpose is to act as an
+[Asciidoctor](https://asciidoctor.org) extension hosted by an
+[Antora](https://antora.org) plugin. This is done with the help of a
+[framework](https://gitlab.com/djencks/asciidoctor-generic-svg-extension.js)
+that [David Jencks](https://gitlab.com/djencks) has created.
+
+However, plugin support for Antora is not yet released, so in order
+for this to work you need to build and run one of David's [Antora fork
+branches](https://gitlab.com/djencks/antora/-/tree/issue-585-with-377-582-git-credential-plugin).
+
+Once those things are released, this will be a lot easier. If you want
+to brave it before then, the [build
+script](https://github.com/Deep-Symmetry/dysentery/blob/master/doc/build.sh)
+for the above-linked documentation site shows one way to do it (that
+script is further complicated because it also installs another as-yet
+unreleased plugin of David's, for integrating LUNR search into the
+site).
+
+## Building
+
+To build a development build from source, clone the repository and
+make sure you have [Node.js](https://nodejs.org/en/) and the [Clojure
+CLI tools](https://clojure.org/guides/getting_started) installed, then
+from the top-level directory of your cloned repo run:
+
+    npm install
+    npm run build
+
+This will create the file `lib.js`. At that point, you can try
+building the test SVG file:
+
+## Local Testing
+
+Once built, you can generate diagrams like [this
 one](https://deepsymmetry.org/images/test.svg) by running:
 
     node test.js >test.svg
@@ -20,31 +83,6 @@ is present in the project, and with some well-designed helper
 functions in that project's own include file, the source for an even
 more attractive version of the diagram shrinks to
 [this](https://github.com/Deep-Symmetry/dysentery/blob/379555f21244354c4dc0c9711c8cb3a3552bc64b/doc/modules/ROOT/examples/dbserver_shared.edn)).
-
-[David Jencks](https://gitlab.com/djencks) has been helping build a
-framework that will run this as an
-[Asciidoctor](https://asciidoctor.org) extension hosted by an
-[Antora](https://antora.org) plugin. Until plugin support has been
-merged into Antora and released, it needs to run on unreleased
-branches, but that is already working very well. The [new version of
-the dysentery DJ Link Packet
-Analysis](https://djl-analysis.deepsymmetry.org) is being built using
-this approach. Follow that link if you want to see exactly why this
-was created.
-
-It has not yet been published to npm; I am holding off on doing that
-until the DSL has proven itself in the course of converting the LaTeX
-documents I developed this for. The DSL and this package itself needs
-to be documented as well. I expect it will be ready in a week or two.
-Until then, clone the repository and build it by making sure you have
-[Node.js](https://nodejs.org/en/) and the [Clojure CLI
-tools](https://clojure.org/guides/getting_started) installed, and run:
-
-    npm install
-    npm run build
-
-This will create the file `lib.js`. At that point, you can try
-building the test SVG file as shown above.
 
 To check for outdated dependencies, you can run:
 

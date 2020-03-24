@@ -566,8 +566,10 @@
    :math  {:font-size   18 ; Default style in which variables and equations are drawn.
            :font-family "Palatino, Georgia, Times New Roman, serif"
            :font-style  "italic"}
-   :sub   {:font-size      "70%" ; Style for subscripted nested tspan objects
-           :baseline-shift "sub"}
+   :sub   {:font-size "70%" ; Style for subscripted nested tspan objects.
+           :dy        "0.5ex"}
+   :super {:font-size "70%" ; Style for superscripted nested tspan objects.
+           :dy        "-0.8ex"}
    :bold  {:font-weight "bold"} ; Adds bolding to the font style.
 
    :dotted {:stroke-dasharray "1,1"} ; Style for dotted lines.

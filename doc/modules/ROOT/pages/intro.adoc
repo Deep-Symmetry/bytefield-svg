@@ -104,7 +104,8 @@ it, like so:
 That gives us a nicely centered diagram with four byte boxes per row.
 
 If you have to draw a lot of values in a sequence, you can use normal
-Clojure sequence handling forms like `doseq`:
+Clojure sequence handling forms like
+https://clojuredocs.org/clojure.core/doseq[`doseq`]:
 
 [source,clojure]
 (draw-column-headers)

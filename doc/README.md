@@ -14,7 +14,7 @@ descriptor](antora.yml) and [source](modules/ROOT).
 If you would like to build the documentation site in order to preview
 changes you are making, you can use an `npm` script to do it, because
 `npm` has already installed the dependencies needed for building the
-documentation site, including David Jenks' not-yet-merged enhancements
+documentation site, including David Jencks’ not-yet-merged enhancements
 to Antora.
 
 3. `cd` into the `bytefield-svg` repository and run the following commands:

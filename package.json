@@ -14,7 +14,7 @@
   "scripts": {
     "build": "shadow-cljs compile lib",
     "release": "shadow-cljs release lib",
-    "test": "test.js >test.svg"
+    "test": "./test.js >test.svg"
   },
   "repository": {
     "type": "git",

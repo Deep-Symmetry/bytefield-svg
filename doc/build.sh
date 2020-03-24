@@ -5,7 +5,13 @@
 
 # Install dependencies needed only on Netlify.
 npm install yarn
-npm run release
+
+# If we haven't already, build bytefield-svg so we can create the
+# example diagrams.
+if [ ! -f "lib.js" ]
+then
+    npm run release
+fi
 
 cd doc
 

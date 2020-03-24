@@ -57,6 +57,17 @@ And here is an example of how to draw a box with a custom label function:
             (draw-line left top (+ left width) (+ top height))
             (draw-line left (+ top height) (+ left width) top)))
 
+And here's what it looks like repeated over a four-box row:
 
+[bytefield]
+----
+(def boxes-per-row 4)
+(def left-margin 1)
+(draw-column-headers)
+(doseq [_ (range 4)]
+  (draw-box (fn [left top width height]
+              (draw-line left top (+ left width) (+ top height))
+              (draw-line left (+ top height) (+ left width) top))))
+----
 
 include::partial$Footer.adoc[]

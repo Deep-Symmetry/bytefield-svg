@@ -5,6 +5,8 @@
   "main": "lib.js",
   "dependencies": {},
   "devDependencies": {
+    "antora-generic-svg-extension-plugin": "https://gitlab.com/djencks/antora-generic-svg-extension-plugin/-/jobs/artifacts/master/raw/antora-generic-svg-extension-plugin-v0.0.1.tgz?job=bundle-stable",
+    "antora-lunr": "https://github.com/djencks/antora-lunr#plugin-377",
     "asciidoctor-mathjax": "0.0.4",
     "shadow-cljs": "^2.8.93",
     "source-map-support": "^0.5.16"

@@ -5,7 +5,7 @@
 
 # Install dependencies needed only on Netlify.
 npm install yarn
-npm install bytefield-svg
+npm run release
 
 cd doc
 

@@ -13,7 +13,7 @@ asciidoc:
 plugins:
   - path: antora-generic-svg-extension-plugin
     config:
-      generator: bytefield-svg
+      generator: ./..
       name: bytefield
   - path: antora-lunr
 ui:

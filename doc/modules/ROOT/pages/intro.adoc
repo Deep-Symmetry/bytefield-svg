@@ -125,7 +125,8 @@ in hexadecimal.
 For situations where you have a series of bytes that you want to
 convey are part of a related structure, you can use the
 `draw-related-boxes` function. It takes a sequence as its first
-argument, and does the looping for you:
+argument, and does the looping for you, in addition to using dashed
+borders inside the related group:
 
 [source,clojure]
 (draw-column-headers)

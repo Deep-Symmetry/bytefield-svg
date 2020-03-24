@@ -18,8 +18,9 @@ It has been published to npm, so you can install it by simply running:
     npm install bytefield-svg
 
 
-I am currently in the process of documenting the DSL and this package
-itself.
+I am currently in the process of
+[documenting](https://bytefield-svg.netlify.com/) the DSL and this
+package itself.
 
 If all you want to do is build an SVG from the DSL, you can simply
 write JavaScript to do it, once you've installed `bytefield-svg`:

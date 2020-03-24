@@ -28,15 +28,154 @@ representing them in source, are a big part of why this worked so
 well.
 
 TIP: But this means that to get really productive with
-`bytefield-svg`, you are going to need to learn at least a little
-Clojure.
+`bytefield-svg`, you are going to need to
+https://clojure.org/guides/getting_started[learn] at least a little
+Clojure. The https://github.com/borkdude/sci[sci] interpreter offers a
+large subset of the language, with the omission of host interop
+features and a few functions which would be dangerous in a shared
+hosting environment.
 
 ## The Drawing Model
+
+The basic purpose of `bytefield-svg` is to support the drawing of
+byte-field diagrams to aid in the understanding of network protocols,
+memory layouts, an similar binary structures. It sets up a drawing
+environment to facilitate that, as well as the automatic generation of
+column and row headers to help readers keep track of byte addresses.
+
+Reasonable defaults are provideded, but everything is very
+configurable. Before diving into those details, it will help to look
+at some concrete examples. The main function you'll use for drawing
+byte boxes is `draw-box`. By default it creates a box that represents
+one byte. So if we create a diagram with only `(draw-box 0)` as its
+content, here is what we get:
+
+[bytefield]
+----
+(draw-box 0)
+----
+
+Notice that the value is represented as two hexadecimal digits, to
+reinforce that it is a single byte. But why is it positioned where it
+is? We can get a hint of that if we draw the column headers before
+calling it. So, a slightly more full-featured diagram specification
+would be:
+
+[source,clojure]
+(draw-column-headers)
+(draw-box 0)
 
 [bytefield]
 ----
 (draw-column-headers)
+(draw-box 0)
 ----
+
+That's more clear: The diagram is configured to show sixteen byte
+boxes per row, which is why our box was drawn where it is. The diagram
+is centered, as well (although there is room on the left for row
+address headers, which will appear when the diagram grows beyond one
+row).
+
+But why were the column headers not drawn until we explicitly asked
+for them? That is to give us a chance to change things like the number
+of boxes per row and the left margin before we start drawing. Those
+values are set up as defaults, but can be changed by calling `def` (a
+standard Clojure function{empty}footnote:[Techincally, `def` is
+actually a _special form_ rather than a function, but that is further
+afield than this introduction needs to go.]) with the symbol of the
+setting we want to define or redefine, and the value we want to give
+it, like so:
+
+[source,clojure]
+(def left-margin 1)
+(def boxes-per-row 4)
+(draw-column-headers)
+(draw-box 0)
+
+[bytefield]
+----
+(def left-margin 1)
+(def boxes-per-row 4)
+(draw-column-headers)
+(draw-box 0)
+----
+
+That gives us a nicely centered diagram with four byte boxes per row.
+
+If you have to draw a lot of values in a sequence, you can use normal
+Clojure sequence handling forms like `doseq`:
+
+[source,clojure]
+(draw-column-headers)
+(doseq [val (range 30)]
+  (draw-box val))
+
+[bytefield]
+----
+(draw-column-headers)
+(doseq [val (range 30)]
+  (draw-box val))
+----
+
+And we get thirty boxes containing the numbers from 0 to 29 expressed
+in hexadecimal.
+
+For situations where you have a series of bytes that you want to
+convey are part of a related structure, you can use the
+`draw-related-boxes` function. It takes a sequence as its first
+argument, and does the looping for you:
+
+[source,clojure]
+(draw-column-headers)
+(draw-related-boxes (range 30))
+
+[bytefield]
+----
+(draw-column-headers)
+(draw-related-boxes (range 30))
+----
+
+Of course, sometimes we have values that take more than one byte, and
+sometimes we want to draw labels describing their contents, rather
+than just showing values. If you pass a string rather than a number,
+it is drawn as a label. And `draw-box` takes a second argument after
+the box content, which is a map of attributes, identified by keyword,
+that modify the box. The `:span` attribute controls how many bytes
+wide the box should be, with a default value of 1. Putting that
+together, and using a new `draw-gap` function which is designed to
+communicate variable-length structures, we can draw something like
+this:
+
+[source,clojure]
+(draw-column-headers)
+(draw-box "Address" {:span 4})
+(draw-box "Size" {:span 2})
+(draw-box 0 {:span 2})
+(draw-gap "Payload")
+(draw-bottom)
+
+[bytefield]
+----
+(draw-column-headers)
+(draw-box "Address" {:span 4})
+(draw-box "Size" {:span 2})
+(draw-box 0 {:span 2})
+(draw-gap "Payload")
+(draw-bottom)
+----
+
+> We had to call `draw-bottom` at the end, because sometimes we want
+  control over the border at the bottom of a gap, which will become
+  more clear in the discussion of box borders.
+
+Note that the third box we drew, which we labeled with a number, was
+drawn using four hex digits, because we told it to span two byte
+boxes, and that's how many hexadecimal digits fit in two bytes.
+
+With that introduction, we're ready to start exploring all the values
+that can be configured, and the full details of the functions that you
+can use for drawing.
 
 ## Predefined Values
 

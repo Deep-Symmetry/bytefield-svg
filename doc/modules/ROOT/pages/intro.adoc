@@ -39,7 +39,7 @@ hosting environment.
 
 The basic purpose of `bytefield-svg` is to support the drawing of
 byte-field diagrams to aid in the understanding of network protocols,
-memory layouts, an similar binary structures. It sets up a drawing
+memory layouts, and similar binary structures. It sets up a drawing
 environment to facilitate that, as well as the automatic generation of
 column and row headers to help readers keep track of byte addresses.
 

@@ -1,0 +1,21 @@
+site:
+  title: bytefield-svg
+  url: https://bytefield-svg.deepsymmetry.org
+  start_page: bytefield-svg::intro.adoc
+content:
+  sources:
+  - url: ./..
+    branches: HEAD
+    start_path: doc
+asciidoc:
+  extensions:
+  - asciidoctor-mathjax
+plugins:
+  - path: ./../../asciidoctor-generic-svg-extension.js
+    config:
+      generator: ./..
+      name: bytefield
+ui:
+  bundle:
+    url: https://deepsymmetry.org/media/antora/ui-bundle.zip
+    snapshot: true

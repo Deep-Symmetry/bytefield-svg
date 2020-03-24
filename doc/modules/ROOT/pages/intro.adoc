@@ -1,0 +1,62 @@
+= Introduction
+James Elliott <james@deepsymmetry.org>
+:icons: font
+:toc: preamble
+:experimental:
+
+This tool was created to enable the porting of a pair of large LaTeX
+documents to a more modern and maintainable
+https://asciidoctor.org[Asciidoc]-based https://antora.org[Antora]
+site. The only thing I couldn't do without was the wonderful
+`bytefield` LaTeX package for drawing byte field diagrams, and
+`bytefield-svg` was my way to bring it forward to this new world.
+https://djl-analysis.deepsymmetry.org/djl-analysis/track_metadata.html#_connecting_to_the_database[It
+worked wonderfully.]
+
+Along the way, I switched from LaTeX-style commands to using
+https://clojure.org[Clojure] to build my own domain-specific language
+for expressing byte field diagrams. Having the full power of a modern
+Lisp made the diagram source a lot more compact and faster to write,
+and it is easy to define your own helper functions to eliminate
+repetitive writing.
+
+Clojure's rich set of native data types (including keywords,
+https://clojure.org/reference/reader#_vectors[vectors],
+https://clojure.org/reference/reader#_maps[maps], and
+https://clojure.org/reference/reader#_sets[sets]), and compact way of
+representing them in source, are a big part of why this worked so
+well.
+
+TIP: But this means that to get really productive with
+`bytefield-svg`, you are going to need to learn at least a little
+Clojure.
+
+## The Drawing Model
+
+[bytefield]
+----
+(draw-column-headers)
+----
+
+## Predefined Values
+
+> TODO: Document, an show how to override.
+
+## Attributes
+
+> TODO: Document, and show how to override, combine and to add new definitions.
+
+## Diagram Drawing Functions
+
+> TODO: Document, including links to relevant Analemma docs.
+
+And here is an example of how to draw a box with a custom label function:
+
+[source,clojure]
+(draw-box (fn [left top width height]
+            (draw-line left top (+ left width) (+ top height))
+            (draw-line left (+ top height) (+ left width) top)))
+
+
+
+include::partial$Footer.adoc[]

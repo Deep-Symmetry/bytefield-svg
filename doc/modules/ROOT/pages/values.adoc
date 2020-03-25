@@ -13,7 +13,7 @@ their values using https://clojuredocs.org/clojure.core/def[Clojure's
 
 TIP: Unless you append a specific unit type to them,
 https://oreillymedia.github.io/Using_SVG/guide/units.html[distances
-and coordinates] in SVG are interpreted as "user units", which default
+and coordinates] in SVG are interpreted as “user units”, which default
 in these diagrams to pixels (as if you had added `px` after the
 number).
 
@@ -37,7 +37,21 @@ number).
  sure the box boundaries don't get clipped. You can make it bigger if
  you want to draw custom content there.
 
-|box-width |1 | How much horizontal space each box takes up.
+|box-width |40 | How much horizontal space each box takes up.
+
+|boxes-per-row |16 |How many boxes are drawn on a row before moving to
+ the next row. The default is 16, so that the hexadecimal row labels
+ increment by `10` and the diagram is a nice width. If you are drawing
+ smaller structures you can reduce this.
+
+|row-height |30 | How much vertical space a row of boxes takes up.
+
+|named-attributes | |See the <<attrs#,next section>>.
+
+|row-header-fn |default-row-header-fn |The function that is called to
+ draw the row header when necessary. See the
+ https://github.com/Deep-Symmetry/bytefield-svg/blob/master/src/org/deepsymmetry/bytefield/core.cljs[source]
+ for more details (near the end of the file).
 
 |===
 

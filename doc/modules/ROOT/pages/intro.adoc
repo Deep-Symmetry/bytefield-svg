@@ -7,7 +7,7 @@ James Elliott <james@deepsymmetry.org>
 This tool was created to enable the porting of a pair of large LaTeX
 documents to a more modern and maintainable
 https://asciidoctor.org[Asciidoc]-based https://antora.org[Antora]
-site. The only thing I couldn't do without was the wonderful
+site. The only thing I couldn’t do without was the wonderful
 `bytefield` LaTeX package for drawing byte field diagrams, and
 `bytefield-svg` was my way to bring it forward to this new world.
 https://djl-analysis.deepsymmetry.org/djl-analysis/track_metadata.html#_connecting_to_the_database[It
@@ -20,7 +20,7 @@ Lisp made the diagram source a lot more compact and faster to write,
 and it is easy to define your own helper functions to eliminate
 repetitive writing.
 
-Clojure's rich set of native data types (including keywords,
+Clojure’s rich set of native data types (including keywords,
 https://clojure.org/reference/reader#_vectors[vectors],
 https://clojure.org/reference/reader#_maps[maps], and
 https://clojure.org/reference/reader#_sets[sets]), and compact way of
@@ -46,7 +46,7 @@ column and row headers to help readers keep track of byte addresses.
 
 Reasonable defaults are provideded, but everything is very
 configurable. Before diving into those details, it will help to look
-at some concrete examples. The main function you'll use for drawing
+at some concrete examples. The main function you’ll use for drawing
 byte boxes is `draw-box`. By default it creates a box that represents
 one byte. So if we create a diagram with only `(draw-box 0)` as its
 content, here is what we get:
@@ -72,7 +72,7 @@ would be:
 (draw-box 0)
 ----
 
-That's more clear: The diagram is configured to show sixteen byte
+That’s more clear: The diagram is configured to show sixteen byte
 boxes per row, which is why our box was drawn where it is. The diagram
 is centered, as well (although there is room on the left for row
 address headers, which will appear when the diagram grows beyond one
@@ -174,15 +174,11 @@ this:
 
 Note that the third box we drew, which we labeled with a number, was
 drawn using four hex digits, because we told it to span two byte
-boxes, and that's how many hexadecimal digits fit in two bytes.
+boxes, and that’s how many hexadecimal digits fit in two bytes.
 
-With that introduction, we're ready to start exploring all the
+With that introduction, we’re ready to start exploring all the
 <<values#,values that can be configured>>, and the full details of the
 functions that you can use for drawing.
-
-## Attributes
-
-> TODO: Document, and show how to override, combine and to add new definitions.
 
 ## Diagram Drawing Functions
 
@@ -195,7 +191,7 @@ And here is an example of how to draw a box with a custom label function:
             (draw-line left top (+ left width) (+ top height))
             (draw-line left (+ top height) (+ left width) top)))
 
-And here's what it looks like repeated over a four-box row:
+And here’s what it looks like repeated over a four-box row:
 
 [bytefield]
 ----

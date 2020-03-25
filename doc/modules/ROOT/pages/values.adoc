@@ -1,14 +1,13 @@
 = Predefined Values
 James Elliott <james@deepsymmetry.org>
 :icons: font
-:toc: preamble
 :experimental:
 
 There are a number of predefined values that control the default
 behavior of the functions you use to draw byte field diagrams. They
 are set up as variables before your code starts running, and as
 described in the <<intro#drawing-model,introduction>>, you can change
-their values using https://clojuredocs.org/clojure.core/def[Clojure's
+their values using https://clojuredocs.org/clojure.core/def[Clojure’s
 `def`] mechanism.
 
 TIP: Unless you append a specific unit type to them,
@@ -24,17 +23,17 @@ number).
 |left-margin |40 | How far from the left edge of the diagram the first
  box begins. This default is large enough to accommodate the row
  address labels for all but extremely long byte fields. If you are
- drawing a single row (which won't have a row label), it's nice to set
+ drawing a single row (which won’t have a row label), it’s nice to set
  this to `1` so the diagram is centered.
 
 |right-margin |1 | How far from the right edge of the diagram the last
  box ends. This default is just large enough to make sure the box
- boundary doesn't get clipped. You can make it bigger if you want to
+ boundary doesn’t get clipped. You can make it bigger if you want to
  draw custom content there.
 
 |bottom-margin |1 | How far from the bottom edge of the diagram the
  last row of boxes ends. This default is just large enough to make
- sure the box boundaries don't get clipped. You can make it bigger if
+ sure the box boundaries don’t get clipped. You can make it bigger if
  you want to draw custom content there.
 
 |box-width |40 | How much horizontal space each box takes up.
@@ -46,7 +45,7 @@ number).
 
 |row-height |30 | How much vertical space a row of boxes takes up.
 
-|named-attributes | |See the <<attrs#,next section>>.
+|named-attributes | |See the <<attrs#predefined-attributes,next section>>.
 
 |row-header-fn |default-row-header-fn |The function that is called to
  draw the row header when necessary. See the
@@ -54,5 +53,9 @@ number).
  for more details (near the end of the file).
 
 |===
+
+You can `def` any other variables that might be useful to your
+diagrams, perhaps in a shared include file, but they won’t affect the
+existing drawing functions the way these values do.
 
 include::partial$Footer.adoc[]

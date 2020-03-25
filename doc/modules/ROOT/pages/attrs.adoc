@@ -1,0 +1,180 @@
+= Attributes
+James Elliott <james@deepsymmetry.org>
+:icons: font
+:toc: preamble
+:experimental:
+
+Most of the drawing functions that you can call have a parameter that
+let you specify _attributes_ to configure details about what you want
+them to do. In the end, the attributes boil down to a
+https://clojure.org/reference/reader#_maps[Clojure map] whose keys are
+keywords that identify the attribute being configured, and whose
+values are what you want to use for that attribute.
+
+The specific attributes accepted by each function are described in the
+function documentation. Some attributes are used by the function
+itself, and some are passed along to the SVG to be come
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
+attributes] of the element you are drawing.
+
+== Attribute Expressions
+
+Because you often want to reuse and combine the same sets of
+attributes when drawing your diagrams, `bytefield-svg` offers a
+shorthand way to express many useful operations concisely, without
+requiring you to build up the map explicitly. Drawing functions which
+accept attributes will process this notation for you.
+
+> If you are interested in the intricate details, attribute
+  expressions are interpreted by the function `eval-attribute-spec`
+  near the top of the
+  https://github.com/Deep-Symmetry/bytefield-svg/blob/master/src/org/deepsymmetry/bytefield/core.cljs[source].
+
+=== Raw Maps
+
+In the simplest case, you can pass a map of attributes that you build
+yourself, such as when you want to tell `draw-box` to consume the
+space normally taken by two boxes:
+
+[source,clojure]
+(draw-box 42 {:span 2}}
+
+The second argument to `draw-box` is an attribute expression. In this
+case we have told it that the `:span` attribute should have the value
+`2`.
+
+=== Named Attributes
+
+If you want to use one of the <<predefined-attributes,predefined
+sets>> of attributes, instead of a map you can pass the keyword that
+names them. For example, if you want to render some text in the same
+style normally used for drawing hexadecimal numbers, you can reference
+the attribute set named `:hex` as the second (attribute) argument to
+the `text` function:
+
+[source,clojure]
+(text "NUL" :hex)
+
+When a keyword is found as an attribute expression, that keyword is
+looked up in the `named-attributes` table, and the corresponding value
+is used as the attributes to control the drawing.
+
+In addition to the predefined values that start out in that table, you
+can add your own named attribute definitions by calling the `defattrs`
+function, perhaps in a shared include file.
+
+=== Combining Attributes
+
+Sometimes you want to combine multiple attribute specifications,
+perhaps starting with a named set of attributes and then augmenting or
+modifying it somehow. To express that you can pass a
+https://clojure.org/reference/reader#_vectors[vector] of attribute
+expressions, and each expression in turn will be evaluated into a map
+as described by this section, and the later maps will be
+https://clojuredocs.org/clojure.core/merge[merged] into the earlier
+ones. The merge process allows later keys to replace earlier values,
+which is how you can override as well as adding on to the predefined
+attribute sets.
+
+For example, here is an attribute expression that starts with the
+predefined `:plain` text attributes but establishes a lighter font
+weight:
+
+[source,clojure]
+----
+[:plain {:font-weight "light"}]
+----
+
+And here is how to draw a box using the predefined `:related` (dotted)
+border styles, in addition to a purple background (assuming your
+diagram has called `defattrs` to set up the `:bg-purple` style), that
+takes up the space of four normal boxes:
+
+[source,clojure]
+(draw-box "Unknown" [:box-related :bg-purple {:span 4}]))
+
+=== No Attributes
+
+If you don't want to pass any attributes at all, you can either pass
+an empty map, `{}`, or `nil` which is interpreted in the same way.
+This tells the function to use its default values and behaviors. But
+most functions which accept an attribute parameter also allow you to
+call them with fewer parameters, and treat that as if you had passed
+`nil` for the attributes. You only need to pass the `nil` if you want
+to pass a value for parameter that comes later, but don’t care to send
+attributes.
+
+
+[[predefined-attributes]]
+== Predefined Attributes
+
+The following named attributes are set up for your diagram to use
+(although you are free to call `defattrs` to modify or replace any of
+these, as well as to add your own new sets).
+
+[cols="1m,4"]
+|===
+|Key |Purpose
+
+|:hex |The default text style in which hexadecimal values are drawn,
+ with a `:font-size` of `18` and `:font-family` `"Courier New,
+ monospace"`.
+
+|:plain |The default text style in which string values are drawn, with
+ a `:font-size` of `18` and `:font-family` `"Palatino, Georgia, Times
+ New Roman, serif"`.
+
+|:math |A text style you can use for writing math-expression-like
+ text, with a `:font-size` of `18`, `:font-family` `"Palatino,
+ Georgia, Times New Roman, serif"`, and `:font-style` `"italic"`.
+
+| |
+|:sub |A text style for creating subscripted nested `tspan` objects.
+|:super |A text style for creating superscripted nested `tspan` objects.
+|:bold |Adds bolding (`:font-weight` `"bold"`) when merged into
+ another text style.
+
+| |
+|:dotted |A line style for drawing dotted lines. Commonly used with
+ borders, but you can use it when calling lower-level SVG line-drawing
+ primitives too.
+
+|:border-unrelated |The line styles for drawing the borders of boxes
+ whose content is separate from the boxes around them (this uses the
+ default line drawing style).
+
+|:border-related |The line styles styles for drawing the borders of
+ boxes that are related to those around them (this uses a
+ `:stroke-dasharray` of `"1,3"` which is a light dotted line).
+
+|:box-first |A set of border styles for the first box in a row of
+ related boxes. It uses the unrelated style for its left, top, and
+ bottom borders, and the related style for its right border.
+
+|:box-related |A set of border styles for a middle box in a row of
+ related boxes. It uses the unrelated style for its top, and bottom
+ borders, and the related style for its left and right borders.
+
+|:box-last |A set of border styles for the last box in a row of
+ related boxes. It uses the unrelated style for its right, top, and
+ bottom borders, and the related style for its left border.
+
+|:box-above |A set of border styles for a box that is open to the row
+ below. It draws only its left, right, and top borders.
+
+|:box-above-related |A set of border styles for a box that is open to
+ the row below and related to the previous box. It draws only its
+ left, right, and top borders, and the left border is drawn in the
+ `:box-related` style.
+
+|:box-below |A set of border styles for a box that is open to the row
+ above. It draws only its left, right, and bottom borders.
+|===
+
+For examples of how to combine the box styles, the source for the
+diagrams in the https://djl-analysis.deepsymmetry.org/[DJ Link
+Ecosystem Analysis] is full of variations. You can see it by clicking
+the **Edit this Page** link at the top right of a page that looks
+interesting.
+
+include::partial$Footer.adoc[]

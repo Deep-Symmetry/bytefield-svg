@@ -1,1 +1,2 @@
 * xref:intro.adoc[Introduction]
+* xref:values.adoc[Predefined Values]

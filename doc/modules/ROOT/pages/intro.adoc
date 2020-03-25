@@ -35,6 +35,7 @@ large subset of the language, with the omission of host interop
 features and a few functions which would be dangerous in a shared
 hosting environment.
 
+[[drawing-model]]
 ## The Drawing Model
 
 The basic purpose of `bytefield-svg` is to support the drawing of
@@ -175,13 +176,9 @@ Note that the third box we drew, which we labeled with a number, was
 drawn using four hex digits, because we told it to span two byte
 boxes, and that's how many hexadecimal digits fit in two bytes.
 
-With that introduction, we're ready to start exploring all the values
-that can be configured, and the full details of the functions that you
-can use for drawing.
-
-## Predefined Values
-
-> TODO: Document, an show how to override.
+With that introduction, we're ready to start exploring all the
+<<values#,values that can be configured>>, and the full details of the
+functions that you can use for drawing.
 
 ## Attributes
 

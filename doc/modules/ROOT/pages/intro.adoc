@@ -1,7 +1,6 @@
 = Introduction
 James Elliott <james@deepsymmetry.org>
 :icons: font
-:toc: preamble
 :experimental:
 
 This tool was created to enable the porting of a pair of large LaTeX
@@ -27,13 +26,25 @@ https://clojure.org/reference/reader#_sets[sets]), and compact way of
 representing them in source, are a big part of why this worked so
 well.
 
-TIP: But this means that to get really productive with
+[TIP]
+====
+But this means that to get really productive with
 `bytefield-svg`, you are going to need to
 https://clojure.org/guides/getting_started[learn] at least a little
-Clojure. The https://github.com/borkdude/sci[sci] interpreter offers a
-large subset of the language, with the omission of host interop
-features and a few functions which would be dangerous in a shared
-hosting environment.
+Clojure.
+
+Here is an introduction to the
+https://clojure.org/guides/learn/syntax[syntax], a
+https://clojure.org/api/cheatsheet[cheat sheet] and some help
+deciphering what will initially look like strange
+https://clojure.org/guides/weird_characters[characters] that are hard
+to search for on the web.
+
+The https://github.com/borkdude/sci[sci] interpreter that runs your
+`bytefield-svg` source offers a large subset of the language, with the
+omission of host interop features and a few functions which would be
+dangerous in a shared hosting environment.
+====
 
 [[drawing-model]]
 ## The Drawing Model
@@ -47,9 +58,9 @@ column and row headers to help readers keep track of byte addresses.
 Reasonable defaults are provideded, but everything is very
 configurable. Before diving into those details, it will help to look
 at some concrete examples. The main function you’ll use for drawing
-byte boxes is `draw-box`. By default it creates a box that represents
-one byte. So if we create a diagram with only `(draw-box 0)` as its
-content, here is what we get:
+byte boxes is <<funcs#draw-box,`draw-box`>>. By default it creates a
+box that represents one byte. So if we create a diagram with only
+`(draw-box 0)` as its content, here is what we get:
 
 [bytefield]
 ----
@@ -125,9 +136,9 @@ in hexadecimal.
 
 For situations where you have a series of bytes that you want to
 convey are part of a related structure, you can use the
-`draw-related-boxes` function. It takes a sequence as its first
-argument, and does the looping for you, in addition to using dashed
-borders inside the related group:
+<<funcs#draw-related-boxes,`draw-related-boxes`>> function. It takes a
+sequence as its first argument, and does the looping for you, in
+addition to using dashed borders inside the related group:
 
 [source,clojure]
 (draw-column-headers)
@@ -146,9 +157,9 @@ it is drawn as a label. And `draw-box` takes a second argument after
 the box content, which is a map of attributes, identified by keyword,
 that modify the box. The `:span` attribute controls how many bytes
 wide the box should be, with a default value of 1. Putting that
-together, and using a new `draw-gap` function which is designed to
-communicate variable-length structures, we can draw something like
-this:
+together, and using a new <<funcs#draw-gap,`draw-gap`>> function which
+is designed to communicate variable-length structures, we can draw
+something like this:
 
 [source,clojure]
 (draw-column-headers)
@@ -178,30 +189,7 @@ boxes, and that’s how many hexadecimal digits fit in two bytes.
 
 With that introduction, we’re ready to start exploring all the
 <<values#,values that can be configured>>, and the full details of the
-functions that you can use for drawing.
+<<funcs#,functions that you can use for drawing>>.
 
-## Diagram Drawing Functions
-
-> TODO: Document, including links to relevant Analemma docs.
-
-And here is an example of how to draw a box with a custom label function:
-
-[source,clojure]
-(draw-box (fn [left top width height]
-            (draw-line left top (+ left width) (+ top height))
-            (draw-line left (+ top height) (+ left width) top)))
-
-And here’s what it looks like repeated over a four-box row:
-
-[bytefield]
-----
-(def boxes-per-row 4)
-(def left-margin 1)
-(draw-column-headers)
-(doseq [_ (range 4)]
-  (draw-box (fn [left top width height]
-              (draw-line left top (+ left width) (+ top height))
-              (draw-line left (+ top height) (+ left width) top))))
-----
 
 include::partial$Footer.adoc[]

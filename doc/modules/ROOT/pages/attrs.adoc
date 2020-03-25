@@ -12,8 +12,8 @@ keywords that identify the attribute being configured, and whose
 values are what you want to use for that attribute.
 
 The specific attributes accepted by each function are described in the
-function documentation. Some attributes are used by the function
-itself, and some are passed along to the SVG to be come
+<<funcs#,function documentation>>. Some attributes are used by the
+function itself, and some are passed along to the SVG to be come
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
 attributes] of the element you are drawing.
 
@@ -26,8 +26,9 @@ requiring you to build up the map explicitly. Drawing functions which
 accept attributes will process this notation for you.
 
 > If you are interested in the intricate details, attribute
-  expressions are interpreted by the function `eval-attribute-spec`
-  near the top of the
+  expressions are interpreted by the
+  <<funcs#eval-attribute-spec,function `eval-attribute-spec`>> near
+  the top of the
   https://github.com/Deep-Symmetry/bytefield-svg/blob/master/src/org/deepsymmetry/bytefield/core.cljs[source].
 
 === Raw Maps
@@ -50,7 +51,7 @@ sets>> of attributes, instead of a map you can pass the keyword that
 names them. For example, if you want to render some text in the same
 style normally used for drawing hexadecimal numbers, you can reference
 the attribute set named `:hex` as the second (attribute) argument to
-the `text` function:
+the <<funcs#text,`text` function>>:
 
 [source,clojure]
 (text "NUL" :hex)
@@ -60,8 +61,9 @@ looked up in the `named-attributes` table, and the corresponding value
 is used as the attributes to control the drawing.
 
 In addition to the predefined values that start out in that table, you
-can add your own named attribute definitions by calling the `defattrs`
-function, perhaps in a shared include file.
+can add your own named attribute definitions by calling the
+<<funcs#defattrs,`defattrs`>> function, perhaps in a shared include
+file.
 
 === Combining Attributes
 
@@ -95,7 +97,7 @@ takes up the space of four normal boxes:
 
 === No Attributes
 
-If you don't want to pass any attributes at all, you can either pass
+If you don’t want to pass any attributes at all, you can either pass
 an empty map, `{}`, or `nil` which is interpreted in the same way.
 This tells the function to use its default values and behaviors. But
 most functions which accept an attribute parameter also allow you to
@@ -136,8 +138,10 @@ these, as well as to add your own new sets).
 
 | |
 |:dotted |A line style for drawing dotted lines. Commonly used with
- borders, but you can use it when calling lower-level SVG line-drawing
- primitives too.
+ borders, but you can use it when calling the
+ <<funcs#draw-line,`draw-line` function>> and
+ https://github.com/liebke/analemma[lower-level SVG drawing
+ primitives] too.
 
 |:border-unrelated |The line styles for drawing the borders of boxes
  whose content is separate from the boxes around them (this uses the

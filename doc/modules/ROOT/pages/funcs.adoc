@@ -1,0 +1,124 @@
+= Functions
+James Elliott <james@deepsymmetry.org>
+:icons: font
+:toc: preamble
+:experimental:
+
+This section describes the drawing functions that are the main purpose
+of `bytefield-svg`. They are designed to flexibly draw the elements
+you might need in a byte field diagram. But they are also intended to
+be combined with the functions in the Clojure
+https://clojure.github.io/clojure/[core library], and you can dive
+down to the https://github.com/liebke/analemma[Analemma SVG building
+functions] used by these functions if you need to draw something
+unique.
+
+> TODO: Consider providing some basic documentation for the Analemma
+  functions we export because the Analemma site is cryptic and
+  currently has broken links to the source.
+
+== append-svg
+
+> TODO: Document
+
+
+[defattrs]
+== defattrs
+
+> TODO: Document
+
+
+== draw-bottom
+
+> TODO: Document
+
+
+[draw-box]
+== draw-box
+
+> TODO: Document
+
+And here is an example of how to draw a box with a custom label function:
+
+[source,clojure]
+(draw-box (fn [left top width height]
+            (draw-line left top (+ left width) (+ top height))
+            (draw-line left (+ top height) (+ left width) top)))
+
+And here’s what it looks like repeated over a four-box row:
+
+[bytefield]
+----
+(def boxes-per-row 4)
+(def left-margin 1)
+(draw-column-headers)
+(doseq [_ (range 4)]
+  (draw-box (fn [left top width height]
+              (draw-line left top (+ left width) (+ top height))
+              (draw-line left (+ top height) (+ left width) top))))
+----
+
+
+[draw-boxes]
+== draw-boxes
+
+> TODO: Document
+
+
+[draw-column-headers]
+== draw-column-headers
+
+> TODO: Document
+
+
+[draw-gap]
+== draw-gap
+
+> TODO: Document
+
+[draw-line]
+== draw-line
+
+> TODO: Document
+
+[draw-related-boxes]
+== draw-related-boxes
+
+> TODO: Document
+
+[draw-row-header]
+== draw-row-header
+
+> TODO: Document
+
+[eval-attribute-spec]
+== eval-attribute-spec
+
+> TODO: Document
+
+
+[hex-text]
+== hex-text
+
+> TODO: Document
+
+
+[next-row]
+== next-row
+
+> TODO: Document
+
+
+[text]
+== text
+
+> TODO: Document
+
+
+[tspan]
+== tspan
+
+> TODO: Document
+
+
+include::partial$Footer.adoc[]

@@ -17,28 +17,155 @@ unique.
   functions we export because the Analemma site is cryptic and
   currently has broken links to the source.
 
+[[append-svg]]
 == append-svg
 
-> TODO: Document
+NOTE: Most people will not need to use this function.
 
+Adds an element to the end of the SVG document being created.
 
-[defattrs]
+.Arguments
+[source,clojure]
+----
+[element]
+----
+
+This function is only needed if you are using the lower-level
+https://github.com/liebke/analemma/blob/master/src/analemma/svg.cljc[Analemma
+SVG functions] to draw custom SVG content. Call this function with the
+Clojure data structure returned by the SVG function and it will become
+part of the diagram.
+
+It’s beyond the current scope of these instructions to try to explain
+Analemma, so you will need to study its own documentation and source
+if you want to engage in this kind of low-level drawing. But as a
+small example, you could draw a circle at coordinates (20, 10) with
+radius 5 by calling:
+
+[source,clojure]
+(append-svg (svg/circle 20 10 5))
+
+The `analemma.svg` functions available in `bytefield-svg` are all
+organized under the `svg` namespace alias, and include:
+`svg/add-style`, `svg/animate`, `svg/animate-color`,
+`svg/animate-motion`, `svg/animate-transform`, `svg/circle`,
+`svg/defs`, `svg/draw`, `svg/ellipse`, `svg/group`, `svg/image`,
+`svg/line`, `svg/parse-inline-css`, `svg/path`, `svg/polygon`,
+`svg/rect`, `svg/rgb`, `svg/rotate`, `svg/style`, `svg/style-map`,
+`svg/svg`, `svg/text`, `svg/text-path`, `svg/transform`,
+`svg/translate`, `svg/translate-value`, `svg/tref`, and `svg/tspan`.
+
+You can also manipulate the
+https://github.com/weavejester/hiccup[hiccup-like] structures returned
+by these functions using the even-lower level
+https://github.com/liebke/analemma/blob/master/src/analemma/xml.cljc[Analemma
+XML functions]. These are organized under the `xml` namespace alias,
+and include: `xml/add-attrs`, `xml/add-content`, `xml/emit`,
+`xml/emit-attrs`, `xml/emit-tag`, `xml/get-attrs`, `xml/get-content`,
+`xml/get-name`, `xml/has-attrs?`, `xml/has-content?`,
+`xml/merge-attrs`, `xml/set-attrs`, `xml/set-content`, and
+`xml/update-attrs`.
+
+If you understand the structures built and used by Analemma, you can
+also build them directly yourself and pass them to `append-svg`.
+
+[[defattrs]]
 == defattrs
 
-> TODO: Document
+Register a attribute map for later use in your diagram.
+
+.Arguments
+[source,clojure]
+----
+[k m]
+----
+
+TIP: By convention, in Clojure arguments, `k` means “a keyword” and
+`m` means “a map”.
+
+To add a new named attribute or update one of the
+<<attrs#predefined-attributes,predefined attributes>>, pass the
+keyword you want to define as the first argument, and the map of
+attributes that you want that keyword to represent as the second
+argument.
+
+For example, if you want to have some of your byte boxes have a green
+background, you could make `:bg-green` a named attribute that achieves
+that by calling:
+
+[source,clojure]
+(defattrs :bg-green {:fill "#a0ffa0"})
+
+From then on, you can use `:bg-green` in any attribute expression to
+stand in for this fill color.
 
 
+[[draw-bottom]]
 == draw-bottom
 
-> TODO: Document
+Close the bottom of a gap drawn by `draw-gap`.
+
+.Arguments
+_none_
+
+This function isn’t needed if you are continuing to draw enough boxes
+after your gap to span an entire row, because the top borders of those
+boxes will draw the bottom of the gap. But if your diagram ends after
+the gap, or after a partial row after the gap, you will want to call
+`(draw-bottom`) to draw the line across the bottom of the gap.
+
+This isn’t done automatically because some diagrams want the gap to
+extend into some of the boxes of the line after the gap, which can be
+achieved by setting those boxes to not have a top border, but that
+only works if the gap doesn’t close itself.
 
 
-[draw-box]
+[[draw-box]]
 == draw-box
 
-> TODO: Document
+This is probably the most-used function in `bytefield-svg`. It draws
+the next cell in your byte field diagram.
 
-And here is an example of how to draw a box with a custom label function:
+If the previous box completed a row, drawing this new box will advance
+to the start of the next row, and draw the row header.
+
+.Arguments
+[source,clojure]
+----
+[label]
+[label attr-spec]
+----
+
+If you call `draw-box` with just a `label`, it will draw a box with a
+default set of attributes that contains that label. If you want to
+change the way the box is drawn, you can pass an
+<<attrs#attribute-expressions,attribute expression>> as the second
+argument <<draw-box-attrs,(see below)>>.
+
+=== Label Styles
+
+If you don’t want a label in the box, you can pass `nil` for `label`.
+
+If you pass a string, it is rendered as <<text,text>>, as if you had
+passed the result of calling `(text label)`.
+
+If you pass a number, it is rendered in hexadecimal, with enough
+digits to represent all the bytes spanned by your box (see the
+discussion of the `:span` attribute below).
+
+If you need a label with more complex structure or styling you can
+build it by calling <<text,`text`>> or <<hex-text,`hex-text`>>
+yourself and passing the results as `label`.
+
+Or you can draw arbitrary SVG content in the box by passing a custom
+label function as `label`. Your function will be called with four
+arguments, the left and top coordinates of the box, and its width and
+height. (This is one situation where you might use
+<<append-svg,`append-svg`>>.)
+
+This example uses a custom label function to draw two lines in the
+box, from the top left to the bottom right, and the top right to the
+bottom left:
 
 [source,clojure]
 (draw-box (fn [left top width height]
@@ -58,64 +185,150 @@ And here’s what it looks like repeated over a four-box row:
               (draw-line left (+ top height) (+ left width) top))))
 ----
 
+[[draw-box-attrs]]
+=== Box Attributes
 
-[draw-boxes]
+You can modify the box that is drawn by passing in the following
+attributes:
+
+[cols="1m,2m,6"]
+|===
+|Attribute |Default Value |Meaning
+
+|:borders |#{:left :right :top :bottom} |Controls which box borders
+ are drawn, and optionally, their individual attributes.
+ <<draw-box-borders,See below>> for more details.
+
+|:fill |nil |The fill color to use as the box background.
+
+|:height |row-height |If you pass a value here you can override the
+ height of the box. Normally it is controlled by the
+ <<values#,predefined value>> `row-height`.
+
+|:span |1 |The number of bytes (columns) this box will occupy. You can
+ supply a `:span` value ranging from 1 to the remaining columns in
+ the row. If you try to go beyond the end of the row, an exception
+ will be thrown.
+|===
+
+
+[[draw-box-borders]]
+=== Box Borders
+
+As noted above, by default a box is drawn with all four borders (left,
+right, top, and bottom). To change that, you can pass a Clojure
+https://clojure.org/reference/reader#_sets[set] containing a subset of
+the keywords `:left`, `:right`, `:top`, and `:bottom`, and only the
+borders that you include will be drawn.
+
+If you want even more control, rather than a set you can pass a
+`:map`, whose keys are the keywords identifying the borders that you
+want to draw, and whose values are
+<<attrs#attribute-expressions,attribute expressions>> containing the
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
+attributes] that describe the color and style of line that you want
+that border to be drawn with. There are
+<<attrs#predefined-attributes,predefined attributes>> that can be
+useful here. Individual borders can be assigned line styles
+`:border-unrelated` (the default) `:dotted`, and `:border-related`.
+The entire `:borders` attribute can be assigned the styles
+`:box-first`, `:box-related`, `:box-last`, `:box-above`,
+`:box-above-related`, or `:box-below`. Or of course you can make up
+your own completely original line styles and border maps.
+
+Here’s a look at the three line styles (with no bottom border):
+[source,clojure]
+----
+(draw-box "borders"
+          {:span    4
+           :borders {:top   :dotted
+                     :left  :border-related
+                     :right :border-unrelated}})
+----
+
+[bytefield]
+----
+(draw-box "borders" {:span 4
+                     :borders {:top  :dotted
+                               :left  :border-related
+                               :right :border-unrelated}})
+----
+
+And here’s an example of using the predefined attributes that specify
+entire border sets (notice how we can use the
+<<attrs#attribute-expressions,attribute expression mini-language>> to
+combine the border style named attributes with our own `:span`
+attribute):
+
+[source,clojure]
+(draw-box "first" [:box-first {:span 3}])
+(draw-box "related" [:box-related {:span 3}])
+(draw-box "last" [:box-related {span 3}])
+
+[bytefield]
+----
+(draw-box "first" [:box-first {:span 3}])
+(draw-box "related" [:box-related {:span 3}])
+(draw-box "last" [:box-last {:span 3}])
+----
+
+[[draw-boxes]]
 == draw-boxes
 
 > TODO: Document
 
 
-[draw-column-headers]
+[[draw-column-headers]]
 == draw-column-headers
 
 > TODO: Document
 
 
-[draw-gap]
+[[draw-gap]]
 == draw-gap
 
 > TODO: Document
 
-[draw-line]
+[[draw-line]]
 == draw-line
 
 > TODO: Document
 
-[draw-related-boxes]
+[[draw-related-boxes]]
 == draw-related-boxes
 
 > TODO: Document
 
-[draw-row-header]
+[[draw-row-header]]
 == draw-row-header
 
 > TODO: Document
 
-[eval-attribute-spec]
+[[eval-attribute-spec]]
 == eval-attribute-spec
 
 > TODO: Document
 
 
-[hex-text]
+[[hex-text]]
 == hex-text
 
 > TODO: Document
 
 
-[next-row]
+[[next-row]]
 == next-row
 
 > TODO: Document
 
 
-[text]
+[[text]]
 == text
 
 > TODO: Document
 
 
-[tspan]
+[[tspan]]
 == tspan
 
 > TODO: Document

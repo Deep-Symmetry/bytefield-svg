@@ -13,10 +13,11 @@ values are what you want to use for that attribute.
 
 The specific attributes accepted by each function are described in the
 <<funcs#,function documentation>>. Some attributes are used by the
-function itself, and some are passed along to the SVG to be come
+function itself, and some are passed along to the SVG to become
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
 attributes] of the element you are drawing.
 
+[[attribute-expressions]]
 == Attribute Expressions
 
 Because you often want to reuse and combine the same sets of

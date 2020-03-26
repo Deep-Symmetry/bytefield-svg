@@ -275,8 +275,20 @@ attribute):
 [[draw-boxes]]
 == draw-boxes
 
-> TODO: Document
+This is a shortcut for drawing mutiple labels with the same attributes
+for each. It calls <<draw-box,`draw-box`>> for each value in `labels`.
 
+.Arguments
+[source,clojure]
+----
+[labels]
+[labels attr-spec]
+----
+
+If you pass `attr-spec` it will be used when calling `draw-box` for
+each value in `labels`. See the <<draw-box,`draw-box` documentation>>
+for details about how labels and attributes are used to control the
+drawing of the boxes.
 
 [[draw-column-headers]]
 == draw-column-headers

@@ -263,7 +263,7 @@ attribute):
 [source,clojure]
 (draw-box "first" [:box-first {:span 3}])
 (draw-box "related" [:box-related {:span 3}])
-(draw-box "last" [:box-related {span 3}])
+(draw-box "last" [:box-related {:span 3}])
 
 [bytefield]
 ----

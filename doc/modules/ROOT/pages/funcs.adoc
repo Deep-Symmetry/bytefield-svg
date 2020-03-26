@@ -211,6 +211,37 @@ attributes:
  will be thrown.
 |===
 
+Here are some sample boxes:
+
+[source,clojure]
+(draw-box 1)
+(draw-box "two" {:span 2})
+(draw-box nil {:fill "#a0ffa0"})
+
+[bytefield]
+----
+(draw-box 1)
+(draw-box "two" {:span 2})
+(draw-box nil {:fill "#a0ffa0"})
+----
+
+And as a concrete example of how we can use <<defattrs,`defattrs`>> to
+set up a named attribute making it concise to use later:
+
+[source,clojure]
+(defattrs :bg-blue {:fill "#80a0ff"})
+(draw-box "b" :bg-blue)
+
+[bytefield]
+----
+(defattrs :bg-blue {:fill "#80a0ff"})
+(draw-box "b" :bg-blue)
+----
+
+When the keyword `:bg-blue` is found as a standalone attribute
+expression, it is looked up in the named attribtues, and the fill that
+we set up with `defattrs` is found and used.
+
 
 [[draw-box-borders]]
 === Box Borders
@@ -231,10 +262,11 @@ that border to be drawn with. There are
 <<attrs#predefined-attributes,predefined attributes>> that can be
 useful here. Individual borders can be assigned line styles
 `:border-unrelated` (the default) `:dotted`, and `:border-related`.
-The entire `:borders` attribute can be assigned the styles
-`:box-first`, `:box-related`, `:box-last`, `:box-above`,
-`:box-above-related`, or `:box-below`. Or of course you can make up
-your own completely original line styles and border maps.
+
+The entire border style of the box can be assigned more compactly
+using the predefined styles `:box-first`, `:box-related`, `:box-last`,
+`:box-above`, `:box-above-related`, or `:box-below`. Or of course you
+can make up your own completely original line styles and border maps.
 
 Here’s a look at the three line styles (with no bottom border):
 [source,clojure]
@@ -254,8 +286,15 @@ Here’s a look at the three line styles (with no bottom border):
                                :right :border-unrelated}})
 ----
 
+> The same result could have been achieved by using the style map
+`{:stroke-dasharray "1,1"}` instead of the predefined attribute
+`:dotted` (that is its value), and `{:stroke-dasharray "1,3"}` instead
+of the predefined attribute `:related`, but the short keywords are
+both easier to type than the full maps, and easier to read and
+understand than the raw SVG attributes.
+
 And here’s an example of using the predefined attributes that specify
-entire border sets (notice how we can use the
+entire box border styles (notice how we can use the
 <<attrs#attribute-expressions,attribute expression mini-language>> to
 combine the border style named attributes with our own `:span`
 attribute):
@@ -288,7 +327,8 @@ for each. It calls <<draw-box,`draw-box`>> for each value in `labels`.
 If you pass `attr-spec` it will be used when calling `draw-box` for
 each value in `labels`. See the <<draw-box,`draw-box` documentation>>
 for details about how labels and attributes are used to control the
-drawing of the boxes.
+drawing of each box.
+
 
 [[draw-column-headers]]
 == draw-column-headers

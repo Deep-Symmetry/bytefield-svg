@@ -520,7 +520,7 @@ the gap.
 
 After a gap, the actual addresses of subsequent rows are not known,
 since the gap can vary in length. To reflect that, row headers after
-that point are reset to _i+_`00` (meaning zero bytes past the end of
+that point are reset to _i_+``00`` (meaning zero bytes past the end of
 the gap) and grow from there. If you would like a different labeling
 scheme you can replace the <<values#row-header-fn,`row-header-fn`
 predefined value>>.

@@ -547,7 +547,7 @@ supply, the line will be drawn with a `:stroke-width` of `1` and a
 `:stroke` of `#000000` (black). But you can override those (and other
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
 attributes]) by passing an <<attrs#attribute-expressions,attribute
-expression>> as the second argument.
+expression>> as the fifth argument.
 
 [[draw-related-boxes]]
 == draw-related-boxes

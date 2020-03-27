@@ -118,29 +118,31 @@
   `:height`. Defaults to a `:font-size` of 11 and `:font-family` of
   \"Courier New\" but these can be overridden as well. Other SVG text
   attributes can be supplied, and they will be passed along."
-  [attr-spec]
-  (let [{:keys [labels height font-size font-family]
-         :or   {labels      (str/split "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f" #",")
-                height      14
-                font-size   11
-                font-family "Courier New, monospace"}
-         :as   options} (eval-attribute-spec attr-spec)
-        y               (+ (:y @@('diagram-state @*globals*)) (* 0.5 height))
-        body            (for [i (range @('boxes-per-row @*globals*))]
-                          (let [x (+ @('left-margin @*globals*) (* (+ i 0.5) @('box-width @*globals*)))]
-                            (svg/text (merge (dissoc options :labels :height)
-                                             {:x                 x
-                                              :y                 y
-                                              :font-family       font-family
-                                              :font-size         font-size
-                                              :dominant-baseline "middle"
-                                              :text-anchor       "middle"})
-                                      (nth labels i))))]
-    (swap! @('diagram-state @*globals*)
-          (fn [current]
-            (-> current
-                (update :y + height)
-                (update :svg-body concat body))))))
+  ([]
+   (draw-column-headers nil))
+  ([attr-spec]
+   (let [{:keys [labels height font-size font-family]
+          :or   {labels      (str/split "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f" #",")
+                 height      14
+                 font-size   11
+                 font-family "Courier New, monospace"}
+          :as   options} (eval-attribute-spec attr-spec)
+         y               (+ (:y @@('diagram-state @*globals*)) (* 0.5 height))
+         body            (for [i (range @('boxes-per-row @*globals*))]
+                           (let [x (+ @('left-margin @*globals*) (* (+ i 0.5) @('box-width @*globals*)))]
+                             (svg/text (merge (dissoc options :labels :height)
+                                              {:x                 x
+                                               :y                 y
+                                               :font-family       font-family
+                                               :font-size         font-size
+                                               :dominant-baseline "middle"
+                                               :text-anchor       "middle"})
+                                       (nth labels i))))]
+     (swap! @('diagram-state @*globals*)
+            (fn [current]
+              (-> current
+                  (update :y + height)
+                  (update :svg-body concat body)))))))
 
 (defn draw-row-header
   "Generates the label in the left margin which identifies the starting

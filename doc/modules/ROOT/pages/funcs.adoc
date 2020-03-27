@@ -529,7 +529,25 @@ predefined value>>.
 [[draw-line]]
 == draw-line
 
-> TODO: Document
+Adds a line to the SVG being built up. This is used extensively by the
+other functions here to draw the diagram, but you can use it yourself
+to draw your own custom content, either in your diagram itself, or as
+a part of a custom label function in <<draw-box,`draw-box`>>.
+
+.Arguments
+[source,clojure]
+----
+[x1 y1 x2 y2]
+[x1 y1 x2 y2 attr-spec]
+----
+
+The four required arguments are the coordinates of the endpoints of
+the line segment to be drawn. If those are the only arguments you
+supply, the line will be drawn with a `:stroke-width` of `1` and a
+`:stroke` of `#000000` (black). But you can override those (and other
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
+attributes]) by passing an <<attrs#attribute-expressions,attribute
+expression>> as the second argument.
 
 [[draw-related-boxes]]
 == draw-related-boxes

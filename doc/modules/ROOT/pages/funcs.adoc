@@ -333,7 +333,110 @@ drawing of each box.
 [[draw-column-headers]]
 == draw-column-headers
 
-> TODO: Document
+Draws the row of byte offsets at the top of the diagram, making it
+easy to visually determine the addresses of boxes below. This is not
+done until you ask for it, to give you an opportunity to first adjust
+<<values#,predefined values>> that will affect the result.
+
+.Arguments
+[source,clojure]
+----
+[]
+[attr-spec]
+----
+
+If you supply `attr-spec`, it is parsed as an
+<<attrs#attribute-expressions,attribute expression>> that you can use
+to further customize the column headers (in ways that don’t affect the
+structure of the rest of the diagram):
+
+=== Column Header Attributes
+
+[cols="2m,2m,6"]
+|===
+|Attribute |Default Value |Meaning
+
+|:font-family |"Courier New, monospace" |The typeface used to draw the
+ column headers.
+
+|:font-size |11 |Controls the size of the column headers.
+
+|:height |14 |The amount of vertical space allocated to the column
+ headers.
+
+|:labels |<<values#column-labels,column-labels>> |A sequence whose
+ elements are used as the actual text of each column header in order.
+ You might want to change this if you are drawing a bit field, where
+ the high order bits come first, as shown in the examples below.
+|===
+
+With no redefinitions of predefined values and no attribute
+expression, this generates headers for a row of sixteen bytes as
+hexadecimal digits:
+
+[source,clojure]
+(draw-column-headers)
+
+[bytefield]
+----
+(draw-column-headers)
+----
+
+If you are dealing with big-endian values, you can reverse the
+`column-labels` predefined value that is used to generate the
+labels, and pass it in as the `:labels` attribute:
+
+[source,clojure]
+(draw-column-headers {:labels (reverse column-labels)})
+
+[bytefield]
+----
+(draw-column-headers {:labels (reverse column-labels)})
+----
+
+If you want to draw a diagram with fewer columns, redefine
+`boxes-per-row` before calling this:
+
+[source,clojure]
+(def boxes-per-row 8)
+(draw-column-headers)
+
+[bytefield]
+----
+(def boxes-per-row 8)
+(draw-column-headers)
+----
+
+But note that if you want to both reduce the number of columns _and_
+reverse the headers, you need to do a little more than combining these
+two steps, because that simple approach results in the following
+headers:
+
+[source,clojure]
+(def boxes-per-row 8)
+(draw-column-headers {:labels (reverse column-labels)})
+
+[bytefield]
+----
+(def boxes-per-row 8)
+(draw-column-headers {:labels (reverse column-labels)})
+----
+
+...Which makes sense, if you think about it: there are sixteen values
+in `column-labels`, so reversing it gives you the top eight. Luckily
+the solution is straightforward, just use the
+https://clojuredocs.org/clojure.core/take[Clojure’s `take`] function
+to get the first eight labels _before_ calling `reverse`:
+
+[source,clojure]
+(def boxes-per-row 8)
+(draw-column-headers {:labels (reverse (take 8 column-labels))})
+
+[bytefield]
+----
+(def boxes-per-row 8)
+(draw-column-headers {:labels (reverse (take 8 column-labels))})
+----
 
 
 [[draw-gap]]

@@ -16,7 +16,7 @@ and coordinates] in SVG are interpreted as “user units”, which default
 in these diagrams to pixels (as if you had added `px` after the
 number).
 
-[cols="1m,1m,4"]
+[cols="1m,1m,3"]
 |===
 |Variable |Default Value |Purpose
 
@@ -36,6 +36,8 @@ number).
  sure the box boundaries don’t get clipped. You can make it bigger if
  you want to draw custom content there.
 
+| | |
+
 |box-width |40 | How much horizontal space each box takes up.
 
 |boxes-per-row |16 |How many boxes are drawn on a row before moving to
@@ -43,7 +45,17 @@ number).
  increment by `10` and the diagram is a nice width. If you are drawing
  smaller structures you can reduce this.
 
+[[column-labels]]
+|column-labels |["0" "1" ... "f"] |A sequence whose elements are used
+ as the actual text of each column header in order. Although you can
+ change this globally by redefining this value, it is more common to
+ simply pass a different sequence (often by transforming this one) as
+ the `:labels` attribute when calling
+ <<funcs#draw-column-headers,`draw-column-headers`>>.
+
 |row-height |30 | How much vertical space a row of boxes takes up.
+
+| | |
 
 |named-attributes | |See the <<attrs#predefined-attributes,next section>>.
 

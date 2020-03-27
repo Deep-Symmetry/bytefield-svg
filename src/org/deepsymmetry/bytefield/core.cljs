@@ -122,7 +122,7 @@
    (draw-column-headers nil))
   ([attr-spec]
    (let [{:keys [labels height font-size font-family]
-          :or   {labels      (str/split "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f" #",")
+          :or   {labels      @('column-labels @*globals*)
                  height      14
                  font-size   11
                  font-family "Courier New, monospace"}
@@ -645,6 +645,7 @@
     'bottom-margin 1  ; Space at bottom, currently just enough to avoid clipping bottom box edges.
     'box-width     40 ; How much room each byte (or bit) box takes up.
 
+    'column-labels (str/split "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f" #",") ; The default column headers.
     'boxes-per-row 16 ; How many individual byte/bit boxes fit on each row.
     'row-height    30 ; The height of a standard row of boxes.
 

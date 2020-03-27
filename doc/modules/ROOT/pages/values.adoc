@@ -59,6 +59,7 @@ number).
 
 |named-attributes | |See the <<attrs#predefined-attributes,next section>>.
 
+[[row-header-fn]]
 |row-header-fn |default-row-header-fn |The function that is called to
  draw the row header when necessary. See the
  https://github.com/Deep-Symmetry/bytefield-svg/blob/master/src/org/deepsymmetry/bytefield/core.cljs[source]

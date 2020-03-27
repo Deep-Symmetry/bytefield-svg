@@ -442,7 +442,89 @@ to get the first eight labels _before_ calling `reverse`:
 [[draw-gap]]
 == draw-gap
 
-> TODO: Document
+Draws an indication of discontinuity. Takes a full row (consuming the
+rest of the current row first, if there have been any boxes drawn in
+it). Also optionally labels the contents of the gap.
+
+.Arguments
+[source,clojure]
+----
+[]
+[label]
+[label attr-spec]
+----
+
+If `label` is provided, draws it to identify the content of the gap.
+If there are at least `:min-label-columns` (which defaults to 8, see
+the attributes below) remaining on the current row, will center the
+label in the remaining space on that row before drawing the gap.
+Otherwise it will advance to the next row, draw the label centered on
+the entire row, then draw the gap. `label` is passed to
+<<draw-box,`draw-box`>>, so it is interpreted in the same way.
+
+When finishing off the previous row, a box is drawn in the predefined
+<<attrs#box-above,`box-above` style>>. You can change that by passing
+different attributes under the `:box-above-style` key in your
+<<attrs#attribute-expressions,attribute expression>> (the optional
+second argument). For example, use `{:box-above-style
+:box-above-related}` if the gap relates to the preceding box.
+
+=== Gap Attributes
+
+[cols="2m,1m,4"]
+|===
+|Attribute |Default Value |Meaning
+
+|:edge |15 |The height of the sections before and after the gap
+ drawing, which just draw the left and right edges of the diagram.
+
+|:height |70 |The height of the gap context, which is sandwiched
+ bewteen the edges and affects the slope of the gap within it, drawn
+ from the top left of this section to the bottom right.
+
+|:gap |10 |The height of the gap itself, the unenclosed space between
+ the diagonal lines of the gap.
+
+|:gap-style |:dotted |The line style to use in drawing the diagonal
+ lines on either side of the actual gap.
+
+|:box-above-style |:box-above |The box style to use when drawing a box
+ to finish of a partial row before the gap, as described above.
+
+|:min-label-columns |8 |As described above, the number of columns that
+ must be available in the current row if the label is to be drawn
+ in it.
+
+|===
+
+NOTE: In order to allow you to draw boxes that connect to the bottom
+of the gap, no bottom border is drawn. If you have a full row of boxes
+after it this doesn’t matter, as their top borders will close it off.
+But if the diagram ends at the gap, or with an incomplete row after
+it, you need to call `<<draw-bottom,(draw-bottom)`>> after you draw
+the gap.
+
+[source,clojure]
+(draw-box "Stuff" {:span 4})
+(draw-gap "A gap")
+(draw-box "More stuff")
+(draw-bottom)
+
+[bytefield]
+----
+(draw-box "Stuff" {:span 2})
+(draw-gap "A gap")
+(draw-box "More stuff" {:span 4})
+(draw-bottom)
+----
+
+After a gap, the actual addresses of subsequent rows are not known,
+since the gap can vary in length. To reflect that, row headers after
+that point are reset to _i+_`00` (meaning zero bytes past the end of
+the gap) and grow from there. If you would like a different labeling
+scheme you can replace the <<values#row-header-fn,`row-header-fn`
+predefined value>>.
+
 
 [[draw-line]]
 == draw-line

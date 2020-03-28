@@ -761,7 +761,21 @@ wide enough to hold the text we're drawing.
 [[tspan]]
 == tspan
 
-> TODO: Document
+Builds an SVG `tspan` object with attributes parsed as an
+<<attrs#attribute-expressions,attribute expression>>.
 
+.Arguments
+[source,clojure]
+----
+[attr-spec content]
+----
+
+TIP: You generally don’t need to call this directly, as
+<<text,`text`>> will call it for you when it finds a list or vector in
+its `content`.
+
+Any lists or vectors in the content will be recursively parsed as
+nested `tspan` objects with their own attribute expressions as the
+first element.
 
 include::partial$Footer.adoc[]

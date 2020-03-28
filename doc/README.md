@@ -17,7 +17,8 @@ changes you are making, you can use an `npm` script to do it, because
 documentation site, including David Jencks’ not-yet-merged enhancements
 to Antora.
 
-3. `cd` into the `bytefield-svg` repository and run the following commands:
+To build the site, `cd` into the `bytefield-svg` repository and run
+the following commands:
 
         npm install
         npm run release

@@ -392,7 +392,6 @@
          start                      (+ address column)
          span                       (:span attrs 1)
          end                        (+ start (* span (count labels)))]
-     ;; TODO: Is there a more idiomatic/elegant way to do this?
      (doseq [[i label] (map-indexed (fn [i label] [i label]) labels)]
        (let [borders (into {} (map (fn [border]
                                      [border (if (related? (+ start (* span i)) start end border)

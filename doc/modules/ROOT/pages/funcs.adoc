@@ -311,6 +311,14 @@ attribute):
 (draw-box "last" [:box-last {:span 3}])
 ----
 
+For situations where you’re drawing a lot of related boxes with the
+same attributes (but different content), even if they span multiple
+rows, you can use `draw-boxes` as described in the next section. If
+you want the boxes to be drawn as a related group, like in the example
+above, you can use <<draw-related-boxes,`draw-related-boxes`>>.
+
+
+
 [[draw-boxes]]
 == draw-boxes
 
@@ -552,7 +560,50 @@ expression>> as the fifth argument.
 [[draw-related-boxes]]
 == draw-related-boxes
 
-> TODO: Document
+This is a shortcut for drawing mutiple labels with the same basic
+attributes for each, which are a related group, so the internal
+borders between boxes inside the group are rendered differently than
+the borders with boxes outside the group (as illustrated in the
+example at the end of the <<draw-box,`draw-box` discussion>>. It calls
+<<draw-box,`draw-box`>> for each value in `labels`, merging any
+attributes you supply with appropriate border styles on whether this
+is the first, a middle, or the final box.
+
+.Arguments
+[source,clojure]
+----
+[labels]
+[labels attr-spec]
+----
+
+If you pass `attr-spec` it will be used when calling `draw-box` for
+each value in `labels`. See the <<draw-box,`draw-box` documentation>>
+for details about how labels and attributes are used to control the
+drawing of each box, but keep in mind that the `:borders` attribute is
+controlled by this function so that borders between related cells are
+drawn with the line style specified by the `:border-related`
+<<attrs#predefined-attributes,predefined attribute>>, and borders with
+unrelated cells are drawn with the line style specified by
+`:border-unrelated`.
+
+The default definitions of those line styles result in a solid line
+for borders with unrelated cells, and a light dashed line between
+related cells. You can change those defaults using
+<<defattrs,`defattrs`>> to redefine `:border-related` and
+`:border-unrelated`.
+
+[source,clojure]
+(draw-box "before" {:span 2})
+(draw-related-boxes (range 48))
+(draw-box "after" {:span 2})
+
+[bytefield]
+----
+(draw-box "before" {:span 2})
+(draw-related-boxes (range 48))
+(draw-box "after" {:span 2})
+----
+
 
 [[draw-row-header]]
 == draw-row-header

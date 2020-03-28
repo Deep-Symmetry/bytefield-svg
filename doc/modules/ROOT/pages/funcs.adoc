@@ -638,19 +638,58 @@ nested `tspan` objects), and it will simply be positioned.
 [[eval-attribute-spec]]
 == eval-attribute-spec
 
-> TODO: Document
+This is the function that evaluates
+<<attrs#attribute-expressions,attribute expressions>>. It accepts the
+mini-language described in that section, and boils it down to a single
+map of attributes. It’s available for use in your own code so that
+helper functions you write are able to accept attribute expressions
+just like the built-in functions do.
 
 
 [[hex-text]]
 == hex-text
 
-> TODO: Document
+Creates an SVG text object suitable for use as a box label
+representing a hexadecimal value. This is the function used internally
+when you pass a number as the `label` argument to
+<<draw-box,`draw-box`>>.
 
+.Arguments
+[source,clojure]
+----
+[n]
+[n length]
+[n length attr-spec]
+----
+
+If you just pass a number in `n` it is formatted as a two-digit
+hexadecimal value, using the text styles specified in the
+<<attrs#predefined-attributes,predefined attribute>> `:hex`. You can
+specify the number of digits by also passing `length`, and you can
+override or augment the
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG text
+attributes]) by passing an <<attrs#attribute-expressions,attribute
+expression>> in `attr-spec`.
 
 [[next-row]]
 == next-row
 
-> TODO: Document
+Advances drawing to the next row of boxes.
+
+TIP: You don’t need to call this when drawing boxes, because they will
+auto-advance as needed, generating the row headers as they do. But you
+can use it when you want to draw other informational rows that are not
+part of the box grid.
+
+.Arguments
+[source,clojure]
+----
+[]
+[height]
+----
+
+The height of the row defaults to the <<values#,predefined value>>
+`:row-height` but can be changed by passing `height`.
 
 
 [[text]]

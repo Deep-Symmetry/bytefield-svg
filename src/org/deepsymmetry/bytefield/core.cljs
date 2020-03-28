@@ -147,9 +147,8 @@
 (defn draw-row-header
   "Generates the label in the left margin which identifies the starting
   byte of a row. Defaults to a `:font-size` of 11 and `:font-family`
-  of \"Courier New\" but these can be overridden as well. Other SVG
-  text attributes can be supplied via `attr-spec`, and they will be
-  passed along.
+  of \"Courier New, monospace\" but these can be overridden, and other
+  SVG text attributes can be supplied via `attr-spec`.
 
   In the most common case, `label` is a string and the SVG text object
   is constructed as described above. If you need to draw a more

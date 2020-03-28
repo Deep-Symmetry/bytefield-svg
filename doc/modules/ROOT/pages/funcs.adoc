@@ -608,7 +608,32 @@ related cells. You can change those defaults using
 [[draw-row-header]]
 == draw-row-header
 
-> TODO: Document
+Generates the label in the left margin which identifies the starting
+address of a row.
+
+TIP: You generally don’t need to call this yourself, because it is
+called automatically whenever boxes you are drawing wrap onto a
+new row. But you can call it if you are drawing a single-row diagram
+and still want the row header to be present.
+
+.Arguments
+[source,clojure]
+----
+[labels]
+[labels attr-spec]
+----
+
+Defaults to a `:font-size` of 11 and `:font-family` of `"Courier New,
+monospace"` but these can be overridden, and other
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG text
+attributes]) can be supplied, through an
+<<attrs#attribute-expressions,attribute expression>> in `attr-spec`.
+
+In the most common case, `label` is a string and the SVG text object
+is constructed as described above. If you need to draw a more complex
+structure, you can pass in your own SVG text object (with potentially
+nested `tspan` objects), and it will simply be positioned.
+
 
 [[eval-attribute-spec]]
 == eval-attribute-spec

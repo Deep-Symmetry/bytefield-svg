@@ -1,8 +1,8 @@
 # User Guide
 
 This holds the source for the [user
-guide](https://bytefield-svg.netlify.com/) that explains how to use
-`bytefield-svg`.
+guide](https://bytefield-svg.deepsymmetry.org/) that explains how to
+use `bytefield-svg`.
 
 It is built by [Antora](https://antora.org) using a [build
 script](build.sh) on [Netlify](https://netlify.com), which runs the

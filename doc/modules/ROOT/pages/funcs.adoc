@@ -695,8 +695,68 @@ The height of the row defaults to the <<values#,predefined value>>
 [[text]]
 == text
 
-> TODO: Document
+Builds an SVG `text` object for drawing. This is used by
+<<hex-text,`hex-text`>> and by <<draw-box,``draw-box``>> when you pass
+it a string. If you need to do something more complicated with styling
+(including nested `tspan` objects with different styles), this
+function lets you.
 
+.Arguments
+[source,clojure]
+----
+[label]
+[label attr-spec & content]
+----
+
+If you just pass a single argument, it is rendered as a `text` string
+with the styles specified by the
+<<attrs#predefined-attributes,predefined attribute>> `:plain`. The
+optional second argument is an <<attrs#attribute-expressions,attribute
+expression>> you can use to pick your own
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG text
+attributes]).
+
+Any arguments after `attr-spec` are additional text content to be
+rendered, but if they are
+https://clojure.org/reference/reader#_vectors[vectors] they are given
+special treatment and rendered as a nested `tspan` object. The first
+element of the vector is parsed as an attribute expression for the
+styles to apply to that `tspan`, and the remaining elements are
+rendered as its content. (And even here you can embed new `tspan`
+objects with new styling by embedding more vectors.)
+
+[source,clojure]
+(draw-box (text "v" :math [:sub "max"]))
+(draw-box (text "Some " {} [{:font-style "italic"} "formatted"] " text!")
+          {:span 5})
+
+[bytefield]
+----
+(draw-box (text "v" :math [:sub "max"]))
+(draw-box (text "Some " {} [{:font-style "italic"} "formatted"] " text!")
+          {:span 5})
+----
+
+The first example shows a common pattern in my own diagrams: the main
+text is styled using the `:math` predefined attributes to look like an
+equation, and it is followed by a vector representing a nested `tspan`
+that uses the `:sub` predefined attributes to be positioned as a
+subscript.
+
+The second example has a lot going on: The first text is rendered in
+the default style, which we have to make explicit by passing `{}` as
+the attribute expression so that we can move on to the nested
+`content` arguments (using `nil` would have worked as well).
+
+That content has multiple values this time. The first is again a
+vector representing a nested `tspan` object, this time using an
+explicit attribute map to style its text as italics, and the second is
+just more text, so it gets styled the same way as the original text.
+
+Following the end of the `text` function invocation, which makes up
+the `label` argument of the <<draw-box,`draw-box`>> function, we have
+the attribute expression for the box itself. We use that to make it
+wide enough to hold the text we're drawing.
 
 [[tspan]]
 == tspan

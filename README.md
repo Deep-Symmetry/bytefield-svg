@@ -18,9 +18,11 @@ It has been published to npm, so you can install it by simply running:
     npm install bytefield-svg
 
 
-I am currently in the process of
-[documenting](https://bytefield-svg.netlify.com/) the DSL and this
-package itself.
+The [DSL documentation](https://bytefield-svg.deepsymmetry.org/) is hosted
+on netlify, and built out of the [doc](doc) folder, which includes
+build instructions. (They also serve as an example of how to build a
+site that uses bytefield-svg, because it is used to draw the results
+of the code examples in the documentation.)
 
 If all you want to do is build an SVG from the DSL, you can simply
 write JavaScript to do it, once you've installed `bytefield-svg`:
@@ -47,14 +49,18 @@ But the package's main purpose is to act as an
 that [David Jencks](https://gitlab.com/djencks) has created.
 
 However, plugin support for Antora is not yet released, so in order
-for this to work you need to build and run one of David's [Antora fork
+for this to work you need to use one of David's [Antora fork
 branches](https://gitlab.com/djencks/antora/-/tree/issue-585-with-377-582-git-credential-plugin).
 
-Once those things are released, this will be a lot easier. If you want
-to brave it before then, there are
-[instructions](https://github.com/Deep-Symmetry/dysentery/tree/master/doc)
-showing how to locally build the dysentery project documentation site,
-which set up and use those special versions.
+It used to be necessary to buld and run his forks locally, but they
+are now available as tarballs that you can reference in your
+`package.json`, which is how the dysentery project documentation site
+does it. That is a great example of how to use many fetures of
+bytefield-svg. Its [build
+instructions](https://github.com/Deep-Symmetry/dysentery/tree/master/doc)
+show how to locally build it and can serve, along with that project's
+[`packge.json`](https://github.com/Deep-Symmetry/dysentery/blob/master/package.json),
+as a starting point for your own project.
 
 ## Building
 

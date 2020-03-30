@@ -1,8 +1,5 @@
-#!/usr/bin/env node
+;; This the source for the sample diagram illustrated in the project Read Me.
 
-var generate = require('./lib.js');
-
-var diagram = `
 ;; Some nice default background colors, used to distinguish header sections.
 (defattrs :bg-green {:fill "#a0ffa0"})
 (defattrs :bg-yellow {:fill "#ffffa0"})
@@ -81,6 +78,3 @@ var diagram = `
 (draw-box (text "length" [:math] [:sub 2]) {:span 4})
 (draw-gap "Unknown bytes" {:min-label-columns 6})
 (draw-bottom)
-`;
-
-process.stdout.write(generate(diagram));

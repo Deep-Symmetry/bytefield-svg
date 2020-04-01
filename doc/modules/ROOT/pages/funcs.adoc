@@ -1,7 +1,6 @@
 = Functions
 James Elliott <james@deepsymmetry.org>
 :icons: font
-:toc: preamble
 :experimental:
 
 This section describes the drawing functions that are the main purpose

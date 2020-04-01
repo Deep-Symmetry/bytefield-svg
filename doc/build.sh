@@ -11,5 +11,4 @@ then
 fi
 
 # Use it to build the documentation site.
-DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr npx antora --fetch --generator @djencks/site-generator-default \
-  doc/netlify.yml
+DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr npx antora --fetch doc/netlify.yml --generator antora-site-generator-lunr

@@ -13,10 +13,6 @@ down to the https://github.com/liebke/analemma[Analemma SVG building
 functions] used by these functions if you need to draw something
 unique.
 
-> TODO: Consider providing some basic documentation for the Analemma
-  functions we export because the Analemma site is cryptic and
-  currently has broken links to the source.
-
 [[append-svg]]
 == append-svg
 

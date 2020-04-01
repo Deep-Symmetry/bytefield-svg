@@ -77,24 +77,9 @@ documents I needed it for to an [Antora documentation
 site](https://djl-analysis.deepsymmetry.org/djl-analysis/track_metadata.html).
 
 As that site suggests, this package's main purpose is to act as an
-[Asciidoctor](https://asciidoctor.org) extension hosted by an
-[Antora](https://antora.org) plugin. This is done with the help of a
-[framework](https://gitlab.com/djencks/asciidoctor-generic-svg-extension.js)
-that [David Jencks](https://gitlab.com/djencks) has created.
-
-However, plugin support for Antora is not yet released, so in order
-for this to work you need to use one of David's [Antora fork
-branches](https://gitlab.com/djencks/antora/-/tree/issue-585-with-377-582-git-credential-plugin).
-
-It used to be necessary to buld and run his forks locally, but they
-are now available as tarballs that you can reference in your
-`package.json`, which is how the dysentery project documentation site
-does it. That is a great example of how to use many fetures of
-bytefield-svg. Its [build
-instructions](https://github.com/Deep-Symmetry/dysentery/tree/master/doc)
-show how to locally build it and can serve, along with that project's
-[`packge.json`](https://github.com/Deep-Symmetry/dysentery/blob/master/package.json),
-as a starting point for your own project.
+[Asciidoctor](https://asciidoctor.org) extension, and in fact
+[asciidoctor-bytefield](https://github.com/Deep-Symmetry/asciidoctor-bytefield)
+has now been published to enable that.
 
 ## Building
 
@@ -120,11 +105,13 @@ functions in site's own include file, the source for an even
 more attractive version of the diagram shrinks to
 [this](https://github.com/Deep-Symmetry/dysentery/blob/379555f21244354c4dc0c9711c8cb3a3552bc64b/doc/modules/ROOT/examples/dbserver_shared.edn)).
 
-The [DSL documentation](https://bytefield-svg.deepsymmetry.org/) is hosted
-on netlify, and built out of the [doc](doc) folder, which includes
-build instructions. (They also serve as an example of how to build a
-site that uses bytefield-svg, because it is used to draw the results
-of the code examples in the documentation.)
+The [DSL documentation](https://bytefield-svg.deepsymmetry.org/) is
+hosted on netlify, and built out of the [doc](doc) folder, which
+includes build instructions. (They are slightly more complex than if
+you were using `asciidoctor-bytefield`, because they want ot build
+against the latest version of `bytefield-svg` in case they are
+demonstrating unreleased features that haven't yet made it to the that
+extension.)
 
 To check for outdated dependencies, you can run:
 

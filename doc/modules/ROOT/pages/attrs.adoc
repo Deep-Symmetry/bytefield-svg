@@ -1,7 +1,6 @@
 = Attributes
 James Elliott <james@deepsymmetry.org>
 :icons: font
-:toc: preamble
 :experimental:
 
 Most of the drawing functions that you can call have a parameter that

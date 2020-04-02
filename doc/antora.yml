@@ -1,7 +1,7 @@
 name: bytefield-svg
 title: Byte Field SVG Builder
-version: 'master'
-prerelease: true
+version: '1.3.0'
+prerelease: false
 start_page: ROOT:intro.adoc
 nav:
 - modules/ROOT/nav.adoc

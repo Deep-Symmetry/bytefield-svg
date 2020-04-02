@@ -432,6 +432,24 @@
                                    [:left :right :top :bottom]))]
          (draw-box label (assoc attrs :borders borders)))))))
 
+(defn next-address
+  "Calculates the address at which the next box will be drawn."
+  []
+  (let [{:keys [address column]} @@('diagram-state @*globals*)]
+    (+ address column)))
+
+(defn draw-padding
+  "Draws enough related boxes to reach the specified address. If no
+  `label` is supplied, draws a zero byte in each box. If `attr-spec`
+  is supplied, it is passed along to `draw-related-boxes` along with
+  each copy of the label."
+  ([address]
+   (draw-padding address 0 nil))
+  ([address label]
+   (draw-padding address label nil))
+  ([address label attr-spec]
+   (draw-related-boxes (repeat (- address (next-address)) label) attr-spec)))
+
 (defn draw-gap
   "Draws an indication of discontinuity. Takes a full row, the default
   total `:height` is 70, the default `:gap` distance within that is
@@ -581,10 +599,12 @@
                       draw-column-headers
                       draw-gap
                       draw-line
+                      draw-padding
                       draw-related-boxes
                       draw-row-header
                       eval-attribute-spec
                       hex-text
+                      next-address
                       next-row
                       normalize-bit
                       number-as-bits

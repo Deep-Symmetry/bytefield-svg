@@ -558,6 +558,47 @@ https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
 attributes]) by passing an <<attrs#attribute-expressions,attribute
 expression>> as the fifth argument.
 
+[[draw-padding]]
+== draw-padding
+
+Draws enough related boxes to reach the specified memory address
+(useful if you know where the next chunk of useful information in the
+diagram occurs, and you don’t want to calculate how many boxes it will
+take to get there). The address is the value shown in the row header,
+plus the column header. It is either relative to the start of the
+diagram, or if a gap has been drawn, to the end of the most
+recent gap.
+
+.Arguments
+[source,clojure]
+----
+[address]
+[address label]
+[address label attr-spec]
+----
+
+If no `label` is supplied, draws a zero byte in each box. If
+`attr-spec` is supplied, it is passed along to `draw-related-boxes`
+along with each copy of the label.
+
+[source,clojure]
+(draw-column-headers)
+(draw-box "start" {:span 2})
+(draw-padding 8)
+(draw-box "more" {:span 2})
+(draw-padding 0x12 nil)
+(draw-box "end")
+
+[bytefield]
+----
+(draw-column-headers)
+(draw-box "start" {:span 2})
+(draw-padding 8)
+(draw-box "more" {:span 2})
+(draw-padding 0x12 nil)
+(draw-box "end")
+----
+
 [[draw-related-boxes]]
 == draw-related-boxes
 
@@ -671,6 +712,23 @@ override or augment the
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG text
 attributes]) by passing an <<attrs#attribute-expressions,attribute
 expression>> in `attr-spec`.
+
+[[next-address]]
+== next-address
+
+Calculates the memory address corresponding to the next box that will
+be drawn. (If a <<draw-gap,gap>> has been drawn, this will be relative
+to the end of the gap.)
+
+TIP: This will only be needed when you are writing fairly
+sophisticated drawing functions. For example, it is used by
+<<draw-padding,`draw-padding`>>.
+
+.Arguments
+[source,clojure]
+----
+_none_
+----
 
 [[next-row]]
 == next-row

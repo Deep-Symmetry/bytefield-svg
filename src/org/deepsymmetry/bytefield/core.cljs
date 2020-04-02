@@ -20,6 +20,18 @@
   nil)
 
 
+;; Helper functions to determine the width and height of the diagram.
+
+(defn diagram-width
+  "Calculates the width of the diagram itself (ignoring the margins)."
+  []
+  (let [state @*globals*]
+    (* @('box-width state) @('boxes-per-row state))))
+
+(defn diagram-height
+  "Calculates the height of the diagram itself (ignoring the margins)."
+  []
+  (:y @@('diagram-state @*globals*)))
 
 ;; Implement our domain-specific language for building up attribute
 ;; maps concisely and by composing named starting maps, as well as
@@ -127,7 +139,7 @@
                  font-size   11
                  font-family "Courier New, monospace"}
           :as   options} (eval-attribute-spec attr-spec)
-         y               (+ (:y @@('diagram-state @*globals*)) (* 0.5 height))
+         y               (+ (diagram-height) (* 0.5 height))
          body            (for [i (range @('boxes-per-row @*globals*))]
                            (let [x (+ @('left-margin @*globals*) (* (+ i 0.5) @('box-width @*globals*)))]
                              (svg/text (merge (dissoc options :labels :height)
@@ -164,7 +176,7 @@
                  dominant-baseline "middle"}
           :as   options} (eval-attribute-spec attr-spec)
          x               (- @('left-margin @*globals*) 5)
-         y               (+ (:y @@('diagram-state @*globals*)) (* 0.5 @('row-height @*globals*)))
+         y               (+ (diagram-height) (* 0.5 @('row-height @*globals*)))
          style           (merge options
                                 {:x                 x
                                  :y                 y
@@ -351,7 +363,7 @@
          left   (+ @('left-margin @*globals*) (* column @('box-width @*globals*)))
          width  (* span @('box-width @*globals*))
          right  (+ left width)
-         top    (:y @@('diagram-state @*globals*))
+         top    (diagram-height)
          bottom (+ top height)]
      (when (> (+ column span) @('boxes-per-row @*globals*))
        (throw (js/Error "draw-box called with span larger than remaining columns in row")))
@@ -469,10 +481,10 @@
 
      ;; Move on to a new row to draw the gap.
      (auto-advance-row)
-     (let [y      (:y @@('diagram-state @*globals*))
+     (let [y      (diagram-height)
            top    (+ y edge)
            left   @('left-margin @*globals*)
-           right  (+ left (* @('box-width @*globals*) @('boxes-per-row @*globals*)))
+           right  (+ left (diagram-width))
            bottom (+ y (- height edge))]
        (draw-line left y left top)
        (draw-line right y right top)
@@ -497,9 +509,9 @@
   row of boxes, which would extend the height of the diagram without
   adding useful information."
   []
-  (let [y    (:y @@('diagram-state @*globals*))
+  (let [y    (diagram-height)
         left @('left-margin @*globals*)]
-    (draw-line left y (+ left (* @('box-width @*globals*) @('boxes-per-row @*globals*))) y)))
+    (draw-line left y (+ left (diagram-width)) y)))
 
 
 
@@ -692,10 +704,12 @@
 (defn- emit-svg
   "Outputs the finished SVG."
   []
-  (let [result @*globals*]
-    (xml/emit (apply svg/svg {:width (+ @('left-margin result) @('right-margin result)
-                                         (* @('box-width result) @('boxes-per-row result)))
-                              :height (+ (:y @@('diagram-state @*globals*)) @('bottom-margin result))}
+  (let [result @*globals*
+        width  (+ @('left-margin result) @('right-margin result) (diagram-width))
+        height (+ (diagram-height) @('bottom-margin result))]
+    (xml/emit (apply svg/svg {:width   width
+                              :height  height
+                              :viewBox (str/join " " [0 0 width height])}
                      (:svg-body @@('diagram-state @*globals*))))))
 
 (defn generate

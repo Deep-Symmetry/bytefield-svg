@@ -241,6 +241,9 @@
     (number? label) ; A number, format it as hexadecimal.
     (hex-text label (* span 2))
 
+    (boolean? label) ; A bit, format it as a single hex digit.
+    (hex-text (if label 1 0) 1)
+
     (sequential? label) ; A list or vector, assume it is pre-rendered.
     label
 
@@ -340,7 +343,7 @@
        (draw-line left bottom right bottom style))
      (when-let [style (interpret-box-border :right borders :border-unrelated)] (draw-line right top right bottom style))
      (when-let [style (interpret-box-border :left borders :border-unrelated)] (draw-line left top left bottom style))
-     (when label
+     (when (some? label)
        (if (fn? label)
          (label left top width height)  ; Box being drawn by custom function.
          (let [label (xml/merge-attrs (format-box-label label span)  ; Normal label.

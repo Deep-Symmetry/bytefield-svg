@@ -148,6 +148,10 @@ If you pass a number, it is rendered in hexadecimal, with enough
 digits to represent all the bytes spanned by your box (see the
 discussion of the `:span` attribute below).
 
+If you pass a boolean (`true` or `false`), it is rendered as a
+single-digit bit value (`1` or `0`) in the same style as hexadecimal
+numbers.
+
 If you need a label with more complex structure or styling you can
 build it by calling <<text,`text`>> or <<hex-text,`hex-text`>>
 yourself and passing the results as `label`.
@@ -212,12 +216,14 @@ Here are some sample boxes:
 (draw-box 1)
 (draw-box "two" {:span 2})
 (draw-box nil {:fill "#a0ffa0"})
+(draw-box false)
 
 [bytefield]
 ----
 (draw-box 1)
 (draw-box "two" {:span 2})
 (draw-box nil {:fill "#a0ffa0"})
+(draw-box false)
 ----
 
 And as a concrete example of how we can use <<defattrs,`defattrs`>> to
@@ -686,6 +692,56 @@ part of the box grid.
 The height of the row defaults to the <<values#,predefined value>>
 `:row-height` but can be changed by passing `height`.
 
+
+[[normalize-bit]]
+== normalize-bit
+
+TIP: You probably don’t need to call this, it’s used by
+<<number-as-bits,`number-as-bits` below>>, but it is available in case
+it might be helpful in writing your own bit drawing functions.
+
+Converts a value to either `true` or `false`. All non-zero numbers
+become `true`, zero becomes `false`. Other values are tested for
+truthiness (in Clojurescript all values other than `false` and `nil`
+are truthy) and translated to `true` or `false` accordingly.
+
+.Arguments
+[source,clojure]
+----
+[value]
+----
+
+Returns a value which when passed as a label to `draw-box` will be
+drawn as either `0` or `1` in the hex style.
+
+[[number-as-bits]]
+== number-as-bits
+
+Takes a a number and transforms it into a sequence of `boolean` bit
+values of the specified length.
+
+.Arguments
+[source,clojure]
+----
+[number length]
+----
+
+This can be used to explode a number into the corresponding bit field
+by passing the result to <<draw-boxes,`draw-boxes`>> or
+<<draw-related-boxes,`draw-related-boxes`>>.
+
+[source,clojure]
+(def left-margin 1)
+(def boxes-per-row 8)
+(draw-column-headers {:labels (reverse (take 8 column-labels))})
+(draw-related-boxes (number-as-bits 0xd3 8))
+
+[bytefield]
+----
+(def boxes-per-row 8)
+(draw-column-headers {:labels (reverse (take 8 column-labels))})
+(draw-related-boxes (number-as-bits 0xd3 8))
+----
 
 [[text]]
 == text

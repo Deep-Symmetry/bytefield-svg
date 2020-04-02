@@ -253,6 +253,24 @@
     :else
     (throw (js/Error. (str "Don't know how to format box label: " label)))))
 
+(defn normalize-bit
+  "Converts a value to either `true` or `false`. All non-zero numbers
+  become `true`. Other values are tested for truthiness and translated
+  to `true` or `false` accordingly."
+  [value]
+  (cond
+    (number? value)
+    (zero? value)
+
+    :else
+    (if value true false)))
+
+(defn number-as-bits
+  "Takes a number and transforms it into a sequence of `boolean` bit
+  values of the specified length."
+  [number length]
+  (map #(normalize-bit (bit-test number %)) (reverse (range length))))
+
 (defn- center-baseline
   "Recursively ensures that the a tag and any content tags it contains
   have their dominant baseline set to center them vertically, so
@@ -556,6 +574,8 @@
                       eval-attribute-spec
                       hex-text
                       next-row
+                      normalize-bit
+                      number-as-bits
                       text
                       tspan]))
 

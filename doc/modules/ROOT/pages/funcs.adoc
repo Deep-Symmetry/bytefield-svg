@@ -720,6 +720,10 @@ drawn as either `0` or `1` in the hex style.
 Takes a a number and transforms it into a sequence of `boolean` bit
 values of the specified length.
 
+> Thanks to https://github.com/Swiftb0y[Swiftb0y] for this idea, and
+  for being the first outside user of `bytefield-svg`, thereby helping
+  to flesh it out.
+
 .Arguments
 [source,clojure]
 ----

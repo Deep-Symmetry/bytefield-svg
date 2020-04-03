@@ -8,6 +8,9 @@ This change log follows the conventions of
 
 ### Added
 
+- The `svg` element is now rendered with a proper `viewPort` attribute
+  which allows the host page to make it responsive by styling it with
+  `max-width="100%"`.
 - Functions to support drawing bit-fields from integers.
 - Functions to support drawing padding until a particular address is
   reached.

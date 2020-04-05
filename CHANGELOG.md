@@ -17,6 +17,13 @@ This change log follows the conventions of
 - A `draw-inline-gap` function to support drawing discontinuities in
   single-row diagrams.
 
+### Fixed
+
+- A new version of the Small Clojure Interpreter is used, which
+  enables `dotimes` for index-based iteration within diagrams.
+  Previously it would fail because it delegated to the forbidden,
+  potentially non-terminating `loop` form.
+
 
 ## [1.3.0] - 2020-03-29
 

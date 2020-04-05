@@ -1,0 +1,4 @@
+{:linters {:missing-docstring            {:level :warning}
+           :unsorted-required-namespaces {:level :warning}
+           :single-key-in                {:level :warning}
+           :unused-namespace             {:exclude [clojure.set]}}}

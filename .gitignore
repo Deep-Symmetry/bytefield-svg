@@ -1,3 +1,4 @@
+/.clj-kondo/.cache
 /.cpcache
 /.shadow-cljs
 /.vscode

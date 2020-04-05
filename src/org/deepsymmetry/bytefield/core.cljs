@@ -2,10 +2,10 @@
   "Provides a safe yet robust subset of the Clojure programming
   language, tailored to the task of building SVG diagrams in the style
   of the LaTeX `bytefield` package."
-  (:require [clojure.string :as str]
-            [cljs.pprint :refer [cl-format]]
-            [analemma.svg :as svg]
+  (:require [analemma.svg :as svg]
             [analemma.xml :as xml]
+            [clojure.set :as set]
+            [clojure.string :as str]
             [sci.core :as sci])
   (:require-macros [org.deepsymmetry.bytefield.macros :refer [self-bind-symbols]]))
 
@@ -638,6 +638,15 @@
                       svg/tref
                       svg/tspan]))
 
+(def set-bindings
+  "The clojure.set bindings we make available for building diagrams."
+  (ns-publics 'clojure.set))
+
+(def string-bindings
+  "The clojure.string bindings we make available for building diagrams."
+  (ns-publics 'clojure.string))
+
+
 (def diagram-bindings
   "Our own functions which we want to make available for building
   diagrams."
@@ -791,9 +800,11 @@
     (let [env  (atom {})
           opts {:preset     :termination-safe
                 :env        env
-                :namespaces {'user         (merge diagram-bindings @*globals*)
-                             'analemma.svg svg-bindings
-                             'analemma.xml xml-bindings}}]
+                :namespaces {'user           (merge diagram-bindings @*globals*)
+                             'analemma.svg   svg-bindings
+                             'analemma.xml   xml-bindings
+                             'clojure.set    set-bindings
+                             'clojure.string string-bindings}}]
       (sci/eval-string "(require '[analemma.xml :as xml])" opts)
       (sci/eval-string "(require '[analemma.svg :as svg])" opts)
       (sci/eval-string source opts)

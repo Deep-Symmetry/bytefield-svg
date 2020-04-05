@@ -6,11 +6,17 @@ James Elliott <james@deepsymmetry.org>
 This section describes the drawing functions that are the main purpose
 of `bytefield-svg`. They are designed to flexibly draw the elements
 you might need in a byte field diagram. But they are also intended to
-be combined with the functions in the Clojure
-https://clojure.github.io/clojure/[core library], and you can dive
+be combined with the functions in the ClojureScript
+http://cljs.github.io/api/cljs.core/[core library], and you can dive
 down to the https://github.com/liebke/analemma[Analemma SVG building
-functions] used by these functions if you need to draw something
-unique.
+functions] used by many of the functions below if you need to draw
+something unique.
+
+For your coding convenience, the namespaces
+https://clojure.github.io/clojure/clojure.set-api.html[`clojure.set`] and
+http://cljs.github.io/api/clojure.string[`clojure.string`] are also
+made available, so you can call functions from them if needed.
+
 
 [[append-svg]]
 == append-svg

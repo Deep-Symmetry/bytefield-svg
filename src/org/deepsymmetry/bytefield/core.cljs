@@ -476,11 +476,11 @@
    (draw-gap label nil))
   ([label attr-spec]
    (let [{:keys [height gap edge gap-style box-above-style min-label-columns]
-          :or   {gap-style         (eval-attribute-spec :dotted)
-                 box-above-style   (eval-attribute-spec :box-above)
-                 height            70
+          :or   {height            70
                  gap               10
                  edge              15
+                 gap-style         (eval-attribute-spec :dotted)
+                 box-above-style   (eval-attribute-spec :box-above)
                  min-label-columns 8}} (eval-attribute-spec attr-spec)
 
          column (:column @@('diagram-state @*globals*))
@@ -520,6 +520,56 @@
                                   (assoc :gap? true))))
            header-fn @('row-header-fn @*globals*)]
        (when header-fn (draw-row-header (header-fn state)))))))
+
+(defn draw-gap-inline
+  "Draws an indication of discontinuity for a single-row diagram. Takes
+  a single box. It does not make sense to use this in conjunction with
+  either row or column headers because they will be incorrect. But
+  some single-row diagrams can benefit from representing gaps in them,
+  so this was requested.
+
+  The default `:gap` distance (between the slanted edges of the
+  discontinuity) is 5. The default `:gap-style` used to draw these gap
+  edges is `:border-related`, and `:width` over which that gap is
+  slanted defaults to 20. All these can be overriden through the
+  optional attribute spec.
+
+  The width of the edge drawn before and after the gap is calculated
+  by subtracting the the gap width from the width of the single box
+  into which this gap is drawn, so you will not get meaningful results
+  if you try to specify a width that is greater than your configured
+  box width.
+
+  As with `draw-box`, the row height defaults to the predefined value
+  `row-height` but can be overridden through `:height`.
+
+  Since there are no clearly defined use cases that identify where and
+  how to position any label, it is the responsibility of the
+  open-ended boxes you draw on either side of the gap to take care of
+  that."
+  ([]
+   (draw-gap-inline nil))
+  ([attr-spec]
+   (let [{:keys [width height gap gap-style]
+          :or   {width     15
+                 height    @('row-height @*globals*)
+                 gap       5
+                 gap-style (eval-attribute-spec :border-related)}} (eval-attribute-spec attr-spec)
+
+         column    (:column @@('diagram-state @*globals*))
+         box-width @('box-width @*globals*)
+         edge      (/ (- box-width width) 2.0)
+         top       (diagram-height)
+         left      (+ @('left-margin @*globals*) (* column box-width))
+         bottom    (+ top height)
+         right     (+ left box-width)]
+     (draw-line left top (+ left edge (- width gap)) top)
+     (draw-line (+ left edge (- width gap)) top (+ left edge) bottom gap-style)
+     (draw-line (+ left edge) bottom left bottom)
+     (draw-line right top (- right edge) top)
+     (draw-line (- right edge) top (- right edge (- width gap)) bottom gap-style)
+     (draw-line (- right edge (- width gap)) bottom right bottom))
+   (swap! @('diagram-state @*globals*) update :column inc)))
 
 (defn draw-bottom
   "Ends the diagram by drawing a line across the box area. Needed if the
@@ -598,6 +648,7 @@
                       draw-boxes
                       draw-column-headers
                       draw-gap
+                      draw-gap-inline
                       draw-line
                       draw-padding
                       draw-related-boxes

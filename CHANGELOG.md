@@ -9,7 +9,7 @@ This change log follows the conventions of
 Nothing so far.
 
 
-## [1.3.0] - 2020-04-05
+## [1.4.0] - 2020-04-05
 
 ### Added
 

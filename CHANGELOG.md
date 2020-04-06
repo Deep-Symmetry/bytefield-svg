@@ -6,6 +6,8 @@ This change log follows the conventions of
 
 ## [Unreleased][unreleased]
 
+Nothing so far.
+
 ## [1.4.1] - 2020-04-04
 
 ### Fixed
@@ -16,8 +18,6 @@ This change log follows the conventions of
   new at the JavaScript/ClojureScript worlds!)
 - Generation of the user guide using the local extension now uses
   the new embedded SVG tag mode, to avoid HTML structural issues.
-
-Nothing so far.
 
 ## [1.4.0] - 2020-04-05
 

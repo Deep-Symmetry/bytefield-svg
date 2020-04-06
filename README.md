@@ -38,6 +38,16 @@ const diagram = generate(source);
 process.stdout.write(diagram);
 ```
 
+By default, a full SVG file is generated, complete with XML version
+and namespaces. If you want to generate a simple `<svg>` tag which is
+suitable for embedding inside an HTML document, you can request that
+by calling `generate` like this:
+
+```javascript
+// setup code omitted...
+const diagram = generate(source, { "embedded": true });
+```
+
 Of course, you can do other things than writing the diagram to standard out.
 For a few more examples of usage, you can see the
 [cli.js](https://github.com/Deep-Symmetry/bytefield-svg/blob/master/cli.js)

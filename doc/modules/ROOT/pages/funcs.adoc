@@ -527,7 +527,7 @@ NOTE: In order to allow you to draw boxes that connect to the bottom
 of the gap, no bottom border is drawn. If you have a full row of boxes
 after it this doesn’t matter, as their top borders will close it off.
 But if the diagram ends at the gap, or with an incomplete row after
-it, you need to call `<<draw-bottom,(draw-bottom)`>> after you draw
+it, you need to call <<draw-bottom,`(draw-bottom)`>> after you draw
 the gap.
 
 [source,clojure]

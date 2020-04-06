@@ -4,6 +4,7 @@
   of the LaTeX `bytefield` package."
   (:require [analemma.svg :as svg]
             [analemma.xml :as xml]
+            [clojure.pprint :as pprint]
             [clojure.set :as set]
             [clojure.string :as str]
             [sci.core :as sci])
@@ -237,7 +238,7 @@
    (hex-text n length :hex))
   ([n length attr-spec]
    (let [fmt (str "~" length ",'0x")]
-     (text (cl-format nil fmt n) [:hex attr-spec]))))
+     (text (pprint/cl-format nil fmt n) [:hex attr-spec]))))
 
 (defn format-box-label
   "Builds an appropriate SVG text object to label a box spanning the
@@ -730,7 +731,7 @@
   overridden by setting `:math-family` and `:math-style` in the
   `:row-header` attribute definition."
   [{:keys [address gap?]}]
-  (let [addr-label (cl-format nil "~2,'0x" address)
+  (let [addr-label (pprint/cl-format nil "~2,'0x" address)
         defs       @@('named-attributes @*globals*)
         attr-spec  (:row-header defs)
         hex        (merge (:hex defs)
@@ -800,6 +801,7 @@
     (let [env  (atom {})
           opts {:preset     :termination-safe
                 :env        env
+                :classes    {'Math js/Math}
                 :namespaces {'user           (merge diagram-bindings @*globals*)
                              'analemma.svg   svg-bindings
                              'analemma.xml   xml-bindings

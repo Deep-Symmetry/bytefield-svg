@@ -2,6 +2,7 @@
 James Elliott <james@deepsymmetry.org>
 :icons: font
 :experimental:
+:stem: latexmath
 
 This section describes the drawing functions that are the main purpose
 of `bytefield-svg`. They are designed to flexibly draw the elements
@@ -12,10 +13,20 @@ down to the https://github.com/liebke/analemma[Analemma SVG building
 functions] used by many of the functions below if you need to draw
 something unique.
 
-For your coding convenience, the namespaces
-https://clojure.github.io/clojure/clojure.set-api.html[`clojure.set`] and
-http://cljs.github.io/api/clojure.string[`clojure.string`] are also
-made available, so you can call functions from them if needed.
+For your coding convenience, the ClojureScript standard library
+namespaces
+https://clojure.github.io/clojure/clojure.set-api.html[`clojure.set`]
+and http://cljs.github.io/api/clojure.string[`clojure.string`] are
+also made available, so you can call functions from them if needed.
+
+The JavaScript
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math[`Math`
+object] is also available, so you can use it to perform mathematical
+computations using JavaScript interop syntax. For example here's how
+you would calculate stem:[2^8]:
+
+[source,clojure]
+(Math/pow 2 8)
 
 
 [[append-svg]]

@@ -783,33 +783,46 @@
           (build-initial-globals)))
 
 (defn- emit-svg
-  "Outputs the finished SVG."
-  []
-  (let [result @*globals*
-        width  (+ @('left-margin result) @('right-margin result) (diagram-width))
-        height (+ (diagram-height) @('bottom-margin result))]
-    (xml/emit (apply svg/svg {:width   width
-                              :height  height
-                              :viewBox (str/join " " [0 0 width height])}
-                     (:svg-body @@('diagram-state @*globals*))))))
+  "Outputs the finished SVG. If `embedded?` is true, emits a simple SVG
+  tag suitable for embedding inside an HTML file. Otherwise emits a
+  full SVG file with XML version and namespaces."
+  ([]
+   (emit-svg false))
+  ([embedded?]
+   (let [result @*globals*
+         width  (+ @('left-margin result) @('right-margin result) (diagram-width))
+         height (+ (diagram-height) @('bottom-margin result))
+         body   (:svg-body @@('diagram-state @*globals*))
+         attrs  {:width   width
+                 :height  height
+                 :viewBox (str/join " " [0 0 width height])}]
+     (if embedded?
+       (xml/emit-tag (concat [:svg attrs] body))
+       (xml/emit (apply svg/svg attrs body))))))
 
 (defn generate
   "Accepts Clojure-based diagram specification string and returns the
-  corresponding SVG string."
-  [source]
-  (binding [*globals* (atom (build-vars))]
-    (let [env  (atom {})
-          opts {:preset     :termination-safe
-                :env        env
-                :classes    {'Math js/Math}
-                :namespaces {'user           (merge diagram-bindings @*globals*)
-                             'analemma.svg   svg-bindings
-                             'analemma.xml   xml-bindings
-                             'clojure.set    set-bindings
-                             'clojure.string string-bindings}}]
-      (sci/eval-string "(require '[analemma.xml :as xml])" opts)
-      (sci/eval-string "(require '[analemma.svg :as svg])" opts)
-      (sci/eval-string source opts)
-      (when (pos? (:column @@('diagram-state @*globals*)))
-        (next-row))  ; Finish off the last row.
-      (emit-svg))))
+  corresponding SVG string. `options` is a JavaScript object holding
+  configuration options. Currently the only option is `embedded`
+  which, if truthy, causes a simple `svg` tag suitable for embedding
+  in an HTML document to be embedded. Otherwise a full SVG fiile with
+  XML version and namespaces is emitted."
+  ([source]
+   (generate source nil))
+  ([source options]
+   (binding [*globals* (atom (build-vars))]
+     (let [env  (atom {})
+           opts {:preset     :termination-safe
+                 :env        env
+                 :classes    {'Math js/Math}
+                 :namespaces {'user           (merge diagram-bindings @*globals*)
+                              'analemma.svg   svg-bindings
+                              'analemma.xml   xml-bindings
+                              'clojure.set    set-bindings
+                              'clojure.string string-bindings}}]
+       (sci/eval-string "(require '[analemma.xml :as xml])" opts)
+       (sci/eval-string "(require '[analemma.svg :as svg])" opts)
+       (sci/eval-string source opts)
+       (when (pos? (:column @@('diagram-state @*globals*)))
+         (next-row)))  ; Finish off the last row.
+     (emit-svg (aget options "embedded")))))

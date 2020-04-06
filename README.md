@@ -68,6 +68,11 @@ might be helpful in a scripting pipeline:
 If you supply just a filename with no command-line flag, it is assumed
 to be the diagram source file.
 
+Normally the output is a full SVG file, complete with XML version
+information and namespaces. If instead you want to generate a simple
+SVG tag which is suitable for embedding inside an HTML document, you
+can supply the `-e` or `--embedded` flag.
+
 Invoking it with `-h` or `--help` displays this usage information.
 
 ## Background

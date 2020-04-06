@@ -27,6 +27,13 @@ const optionDefinitions = [{
     alias: 'o',
     type: String,
     description: 'File to which to write the SVG diagram, defaults to standard out.'
+  },
+  {
+    name: 'embedded',
+    alias: 'e',
+    type: Boolean,
+    description: 'Emit a simple <svg> tag suitable for embedding in an HTML document. ' +
+      '(The default is to emit a full SVG file with XML version and namespaces.)'
   }
 ];
 const options = commandLineArgs(optionDefinitions);
@@ -51,7 +58,9 @@ if (options.help) {
 } else {
   // Actually read the source and render a diagram.
   const source = fs.readFileSync(options.source || 0, 'UTF-8');
-  const diagram = generate(source);
+  const diagram = generate(source, {
+    "embedded": options.embedded
+  });
   if (options.output) { // We were asked to write to a specific file.
     fs.writeFileSync(options.output, diagram, "UTF-8");
   } else { // Write to standard out.

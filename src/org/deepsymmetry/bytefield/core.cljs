@@ -808,7 +808,7 @@
   in an HTML document to be embedded. Otherwise a full SVG fiile with
   XML version and namespaces is emitted."
   ([source]
-   (generate source nil))
+   (generate source #js {}))
   ([source options]
    (binding [*globals* (atom (build-vars))]
      (let [env  (atom {})

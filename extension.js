@@ -4,7 +4,7 @@
 // script to draw the sample diagrams. It will only work if the project has been built
 // first, following the instructions in README.md.
 
-const processor = require('./lib.js');  // The compiled byte field diagram generator.
+const processor = require('./lib.js'); // The compiled byte field diagram generator.
 
 // Register as a block processor of type 'bytefield'
 module.exports = function (registry) {
@@ -20,7 +20,9 @@ module.exports = function (registry) {
     }
     var svgText
     try {
-      svgText = processor(source)
+      svgText = processor(source, {
+        "embedded": true
+      })
     } catch (err) {
       console.log(`error after ${line_info}: ${err.toString()}`)
       svgText = `error after ${line_info}: ${err.toString()}`

@@ -6,8 +6,18 @@ This change log follows the conventions of
 
 ## [Unreleased][unreleased]
 
-Nothing so far.
+## [1.4.1] - 2020-04-04
 
+### Fixed
+
+- Invoking the `generate` function with a single argument was not
+  working properly any longer because of a problem handling default
+  JavaScript arguments from ClojureScript code. (Sorry, I am really
+  new at the JavaScript/ClojureScript worlds!)
+- Generation of the user guide using the local extension now uses
+  the new embedded SVG tag mode, to avoid HTML structural issues.
+
+Nothing so far.
 
 ## [1.4.0] - 2020-04-05
 
@@ -36,7 +46,6 @@ Nothing so far.
   Previously it would fail because it delegated to the forbidden,
   potentially non-terminating `loop` form.
 
-
 ## [1.3.0] - 2020-03-29
 
 ### Added
@@ -51,13 +60,11 @@ Nothing so far.
   version, which is the most commonly useful one. It was only a quirk
   of the compiled Clojurescript that was allowing diagrams to work.
 
-
 ## [1.2.0] - 2020-03-26
 
 ### Added
 
 - Continued fleshing out the language guide documentation site.
-
 
 ## [1.1.0] - 2020-03-24
 
@@ -87,8 +94,8 @@ This was the first release that actually worked when installed via
 
 Intial early release.
 
-
-[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.0...HEAD
+[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.0...1.4.1
 [1.4.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.1.0...v1.2.0

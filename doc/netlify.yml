@@ -9,7 +9,7 @@ content:
     start_path: doc
 asciidoc:
   extensions:
-  - asciidoctor-mathjax
+  - "@djencks/asciidoctor-mathjax"
   - ./../extension.js
 ui:
   bundle:

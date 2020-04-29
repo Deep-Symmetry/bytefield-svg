@@ -143,7 +143,7 @@ version in `package.json`, tag and push to GitHub, then run:
 
 ## License
 
-<a href="http://deepsymmetry.org"><img align="right" alt="Deep Symmetry"
+<a href="http://deepsymmetry.org"><img style="float:right" alt="Deep Symmetry"
  src="doc/assets/DS-logo-bw-200-padded-left.png" width="216" height="123"></a>
 
 Copyright © 2020 [Deep Symmetry, LLC](http://deepsymmetry.org)

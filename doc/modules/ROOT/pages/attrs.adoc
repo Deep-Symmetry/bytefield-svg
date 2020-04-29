@@ -1,7 +1,5 @@
 = Attributes
 James Elliott <james@deepsymmetry.org>
-:icons: font
-:experimental:
 
 Most of the drawing functions that you can call have a parameter that
 let you specify _attributes_ to configure details about what you want
@@ -181,5 +179,3 @@ diagrams in the https://djl-analysis.deepsymmetry.org/[DJ Link
 Ecosystem Analysis] is full of variations. You can see it by clicking
 the **Edit this Page** link at the top right of a page that looks
 interesting.
-
-include::partial$Footer.adoc[]

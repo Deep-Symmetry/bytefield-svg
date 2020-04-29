@@ -9,9 +9,9 @@
     "command-line-usage": "^6.1.0"
   },
   "devDependencies": {
-    "@antora/cli": "^2.2.0",
-    "antora-site-generator-lunr": "^0.3.0",
-    "asciidoctor-mathjax": "0.0.4",
+    "@antora/cli": "^2.3.1",
+    "antora-site-generator-lunr": "^0.4.0",
+    "@djencks/asciidoctor-mathjax": "0.0.6",
     "shadow-cljs": "^2.8.94",
     "source-map-support": "^0.5.16"
   },

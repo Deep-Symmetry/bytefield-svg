@@ -1,7 +1,5 @@
 = Introduction
 James Elliott <james@deepsymmetry.org>
-:icons: font
-:experimental:
 
 This tool was created to enable the porting of a pair of large LaTeX
 documents to a more modern and maintainable
@@ -190,6 +188,3 @@ boxes, and that’s how many hexadecimal digits fit in two bytes.
 With that introduction, we’re ready to start exploring all the
 <<values#,values that can be configured>>, and the full details of the
 <<funcs#,functions that you can use for drawing>>.
-
-
-include::partial$Footer.adoc[]

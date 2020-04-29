@@ -3,5 +3,11 @@ title: Byte Field SVG Builder
 version: '1.4.1'
 prerelease: false
 start_page: ROOT:intro.adoc
+asciidoc:
+  attributes:
+    icons: font
+    experimental: ''
+    page-copyright: 2020
+    page-pagination: ''
 nav:
   - modules/ROOT/nav.adoc

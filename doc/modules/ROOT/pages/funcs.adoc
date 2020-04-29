@@ -1,7 +1,5 @@
 = Functions
 James Elliott <james@deepsymmetry.org>
-:icons: font
-:experimental:
 :stem: latexmath
 
 This section describes the drawing functions that are the main purpose
@@ -961,5 +959,3 @@ its `content`.
 Any lists or vectors in the content will be recursively parsed as
 nested `tspan` objects with their own attribute expressions as the
 first element.
-
-include::partial$Footer.adoc[]

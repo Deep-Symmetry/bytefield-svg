@@ -1,7 +1,5 @@
 = Predefined Values
 James Elliott <james@deepsymmetry.org>
-:icons: font
-:experimental:
 
 There are a number of predefined values that control the default
 behavior of the functions you use to draw byte field diagrams. They
@@ -70,5 +68,3 @@ number).
 You can `def` any other variables that might be useful to your
 diagrams, perhaps in a shared include file, but they won’t affect the
 existing drawing functions the way these values do.
-
-include::partial$Footer.adoc[]

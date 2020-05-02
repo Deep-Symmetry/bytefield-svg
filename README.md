@@ -85,6 +85,15 @@ can supply the `-e` or `--embedded` flag.
 
 Invoking it with `-h` or `--help` displays this usage information.
 
+    -h, --help            Display this usage guide.
+    -s, --source string   File from which to read the diagram source, defaults to
+                          standard in.
+    -o, --output string   File to which to write the SVG diagram, defaults to
+                          standard out.
+    -e, --embedded        Emit a simple <svg> tag suitable for embedding in an
+                          HTML document. (The default is to emit a full SVG file
+                          with XML version and namespaces.)
+
 ## Background
 
 The DSL has been nicely validated by porting all of the LaTeX

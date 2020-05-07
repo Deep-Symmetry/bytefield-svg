@@ -6,3 +6,6 @@
 /node_modules
 /test.svg
 /doc/build
+
+# Local Netlify folder
+.netlify

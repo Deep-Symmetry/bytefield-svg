@@ -113,7 +113,7 @@ The following named attributes are set up for your diagram to use
 (although you are free to call `defattrs` to modify or replace any of
 these, as well as to add your own new sets).
 
-[cols="1m,4"]
+[cols="1m,4a"]
 |===
 |Key |Purpose
 
@@ -173,6 +173,14 @@ these, as well as to add your own new sets).
 
 |:box-below |A set of border styles for a box that is open to the row
  above. It draws only its left, right, and bottom borders.
+
+TIP: Even though there is no style predefined for situations where you
+ have really long values that span more than two rows, you can always
+ draw middle boxes that span entire rows, and explicitly specify they
+ have borders only on the right and left by passing `{:borders #{:left
+ :right}}` as their attributes. If you find yourself doing that a lot,
+ and want to set up your own shorthand for this style of box, that's
+ what <<funcs.adoc#defattrs,`defattrs`>> is for.
 |===
 
 For examples of how to combine the box styles, the source for the

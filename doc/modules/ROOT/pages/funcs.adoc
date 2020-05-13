@@ -213,7 +213,7 @@ And here’s what it looks like repeated over a four-box row:
 You can modify the box that is drawn by passing in the following
 attributes:
 
-[cols="1m,2m,6"]
+[cols="1m,2m,5"]
 |===
 |Attribute |Default Value |Meaning
 

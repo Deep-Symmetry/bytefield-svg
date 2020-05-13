@@ -10,10 +10,10 @@
   },
   "devDependencies": {
     "@antora/cli": "^2.3.1",
-    "antora-site-generator-lunr": "^0.4.0",
-    "@djencks/asciidoctor-mathjax": "0.0.6",
-    "shadow-cljs": "^2.8.94",
-    "source-map-support": "^0.5.16"
+    "antora-site-generator-lunr": "^0.5.0",
+    "@djencks/asciidoctor-mathjax": "0.0.7",
+    "shadow-cljs": "^2.9.2",
+    "source-map-support": "^0.5.19"
   },
   "scripts": {
     "build": "shadow-cljs compile lib",

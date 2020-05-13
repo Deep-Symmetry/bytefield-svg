@@ -63,6 +63,7 @@ can add your own named attribute definitions by calling the
 <<funcs#defattrs,`defattrs`>> function, perhaps in a shared include
 file.
 
+[[combining-attributes]]
 === Combining Attributes
 
 Sometimes you want to combine multiple attribute specifications,

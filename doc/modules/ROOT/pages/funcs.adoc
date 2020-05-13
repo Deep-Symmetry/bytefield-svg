@@ -334,6 +334,118 @@ you want the boxes to be drawn as a related group, like in the example
 above, you can use <<draw-related-boxes,`draw-related-boxes`>>.
 
 
+[[draw-vertical-text]]
+=== Vertical Text
+
+If you have long values you want to put in your boxes, and you still
+want to fit a lot of boxes in a row (for example, you are drawing a
+wide bit field diagram where each bit has a particular meaning) you
+can rotate the text so it is drawn vertically. Although bytefield-svg
+does not have any special support for this, you can use SVG's built in
+support for CSS to achieve it.
+
+This example, from the Dysentery project's analysis of the Pioneer Pro
+DJ Link protocol, actually fits fine horizontally, but can still
+demonstrate the technique. Here is the horizontal text version:
+
+```clojure
+(def boxes-per-row 8)
+(def box-width 70)
+(def left-margin 1)
+(draw-column-headers {:labels (str/split "7,6,5,4,3,2,1,0" #",")})
+(draw-box nil)
+(draw-box "Play")
+(draw-box "Master")
+(draw-box "Sync")
+(draw-box "On-Air")
+(draw-box nil)
+(draw-box "BPM")
+(draw-box nil)
+```
+
+[bytefield]
+----
+(def boxes-per-row 8)
+(def box-width 70)
+(def left-margin 1)
+(draw-column-headers {:labels (str/split "7,6,5,4,3,2,1,0" #",")})
+(draw-box nil)
+(draw-box "Play")
+(draw-box "Master")
+(draw-box "Sync")
+(draw-box "On-Air")
+(draw-box nil)
+(draw-box "BPM")
+(draw-box nil)
+----
+
+And here it is with vertical text. The CSS we need is to set the
+`writing-mode` attribute to `"vertical-rl"`. We also want to make
+`row-height` higher to fit the rotated labels, instead of widening
+`box-width`:
+
+```clojure
+(def boxes-per-row 8)
+(def left-margin 1)
+(defattrs :vertical  ;; <1>
+          (eval-attribute-spec [:plain {:writing-mode "vertical-rl"}]))  ;; <2>
+(draw-column-headers {:labels (str/split "7,6,5,4,3,2,1,0" #",")})
+(def row-height 80)  ;; <3>
+(draw-box nil)
+(draw-box (text "Play" :vertical))  ;; <4>
+(draw-box (text "Master" :vertical))
+(draw-box (text "Sync" :vertical))
+(draw-box (text "On-Air" :vertical))
+(draw-box nil)
+(draw-box (text "BPM" :vertical))
+(draw-box nil)
+```
+
+<1> Since there is a bit of code here to define the attributes we use
+to render rotated text, and we'll use it multiple times, we define it
+as a new named attribute set.
+
+<2> We want to combine the new CSS style attribute map `{:writing-mode
+"vertical-rl"}` with the <<attrs.adoc#predefined-attributes,predefined
+attributes>> named `:plain`, which are what `draw-box` normally uses.
+The easiest way to do that is by
+<<attrs.adoc#combining-attributes,combining attributes>> in an
+attribute expression, which we can use
+<<eval-attribute-spec,`eval-attribute-spec`>> to resolve for us.
+
+<3> At the start of the row where we're using rotated text, we
+increase the row height to accommodate it. If you are going to follow
+this with non-rotated rows, you'll want to set it back down after your
+rotated row. We need a bit more height than we needed width because
+WebKit-based browsers like Chrome and Safari don't quite center the
+rotated text vertically, although Firefox seems to get it right.
+
+<4> Because we want to apply our attributes to the text, rather than
+the box, we call <<text,`text`>> explicitly instead of letting
+`draw-box` do it for us, and then we can pass our new named attributes
+to `text`.
+
+Putting that all together yields this result:
+
+[bytefield]
+----
+(def boxes-per-row 8)
+(def left-margin 1)
+(defattrs :vertical
+          (eval-attribute-spec [:plain {:writing-mode "vertical-rl"}]))  ;; <1>
+(draw-column-headers {:labels (str/split "7,6,5,4,3,2,1,0" #",")})
+(def row-height 80)  ;; <2>
+(draw-box nil)
+(draw-box (text "Play" :vertical))  ;; <3>
+(draw-box (text "Master" :vertical))
+(draw-box (text "Sync" :vertical))
+(draw-box (text "On-Air" :vertical))
+(draw-box nil)
+(draw-box (text "BPM" :vertical))
+(draw-box nil)
+----
+
+
 
 [[draw-boxes]]
 == draw-boxes

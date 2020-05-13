@@ -9,7 +9,7 @@ keywords that identify the attribute being configured, and whose
 values are what you want to use for that attribute.
 
 The specific attributes accepted by each function are described in the
-<<funcs#,function documentation>>. Some attributes are used by the
+<<funcs.adoc#,function documentation>>. Some attributes are used by the
 function itself, and some are passed along to the SVG to become
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
 attributes] of the element you are drawing.
@@ -25,7 +25,7 @@ accept attributes will process this notation for you.
 
 > If you are interested in the intricate details, attribute
   expressions are interpreted by the
-  <<funcs#eval-attribute-spec,function `eval-attribute-spec`>> near
+  <<funcs.adoc#eval-attribute-spec,function `eval-attribute-spec`>> near
   the top of the
   https://github.com/Deep-Symmetry/bytefield-svg/blob/master/src/org/deepsymmetry/bytefield/core.cljs[source].
 
@@ -49,7 +49,7 @@ sets>> of attributes, instead of a map you can pass the keyword that
 names them. For example, if you want to render some text in the same
 style normally used for drawing hexadecimal numbers, you can reference
 the attribute set named `:hex` as the second (attribute) argument to
-the <<funcs#text,`text` function>>:
+the <<funcs.adoc#text,`text` function>>:
 
 [source,clojure]
 (text "NUL" :hex)
@@ -60,7 +60,7 @@ is used as the attributes to control the drawing.
 
 In addition to the predefined values that start out in that table, you
 can add your own named attribute definitions by calling the
-<<funcs#defattrs,`defattrs`>> function, perhaps in a shared include
+<<funcs.adoc#defattrs,`defattrs`>> function, perhaps in a shared include
 file.
 
 [[combining-attributes]]
@@ -138,7 +138,7 @@ these, as well as to add your own new sets).
 | |
 |:dotted |A line style for drawing dotted lines. Commonly used with
  borders, but you can use it when calling the
- <<funcs#draw-line,`draw-line` function>> and
+ <<funcs.adoc#draw-line,`draw-line` function>> and
  https://github.com/liebke/analemma[lower-level SVG drawing
  primitives] too.
 

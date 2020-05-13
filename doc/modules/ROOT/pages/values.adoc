@@ -4,7 +4,7 @@ James Elliott <james@deepsymmetry.org>
 There are a number of predefined values that control the default
 behavior of the functions you use to draw byte field diagrams. They
 are set up as variables before your code starts running, and as
-described in the <<intro#drawing-model,introduction>>, you can change
+described in the <<intro.adoc#drawing-model,introduction>>, you can change
 their values using https://clojuredocs.org/clojure.core/def[Clojure’s
 `def`] mechanism.
 
@@ -49,13 +49,13 @@ number).
  change this globally by redefining this value, it is more common to
  simply pass a different sequence (often by transforming this one) as
  the `:labels` attribute when calling
- <<funcs#draw-column-headers,`draw-column-headers`>>.
+ <<funcs.adoc#draw-column-headers,`draw-column-headers`>>.
 
 |row-height |30 | How much vertical space a row of boxes takes up.
 
 | | |
 
-|named-attributes | |See the <<attrs#predefined-attributes,next section>>.
+|named-attributes | |See the <<attrs.adoc#predefined-attributes,next section>>.
 
 [[row-header-fn]]
 |row-header-fn |default-row-header-fn |The function that is called to

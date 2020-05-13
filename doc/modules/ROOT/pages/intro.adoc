@@ -56,7 +56,7 @@ column and row headers to help readers keep track of byte addresses.
 Reasonable defaults are provideded, but everything is very
 configurable. Before diving into those details, it will help to look
 at some concrete examples. The main function you’ll use for drawing
-byte boxes is <<funcs#draw-box,`draw-box`>>. By default it creates a
+byte boxes is <<funcs.adoc#draw-box,`draw-box`>>. By default it creates a
 box that represents one byte. So if we create a diagram with only
 `(draw-box 0)` as its content, here is what we get:
 
@@ -134,7 +134,7 @@ in hexadecimal.
 
 For situations where you have a series of bytes that you want to
 convey are part of a related structure, you can use the
-<<funcs#draw-related-boxes,`draw-related-boxes`>> function. It takes a
+<<funcs.adoc#draw-related-boxes,`draw-related-boxes`>> function. It takes a
 sequence as its first argument, and does the looping for you, in
 addition to using dashed borders inside the related group:
 
@@ -155,7 +155,7 @@ it is drawn as a label. And `draw-box` takes a second argument after
 the box content, which is a map of attributes, identified by keyword,
 that modify the box. The `:span` attribute controls how many bytes
 wide the box should be, with a default value of 1. Putting that
-together, and using a new <<funcs#draw-gap,`draw-gap`>> function which
+together, and using a new <<funcs.adoc#draw-gap,`draw-gap`>> function which
 is designed to communicate variable-length structures, we can draw
 something like this:
 
@@ -186,5 +186,5 @@ drawn using four hex digits, because we told it to span two byte
 boxes, and that’s how many hexadecimal digits fit in two bytes.
 
 With that introduction, we’re ready to start exploring all the
-<<values#,values that can be configured>>, and the full details of the
-<<funcs#,functions that you can use for drawing>>.
+<<values.adoc#,values that can be configured>>, and the full details of the
+<<funcs.adoc#,functions that you can use for drawing>>.

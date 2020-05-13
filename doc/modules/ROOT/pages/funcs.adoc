@@ -96,7 +96,7 @@ specification expression>> that will be processed by
 <<eval-attribute-spec,`eval-attribute-spec`>>.
 
 To add a new named attribute or update one of the
-<<attrs#predefined-attributes,predefined attributes>>, pass the
+<<attrs.adoc#predefined-attributes,predefined attributes>>, pass the
 keyword you want to define as the first argument, and attribute
 expression that you want that keyword to represent as the second
 argument.
@@ -157,7 +157,7 @@ to the start of the next row, and draw the row header.
 If you call `draw-box` with just a `label`, it will draw a box with a
 default set of attributes that contains that label. If you want to
 change the way the box is drawn, you can pass an
-<<attrs#attribute-expressions,attribute expression>> as the second
+<<attrs.adoc#attribute-expressions,attribute expression>> as the second
 argument <<draw-box-attrs,(see below)>>.
 
 === Label Styles
@@ -225,7 +225,7 @@ attributes:
 
 |:height |row-height |If you pass a value here you can override the
  height of the box. Normally it is controlled by the
- <<values#,predefined value>> `row-height`.
+ <<values.adoc#,predefined value>> `row-height`.
 
 |:span |1 |The number of bytes (columns) this box will occupy. You can
  supply a `:span` value ranging from 1 to the remaining columns in
@@ -279,11 +279,11 @@ borders that you include will be drawn.
 If you want even more control, rather than a set you can pass a
 `:map`, whose keys are the keywords identifying the borders that you
 want to draw, and whose values are
-<<attrs#attribute-expressions,attribute expressions>> containing the
+<<attrs.adoc#attribute-expressions,attribute expressions>> containing the
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
 attributes] that describe the color and style of line that you want
 that border to be drawn with. There are
-<<attrs#predefined-attributes,predefined attributes>> that can be
+<<attrs.adoc#predefined-attributes,predefined attributes>> that can be
 useful here. Individual borders can be assigned line styles
 `:border-unrelated` (the default) `:dotted`, and `:border-related`.
 
@@ -319,7 +319,7 @@ understand than the raw SVG attributes.
 
 And here’s an example of using the predefined attributes that specify
 entire box border styles (notice how we can use the
-<<attrs#attribute-expressions,attribute expression mini-language>> to
+<<attrs.adoc#attribute-expressions,attribute expression mini-language>> to
 combine the border style named attributes with our own `:span`
 attribute):
 
@@ -475,7 +475,7 @@ drawing of each box.
 Draws the row of byte offsets at the top of the diagram, making it
 easy to visually determine the addresses of boxes below. This is not
 done until you ask for it, to give you an opportunity to first adjust
-<<values#,predefined values>> that will affect the result.
+<<values.adoc#,predefined values>> that will affect the result.
 
 .Arguments
 [source,clojure]
@@ -485,7 +485,7 @@ done until you ask for it, to give you an opportunity to first adjust
 ----
 
 If you supply `attr-spec`, it is parsed as an
-<<attrs#attribute-expressions,attribute expression>> that you can use
+<<attrs.adoc#attribute-expressions,attribute expression>> that you can use
 to further customize the column headers (in ways that don’t affect the
 structure of the rest of the diagram):
 
@@ -503,7 +503,7 @@ structure of the rest of the diagram):
 |:height |14 |The amount of vertical space allocated to the column
  headers.
 
-|:labels |<<values#column-labels,column-labels>> |A sequence whose
+|:labels |<<values.adoc#column-labels,column-labels>> |A sequence whose
  elements are used as the actual text of each column header in order.
  You might want to change this if you are drawing a bit field, where
  the high order bits come first, as shown in the examples below.
@@ -602,9 +602,9 @@ the entire row, then draw the gap. `label` is passed to
 <<draw-box,`draw-box`>>, so it is interpreted in the same way.
 
 When finishing off the previous row, a box is drawn in the predefined
-<<attrs#box-above,`box-above` style>>. You can change that by passing
+<<attrs.adoc#box-above,`box-above` style>>. You can change that by passing
 different attributes under the `:box-above-style` key in your
-<<attrs#attribute-expressions,attribute expression>> (the optional
+<<attrs.adoc#attribute-expressions,attribute expression>> (the optional
 second argument). For example, use `{:box-above-style
 :box-above-related}` if the gap relates to the preceding box.
 
@@ -661,7 +661,7 @@ After a gap, the actual addresses of subsequent rows are not known,
 since the gap can vary in length. To reflect that, row headers after
 that point are reset to _i_+``00`` (meaning zero bytes past the end of
 the gap) and grow from there. If you would like a different labeling
-scheme you can replace the <<values#row-header-fn,`row-header-fn`
+scheme you can replace the <<values.adoc#row-header-fn,`row-header-fn`
 predefined value>>.
 
 
@@ -695,7 +695,7 @@ row or column headers because they will be incorrect.
 
 |:height |row-height |If you pass a value here you can override the
  height of the row, and therefore the gap. Normally it is controlled
- by the <<values#,predefined value>> `row-height`.
+ by the <<values.adoc#,predefined value>> `row-height`.
 
 |:width |15 |The width of the gap context, which is sandwiched bewteen
  the edges and affects the slope of the gap within it, drawn from the
@@ -739,7 +739,7 @@ the line segment to be drawn. If those are the only arguments you
 supply, the line will be drawn with a `:stroke-width` of `1` and a
 `:stroke` of `#000000` (black). But you can override those (and other
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
-attributes]) by passing an <<attrs#attribute-expressions,attribute
+attributes]) by passing an <<attrs.adoc#attribute-expressions,attribute
 expression>> as the fifth argument.
 
 [[draw-padding]]
@@ -808,7 +808,7 @@ for details about how labels and attributes are used to control the
 drawing of each box, but keep in mind that the `:borders` attribute is
 controlled by this function so that borders between related cells are
 drawn with the line style specified by the `:border-related`
-<<attrs#predefined-attributes,predefined attribute>>, and borders with
+<<attrs.adoc#predefined-attributes,predefined attribute>>, and borders with
 unrelated cells are drawn with the line style specified by
 `:border-unrelated`.
 
@@ -853,7 +853,7 @@ Defaults to a `:font-size` of 11 and `:font-family` of `"Courier New,
 monospace"` but these can be overridden, and other
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG text
 attributes]) can be supplied, through an
-<<attrs#attribute-expressions,attribute expression>> in `attr-spec`.
+<<attrs.adoc#attribute-expressions,attribute expression>> in `attr-spec`.
 
 In the most common case, `label` is a string and the SVG text object
 is constructed as described above. If you need to draw a more complex
@@ -865,7 +865,7 @@ nested `tspan` objects), and it will simply be positioned.
 == eval-attribute-spec
 
 This is the function that evaluates
-<<attrs#attribute-expressions,attribute expressions>>. It accepts the
+<<attrs.adoc#attribute-expressions,attribute expressions>>. It accepts the
 mini-language described in that section, and boils it down to a single
 map of attributes. It’s available for use in your own code so that
 helper functions you write are able to accept attribute expressions
@@ -890,11 +890,11 @@ when you pass a number as the `label` argument to
 
 If you just pass a number in `n` it is formatted as a two-digit
 hexadecimal value, using the text styles specified in the
-<<attrs#predefined-attributes,predefined attribute>> `:hex`. You can
+<<attrs.adoc#predefined-attributes,predefined attribute>> `:hex`. You can
 specify the number of digits by also passing `length`, and you can
 override or augment the
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG text
-attributes]) by passing an <<attrs#attribute-expressions,attribute
+attributes]) by passing an <<attrs.adoc#attribute-expressions,attribute
 expression>> in `attr-spec`.
 
 [[next-address]]
@@ -931,7 +931,7 @@ part of the box grid.
 [height]
 ----
 
-The height of the row defaults to the <<values#,predefined value>>
+The height of the row defaults to the <<values.adoc#,predefined value>>
 `:row-height` but can be changed by passing `height`.
 
 
@@ -1007,8 +1007,8 @@ function lets you.
 
 If you just pass a single argument, it is rendered as a `text` string
 with the styles specified by the
-<<attrs#predefined-attributes,predefined attribute>> `:plain`. The
-optional second argument is an <<attrs#attribute-expressions,attribute
+<<attrs.adoc#predefined-attributes,predefined attribute>> `:plain`. The
+optional second argument is an <<attrs.adoc#attribute-expressions,attribute
 expression>> you can use to pick your own
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG text
 attributes]).
@@ -1059,7 +1059,7 @@ wide enough to hold the text we're drawing.
 == tspan
 
 Builds an SVG `tspan` object with attributes parsed as an
-<<attrs#attribute-expressions,attribute expression>>.
+<<attrs.adoc#attribute-expressions,attribute expression>>.
 
 .Arguments
 [source,clojure]

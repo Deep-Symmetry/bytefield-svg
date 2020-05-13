@@ -395,7 +395,7 @@
      (draw-box label attr-spec))))
 
 (defn- related?
-  "Checks whether the specified `border` direction fromt the cell at the
+  "Checks whether the specified `border` direction from the cell at the
   specified `address` is with a cell that is part of a group of boxes
   being drawn. The group ranges from address `start` until just before
   `end`."

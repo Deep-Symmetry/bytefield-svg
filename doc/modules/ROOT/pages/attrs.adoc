@@ -162,8 +162,7 @@ these, as well as to add your own new sets).
  related boxes. It uses the unrelated style for its right, top, and
  bottom borders, and the related style for its left border.
 
-[[box-above]]
-|:box-above |A set of border styles for a box that is open to the row
+|[[box-above]]:box-above |A set of border styles for a box that is open to the row
  below. It draws only its left, right, and top borders.
 
 |:box-above-related |A set of border styles for a box that is open to

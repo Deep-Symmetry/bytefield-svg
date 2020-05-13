@@ -18,7 +18,7 @@
   "scripts": {
     "build": "shadow-cljs compile lib",
     "release": "shadow-cljs release lib",
-    "local-docs": "DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr npx antora --fetch --generator antora-site-generator-lunr doc/local.yml",
+    "local-docs": "DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr DOCSEARCH_INDEX_VERSION=latest npx antora --fetch --generator antora-site-generator-lunr doc/local.yml",
     "test": "./cli.js test.edn >test.svg"
   },
   "repository": {

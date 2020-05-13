@@ -87,16 +87,18 @@ Register a attribute map for later use in your diagram.
 .Arguments
 [source,clojure]
 ----
-[k m]
+[k spec]
 ----
 
-TIP: By convention, in Clojure arguments, `k` means “a keyword” and
-`m` means “a map”.
+TIP: By convention, in Clojure arguments, `k` means “a keyword”. Here
+`spec` is an <<attrs.adoc#attribute-expressions,attribute
+specification expression>> that will be processed by
+<<eval-attribute-spec,`eval-attribute-spec`>>.
 
 To add a new named attribute or update one of the
 <<attrs#predefined-attributes,predefined attributes>>, pass the
-keyword you want to define as the first argument, and the map of
-attributes that you want that keyword to represent as the second
+keyword you want to define as the first argument, and attribute
+expression that you want that keyword to represent as the second
 argument.
 
 For example, if you want to have some of your byte boxes have a green
@@ -108,6 +110,12 @@ that by calling:
 
 From then on, you can use `:bg-green` in any attribute expression to
 stand in for this fill color.
+
+If you want to build on an existing predefined attribute, your
+attribute expression can <<attrs.adoc#combining-attributes,combine
+attributes>> concisely. The <<draw-vertical-text,vertical text
+example>> for <<draw-box,`draw-box`>> takes advantage of this
+approach.
 
 
 [[draw-bottom]]
@@ -387,12 +395,11 @@ And here it is with vertical text. The CSS we need is to set the
 ```clojure
 (def boxes-per-row 8)
 (def left-margin 1)
-(defattrs :vertical  ;; <1>
-          (eval-attribute-spec [:plain {:writing-mode "vertical-rl"}]))  ;; <2>
+(defattrs :vertical [:plain {:writing-mode "vertical-rl"}])  ;; <1>
 (draw-column-headers {:labels (str/split "7,6,5,4,3,2,1,0" #",")})
-(def row-height 80)  ;; <3>
+(def row-height 80)  ;; <2>
 (draw-box nil)
-(draw-box (text "Play" :vertical))  ;; <4>
+(draw-box (text "Play" :vertical))  ;; <3>
 (draw-box (text "Master" :vertical))
 (draw-box (text "Sync" :vertical))
 (draw-box (text "On-Air" :vertical))
@@ -403,24 +410,21 @@ And here it is with vertical text. The CSS we need is to set the
 
 <1> Since there is a bit of code here to define the attributes we use
 to render rotated text, and we'll use it multiple times, we define it
-as a new named attribute set.
+as a new named attribute set. We want to combine the new CSS style
+attribute map `{:writing-mode "vertical-rl"}` with the
+<<attrs.adoc#predefined-attributes,predefined attributes>> named
+`:plain`, which are what `draw-box` normally uses. The easiest way to
+do that is by <<attrs.adoc#combining-attributes,combining attributes>>
+in an attribute expression.
 
-<2> We want to combine the new CSS style attribute map `{:writing-mode
-"vertical-rl"}` with the <<attrs.adoc#predefined-attributes,predefined
-attributes>> named `:plain`, which are what `draw-box` normally uses.
-The easiest way to do that is by
-<<attrs.adoc#combining-attributes,combining attributes>> in an
-attribute expression, which we can use
-<<eval-attribute-spec,`eval-attribute-spec`>> to resolve for us.
-
-<3> At the start of the row where we're using rotated text, we
+<2> At the start of the row where we're using rotated text, we
 increase the row height to accommodate it. If you are going to follow
 this with non-rotated rows, you'll want to set it back down after your
 rotated row. We need a bit more height than we needed width because
 WebKit-based browsers like Chrome and Safari don't quite center the
 rotated text vertically, although Firefox seems to get it right.
 
-<4> Because we want to apply our attributes to the text, rather than
+<3> Because we want to apply our attributes to the text, rather than
 the box, we call <<text,`text`>> explicitly instead of letting
 `draw-box` do it for us, and then we can pass our new named attributes
 to `text`.
@@ -431,8 +435,7 @@ Putting that all together yields this result:
 ----
 (def boxes-per-row 8)
 (def left-margin 1)
-(defattrs :vertical
-          (eval-attribute-spec [:plain {:writing-mode "vertical-rl"}]))  ;; <1>
+(defattrs :vertical [:plain {:writing-mode "vertical-rl"}])  ;; <1>
 (draw-column-headers {:labels (str/split "7,6,5,4,3,2,1,0" #",")})
 (def row-height 80)  ;; <2>
 (draw-box nil)

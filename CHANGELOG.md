@@ -6,7 +6,12 @@ This change log follows the conventions of
 
 ## [Unreleased][unreleased]
 
-Nothing so far.
+### Changed
+
+- `defattrs` now takes an attribute expression rather than only a
+  resolved attribute map as its second expression, so you can use the
+  concise attribute mini-language to build new attributes based on
+  existing ones.
 
 ## [1.4.1] - 2020-04-04
 

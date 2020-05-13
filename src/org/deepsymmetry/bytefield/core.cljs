@@ -111,11 +111,12 @@
 ;; creating byte field diagrams.
 
 (defn defattrs
-  "Registers an attribute map for later use under a keyword."
-  [k m]
+  "Registers an attribute map for later use under a keyword. `spec` is
+  interpreted by calling `eval-attr-spec` before being stored as a
+  predefined attribute map under the keyword `k`."
+  [k spec]
   (when-not (keyword? k) (throw (js/Error. (str "first argument to defattrs must be a keyword, received: " k))))
-  (when-not (map? m) (throw (js/Error. (str "second argument to defattrs must be a map, received: " m))))
-  (swap! @('named-attributes @*globals*) assoc k m))
+  (swap! @('named-attributes @*globals*) assoc k (eval-attribute-spec spec)))
 
 (defn append-svg
   "Adds another svg element to the body being built up."

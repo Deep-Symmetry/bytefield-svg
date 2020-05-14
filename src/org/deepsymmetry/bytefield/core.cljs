@@ -300,8 +300,11 @@
 
 (defn- auto-advance-row
   "If we are about to draw a box just past the end of a row, advance to
-  the next row, drawing the header(s) as needed."
-  []
+  the next row, drawing the header(s) as needed. If `next-row-height`
+  is not `nil`, the row height will be changed to that value before
+  drawing the header of the new row. If no auto-advance actually
+  occurs, its value will be ignored."
+  [next-row-height]
   (let [{:keys [column address] :as state} @@('diagram-state @*globals*)
         boxes                              @('boxes-per-row @*globals*)
         header-fn                          @('row-header-fn @*globals*)]
@@ -309,6 +312,7 @@
       (when (zero? address)  ; This was the first row, so draw its header now we know we need headers.
         (when header-fn (draw-row-header (header-fn state))))
       (next-row)
+      (when next-row-height (sci/alter-var-root ('row-height @*globals*) (constantly next-row-height)))
       (swap! @('diagram-state @*globals*) update :address + boxes)
       (when header-fn (draw-row-header (header-fn @@('diagram-state @*globals*)))))))  ; Draw header for new row.
 
@@ -355,35 +359,39 @@
   ([label]
    (draw-box label nil))
   ([label attr-spec]
-   (auto-advance-row)
-   (let [{:keys [span borders fill height]
-          :or   {span    1
-                 borders #{:left :right :top :bottom}
-                 height  @('row-height @*globals*)}} (eval-attribute-spec attr-spec)
+   (let [attrs (eval-attribute-spec attr-spec)]
+     (auto-advance-row (:next-row-height attrs))
+     (let [{:keys [span borders fill height]
+            :or   {span    1
+                   borders #{:left :right :top :bottom}
+                   height  @('row-height @*globals*)}} attrs
 
-         column (:column @@('diagram-state @*globals*))
-         left   (+ @('left-margin @*globals*) (* column @('box-width @*globals*)))
-         width  (* span @('box-width @*globals*))
-         right  (+ left width)
-         top    (diagram-height)
-         bottom (+ top height)]
-     (when (> (+ column span) @('boxes-per-row @*globals*))
-       (throw (js/Error "draw-box called with span larger than remaining columns in row")))
-     (when fill (append-svg (svg/rect left top height width :fill fill)))
-     (when-let [style (interpret-box-border :top borders :border-unrelated)] (draw-line left top right top style))
-     (when-let [style (interpret-box-border :bottom borders :border-unrelated)]
-       (draw-line left bottom right bottom style))
-     (when-let [style (interpret-box-border :right borders :border-unrelated)] (draw-line right top right bottom style))
-     (when-let [style (interpret-box-border :left borders :border-unrelated)] (draw-line left top left bottom style))
-     (when (some? label)
-       (if (fn? label)
-         (label left top width height)  ; Box being drawn by custom function.
-         (let [label (xml/merge-attrs (format-box-label label span)  ; Normal label.
-                                      {:x           (/ (+ left right) 2.0)
-                                       :y           (+ top 1 (/ height 2.0))
-                                       :text-anchor "middle"})]
-           (append-svg (center-baseline label)))))
-     (swap! @('diagram-state @*globals*) update :column + span))))
+           column (:column @@('diagram-state @*globals*))
+           left   (+ @('left-margin @*globals*) (* column @('box-width @*globals*)))
+           width  (* span @('box-width @*globals*))
+           right  (+ left width)
+           top    (diagram-height)
+           bottom (+ top height)]
+       (when (> (+ column span) @('boxes-per-row @*globals*))
+         (throw (js/Error "draw-box called with span larger than remaining columns in row")))
+       (when fill (append-svg (svg/rect left top height width :fill fill)))
+       (when-let [style (interpret-box-border :top borders :border-unrelated)]
+         (draw-line left top right top style))
+       (when-let [style (interpret-box-border :bottom borders :border-unrelated)]
+         (draw-line left bottom right bottom style))
+       (when-let [style (interpret-box-border :right borders :border-unrelated)]
+         (draw-line right top right bottom style))
+       (when-let [style (interpret-box-border :left borders :border-unrelated)]
+         (draw-line left top left bottom style))
+       (when (some? label)
+         (if (fn? label)
+           (label left top width height)  ; Box being drawn by custom function.
+           (let [label (xml/merge-attrs (format-box-label label span)  ; Normal label.
+                                        {:x           (/ (+ left right) 2.0)
+                                         :y           (+ top 1 (/ height 2.0))
+                                         :text-anchor "middle"})]
+             (append-svg (center-baseline label)))))
+       (swap! @('diagram-state @*globals*) update :column + span)))))
 
 (defn draw-boxes
   "Draws multiple boxes with the same attributes for each. Calls
@@ -493,14 +501,14 @@
          (draw-box label [{:span (- boxes column)} box-above-style]) ; And there is room for it on the current line.
          (do ; The label doesn't fit on the current line.
            (draw-box nil [{:span (- boxes column)} box-above-style]) ; Finish off current line with emptiness.
-           (auto-advance-row)
+           (auto-advance-row nil)
            (draw-box label [{:span boxes :borders #{:left :right}}]))) ; Put the label on its own line.
        ;; We are not supposed to draw a label, so just finish the current line if needed.
        (when (not= column boxes)
          (draw-box nil [{:span (- boxes column)} :box-above]))) ; Finish off current line with emptiness.
 
      ;; Move on to a new row to draw the gap.
-     (auto-advance-row)
+     (auto-advance-row nil)
      (let [y      (diagram-height)
            top    (+ y edge)
            left   @('left-margin @*globals*)

@@ -213,7 +213,7 @@ And here’s what it looks like repeated over a four-box row:
 You can modify the box that is drawn by passing in the following
 attributes:
 
-[cols="1m,2m,5"]
+[cols="2m,2m,5"]
 |===
 |Attribute |Default Value |Meaning
 
@@ -226,6 +226,13 @@ attributes:
 |:height |row-height |If you pass a value here you can override the
  height of the box. Normally it is controlled by the
  <<values.adoc#,predefined value>> `row-height`.
+
+|:next-row-height |_n/a_ |If you pass a value here and this box is the
+ first box to be drawn on a new row, it will set `row-height` to the
+ specified value after finishing off the old row and before starting
+ the new row. This is needed to coordinate row height changes when
+ <<draw-vertical-text,drawing vertical text>>, with the row headers
+ still ending up in the right places.
 
 |:span |1 |The number of bytes (columns) this box will occupy. You can
  supply a `:span` value ranging from 1 to the remaining columns in
@@ -448,7 +455,19 @@ Putting that all together yields this result:
 (draw-box nil)
 ----
 
+[TIP]
+====
+If you are going to draw another row of boxes after this one with
+a different height, for example because it doesn’t use any rotated
+text, when you call `draw-box` for the first box on the next row pass
+a `:next-row-height` attribute to establish the new height as
+described <<draw-box-attrs,above>>.
 
+```clojure
+(draw-box "Label" {:span 2 :next-row-height 30})
+
+```
+====
 
 [[draw-boxes]]
 == draw-boxes

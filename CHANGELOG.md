@@ -8,7 +8,12 @@ This change log follows the conventions of
 
 Nothing so far.
 
-## [1.4.2] - 2020-05-15
+## [1.4.3] - 2020-05-15
+
+### Fixed
+
+- Short-lived version 1.4.2 was not properly built for release before
+  publishing to npm.
 
 ### Changed
 
@@ -115,8 +120,8 @@ This was the first release that actually worked when installed via
 
 Intial early release.
 
-[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.2...HEAD
-[1.4.2]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.1...v1.4.2
+[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.3...HEAD
+[1.4.3]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.1...v1.4.3
 [1.4.1]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.2.0...v1.3.0

@@ -4,6 +4,7 @@
 /.vscode
 /lib.js
 /node_modules
+/test.edn.next
 /test.svg
 /doc/build
 

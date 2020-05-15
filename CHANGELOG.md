@@ -6,12 +6,28 @@ This change log follows the conventions of
 
 ## [Unreleased][unreleased]
 
+Nothing so far.
+
+## [1.4.2] - 2020-05-15
+
 ### Changed
 
 - `defattrs` now takes an attribute expression rather than only a
   resolved attribute map as its second expression, so you can use the
   concise attribute mini-language to build new attributes based on
   existing ones.
+
+### Added
+
+- You can now pass `:next-row-height` as an attribute to `draw-box`
+  when you need to change row heights as you draw the first box of a
+  new row. This makes it more practical to have variable-height rows,
+  while still having the automatically-drawn row headers appear in the
+  correct posititons.
+- The user guide now shows examples of how to draw vertical text and
+  boxes which span more than two rows but which are not
+  variable-length gaps.
+
 
 ## [1.4.1] - 2020-04-04
 
@@ -99,7 +115,8 @@ This was the first release that actually worked when installed via
 
 Intial early release.
 
-[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.1...HEAD
+[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.2...HEAD
+[1.4.2]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.2.0...v1.3.0

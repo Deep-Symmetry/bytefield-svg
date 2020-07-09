@@ -58,7 +58,8 @@
 (draw-box 0x11)
 (draw-box 0 {:span 4})
 (draw-box 0x11)
-(draw-box (text "length" [:math] [:sub 1]) {:span 4})
+(wrap-svg [:a {:href "https://deepsymmetry.org"}]
+  (draw-box (text "length" [:math] [:sub 1]) {:span 4}))
 (draw-box 0x14)
 
 (draw-box (text "length" [:math] [:sub 1]) {:span 4})

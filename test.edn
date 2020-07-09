@@ -58,12 +58,14 @@
 (draw-box 0x11)
 (draw-box 0 {:span 4})
 (draw-box 0x11)
-(wrap-svg [:a {:href "https://deepsymmetry.org"}]
+(wrap-svg [:a {:href "https://deepsymmetry.org" :target "_blank"}]
   (draw-box (text "length" [:math] [:sub 1]) {:span 4}))
 (draw-box 0x14)
 
-(draw-box (text "length" [:math] [:sub 1]) {:span 4})
-(draw-gap "Cue and loop point bytes")
+(wrap-link "https://google.com"
+  (draw-box (text "length" [:math] [:sub 1]) {:span 4}))
+(wrap-link "https://clojure.org" {:target "_blank"}
+  (draw-gap "Cue and loop point bytes"))
 
 (draw-box nil :box-below)
 (draw-box 0x11)

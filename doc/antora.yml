@@ -1,7 +1,7 @@
 name: bytefield-svg
 title: Byte Field SVG Builder
 version: '1.5.0'
-prerelease: true
+prerelease: false
 start_page: ROOT:intro.adoc
 asciidoc:
   attributes:

@@ -1042,9 +1042,11 @@ rendered as its content. (And even here you can embed new `tspan`
 objects with new styling by embedding more vectors.)
 
 [source,clojure]
+----
 (draw-box (text "v" :math [:sub "max"]))
 (draw-box (text "Some " {} [{:font-style "italic"} "formatted"] " text!")
           {:span 5})
+----
 
 [bytefield]
 ----
@@ -1093,3 +1095,86 @@ its `content`.
 Any lists or vectors in the content will be recursively parsed as
 nested `tspan` objects with their own attribute expressions as the
 first element.
+
+[[wrap-link]]
+== wrap-link
+
+This is a macro that nests any drawing commands in its body inside an
+`a` element, turning the nested drawings into a hyperlink with the
+specified `href`.
+
+If the form immediately following the `href` is a map, it is parsed as
+an <<attrs.adoc#attribute-expressions,attribute expression>> and
+establishes the attributes for the `a` element. (The most common use
+would be to have the link open in a new window by passing `{:target
+"_blank"}`).
+
+.Arguments
+[source,clojure]
+----
+[href & body]
+[href attr-spec & body]
+----
+
+The body can include any number of drawing function calls and other
+Clojure expressions. Notice that in the example below, the text and
+lines (including the separately-drawn bottom line of the gap) are
+hyperlinks, and the Clojure one opens in a new window.
+
+[source,clojure]
+----
+(wrap-link "https://deepsymmetry.org"
+  (draw-box (text "length" [:math] [:sub 1]) {:span 4}))
+(wrap-link "https://clojure.org" {:target "_blank"}
+  (draw-gap "Clojure byte code")
+  (draw-bottom))
+----
+
+[bytefield]
+----
+(wrap-link "https://deepsymmetry.org"
+  (draw-box (text "length" [:math] [:sub 1]) {:span 4}))
+(wrap-link "https://clojure.org" {:target "_blank"}
+  (draw-gap "Clojure byte code")
+  (draw-bottom))
+----
+
+[[wrap-svg]]
+== wrap-svg
+
+This is a macro that nests any drawing commands in its body inside an
+arbitrary SVG element, which you specify as a vector containing a
+keyword that identifies the desired element and a map of its
+attributes and values.
+
+TIP: This allows you create any SVG structure you need, even if
+bytefield-svg doesn't provide special support for it.
+
+.Arguments
+[source,clojure]
+----
+[wrapper & body]
+----
+
+The body can include any number of drawing function calls and other
+Clojure expressions. Here is how we could create the
+<<wrap-link,`wrap-link` example>> above using this lower-level
+approach, although `wrap-link` is more convenient:
+
+[source,clojure]
+----
+(wrap-svg [:a {:href "https://deepsymmetry.org"}]
+  (draw-box (text "length" [:math] [:sub 1]) {:span 4}))
+(wrap-svg [:a {:href "https://clojure.org" :target "_blank"}]
+  (draw-gap "Clojure byte code")
+  (draw-bottom))
+----
+
+[bytefield]
+----
+(wrap-svg [:a {:href "https://deepsymmetry.org"}]
+  (draw-box (text "length" [:math] [:sub 1]) {:span 4}))
+(wrap-svg [:a {:href "https://clojure.org" :target "_blank"}]
+  (draw-gap "Clojure byte code")
+  (draw-bottom))
+----

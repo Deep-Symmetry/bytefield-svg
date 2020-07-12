@@ -8,6 +8,14 @@ This change log follows the conventions of
 
 Nothing so far.
 
+## [1.5.0] - 2020-07-12
+
+### Added
+
+- Two new functions, `wrap-link` and `wrap-svg` which allow you to
+  create hyperlinks and arbitrary SVG elements around sections of your
+  drawings.
+
 ## [1.4.3] - 2020-05-15
 
 ### Fixed

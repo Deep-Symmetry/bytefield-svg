@@ -809,6 +809,7 @@
     'column-labels (str/split "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f" #",") ; The default column headers.
     'boxes-per-row 16 ; How many individual byte/bit boxes fit on each row.
     'row-height    30 ; The height of a standard row of boxes.
+    'svg-attrs     {} ; Allows arbitrary customization of the top-level SVG node attributes.
 
     'named-attributes (atom initial-named-attributes) ; Lookup table for shorthand attribute map specifications.
     'row-header-fn    default-row-header-fn           ; Used to generate row header text when required.
@@ -839,10 +840,11 @@
    (let [result @*globals*
          width  (+ @('left-margin result) @('right-margin result) (diagram-width))
          height (+ (diagram-height) @('bottom-margin result))
-         body   (:svg-body @@('diagram-state @*globals*))
-         attrs  {:width   width
-                 :height  height
-                 :viewBox (str/join " " [0 0 width height])}]
+         body   (:svg-body @@('diagram-state result))
+         attrs  (merge @('svg-attrs result)
+                       {:width   width
+                        :height  height
+                        :viewBox (str/join " " [0 0 width height])})]
      (if embedded?
        (xml/emit-tag (concat [:svg attrs] body))
        (xml/emit (apply svg/svg attrs body))))))

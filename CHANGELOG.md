@@ -8,6 +8,15 @@ This change log follows the conventions of
 
 Nothing so far.
 
+## [1.6.0] - 2021-09-08
+
+### Added
+
+- A new predefined value, `svg-attrs`, which starts out as an empty
+  map, but can be redefined to add arbitrary SVG attributes to the
+  top-level SVG node of your diagram (for example, to set a background
+  color for the entire diagram).
+
 ## [1.5.0] - 2020-07-12
 
 ### Added

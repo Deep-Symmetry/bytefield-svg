@@ -18,25 +18,25 @@ number).
 |===
 |Variable |Default Value |Purpose
 
-|left-margin |40 | How far from the left edge of the diagram the first
+|left-margin |40 |How far from the left edge of the diagram the first
  box begins. This default is large enough to accommodate the row
  address labels for all but extremely long byte fields. If you are
  drawing a single row (which won’t have a row label), it’s nice to set
  this to `1` so the diagram is centered.
 
-|right-margin |1 | How far from the right edge of the diagram the last
+|right-margin |1 |How far from the right edge of the diagram the last
  box ends. This default is just large enough to make sure the box
  boundary doesn’t get clipped. You can make it bigger if you want to
  draw custom content there.
 
-|bottom-margin |1 | How far from the bottom edge of the diagram the
+|bottom-margin |1 |How far from the bottom edge of the diagram the
  last row of boxes ends. This default is just large enough to make
  sure the box boundaries don’t get clipped. You can make it bigger if
  you want to draw custom content there.
 
 | | |
 
-|box-width |40 | How much horizontal space each box takes up.
+|box-width |40 |How much horizontal space each box takes up.
 
 |boxes-per-row |16 |How many boxes are drawn on a row before moving to
  the next row. The default is 16, so that the hexadecimal row labels
@@ -51,7 +51,15 @@ number).
  the `:labels` attribute when calling
  <<funcs.adoc#draw-column-headers,`draw-column-headers`>>.
 
-|row-height |30 | How much vertical space a row of boxes takes up.
+|row-height |30 |How much vertical space a row of boxes takes up.
+
+|svg-attrs |{} |A map that can contain arbitrary
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
+attributes] to be added to the top-level SVG element in the diagram.
+For example, if you want the entire diagram to have a solid white
+background color rather than its transparent default, you could:
+
+`(def svg-attrs {:style "background-color:white"})`
 
 | | |
 

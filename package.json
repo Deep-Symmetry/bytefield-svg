@@ -6,13 +6,15 @@
   "bin": "cli.js",
   "dependencies": {
     "command-line-args": "^5.1.1",
-    "command-line-usage": "^6.1.0"
+    "command-line-usage": "^6.1.0",
+    "netlify-cli": "^6.8.10",
+    "netlify-plugin-checklinks": "^4.1.1"
   },
   "devDependencies": {
     "@antora/cli": "^2.3.3",
     "@djencks/asciidoctor-mathjax": "0.0.7",
     "antora-site-generator-lunr": "^0.5.0",
-    "shadow-cljs": "^2.15.9",
+    "shadow-cljs": "^2.10.14",
     "source-map-support": "^0.5.19"
   },
   "scripts": {

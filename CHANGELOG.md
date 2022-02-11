@@ -8,6 +8,15 @@ This change log follows the conventions of
 
 Nothing so far.
 
+## [1.6.1] - 2022-02-10
+
+### Fixed
+
+- The ability to control substitutions, and thereby (for example) use
+  document attributes to reduce duplication, was broken. Thanks to
+  [Jared Reisinger](https://github.com/JaredReisinger) for noticing
+  this and contributing a fix!
+
 ## [1.6.0] - 2021-09-08
 
 ### Added
@@ -137,7 +146,10 @@ This was the first release that actually worked when installed via
 
 Intial early release.
 
-[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.3...HEAD
+[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.6.0...v1.6.1
+[1.6.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.5.0...v1.6.0
+[1.5.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.3...v1.5.0
 [1.4.3]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.1...v1.4.3
 [1.4.1]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.3.0...v1.4.0

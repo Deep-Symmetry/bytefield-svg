@@ -16,7 +16,7 @@ module.exports = function (registry) {
     const doc = parent.getDocument()
     const subs = attrs.subs
     if (subs) {
-      source = doc.$apply_subs(attrs.subs, doc.$resolve_subs(subs))
+      source = doc.$apply_subs(source, doc.$resolve_subs(subs))
     }
     var svgText
     try {

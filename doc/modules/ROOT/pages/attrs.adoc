@@ -92,7 +92,7 @@ diagram has called `defattrs` to set up the `:bg-purple` style), that
 takes up the space of four normal boxes:
 
 [source,clojure]
-(draw-box "Unknown" [:box-related :bg-purple {:span 4}]))
+(draw-box "Unknown" [:box-related :bg-purple {:span 4}])
 
 === No Attributes
 

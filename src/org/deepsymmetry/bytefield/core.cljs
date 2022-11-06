@@ -864,7 +864,8 @@
            opts {:preset      :termination-safe
                  :realize-max 10000
                  :env         env
-                 :classes     {'Math js/Math}
+                 :classes     {'Math   js/Math
+                               'String js/String}
                  :namespaces  {'user           (merge diagram-bindings @*globals*)
                                'analemma.svg   svg-bindings
                                'analemma.xml   xml-bindings

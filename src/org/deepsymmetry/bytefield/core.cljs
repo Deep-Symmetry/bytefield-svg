@@ -303,6 +303,11 @@
     :else
     (throw (js/Error. (str "Don't know how to format box label: " label)))))
 
+(defn char->int
+  "Yields the UTF-16 code unit of a character. E.g. `(char->int \\A) ;; => 65`."
+  [char]
+  (.charCodeAt ^String char))
+
 (defn normalize-bit
   "Converts a value to either `true` or `false`. All non-zero numbers
   become `true`. Other values are tested for truthiness and translated
@@ -697,6 +702,7 @@
   "Our own functions which we want to make available for building
   diagrams."
   (self-bind-symbols [append-svg
+                      char->int
                       defattrs
                       draw-bottom
                       draw-box
@@ -864,7 +870,8 @@
            opts {:preset      :termination-safe
                  :realize-max 10000
                  :env         env
-                 :classes     {'Math js/Math}
+                 :classes     {'Math   js/Math
+                               'String js/String}
                  :namespaces  {'user           (merge diagram-bindings @*globals*)
                                'analemma.svg   svg-bindings
                                'analemma.xml   xml-bindings

@@ -18,8 +18,9 @@ and http://cljs.github.io/api/clojure.string[`clojure.string`] are
 also made available, so you can call functions from them if needed.
 
 The JavaScript
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String[`String`] and
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math[`Math`
-object] is also available, so you can use it to perform mathematical
+object] are also available. The latter so you can perform mathematical
 computations using JavaScript interop syntax. For example here's how
 you would calculate stem:[2^8]:
 
@@ -78,6 +79,37 @@ and include: `xml/add-attrs`, `xml/add-content`, `xml/emit`,
 
 If you understand the structures built and used by Analemma, you can
 also build them directly yourself and pass them to `append-svg`.
+
+
+[[char-arrow-int]]
+== char->int
+
+Get the UTF-16 code unit of a character.
+
+.Arguments
+[source,clojure]
+----
+[char]
+----
+
+This is equivalent to e.g. `(int \H)` in Clojure.
+
+Example:
+
+[source,clojure]
+(draw-related-boxes (number-as-bits (char->int \H) 8))
+
+
+[bytefield]
+----
+(def boxes-per-row 8)
+(def left-margin 1)
+(draw-related-boxes (number-as-bits (char->int \H) 8))
+
+----
+
+
+
 
 [[defattrs]]
 == defattrs

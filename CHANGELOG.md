@@ -8,6 +8,17 @@ This change log follows the conventions of
 
 Nothing so far.
 
+## [1.7.0] - 2022-11-15
+
+## Added
+
+- A new function, `char->int`, allowing access to the UTF-16 code
+  units of characters. (Thanks to [Gert Goet](https://github.com/eval)
+  for this contribution!)
+- Access to the JavaScript
+  [`String`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
+  object to support the implementation of `char->int`.
+
 ## [1.6.1] - 2022-02-10
 
 ### Fixed
@@ -146,7 +157,8 @@ This was the first release that actually worked when installed via
 
 Intial early release.
 
-[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.6.1...HEAD
+[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.4.3...v1.5.0

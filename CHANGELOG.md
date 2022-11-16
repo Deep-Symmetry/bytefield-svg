@@ -10,7 +10,7 @@ Nothing so far.
 
 ## [1.7.0] - 2022-11-15
 
-## Added
+### Added
 
 - A new function, `char->int`, allowing access to the UTF-16 code
   units of characters. (Thanks to [Gert Goet](https://github.com/eval)

@@ -18,11 +18,12 @@ and http://cljs.github.io/api/clojure.string[`clojure.string`] are
 also made available, so you can call functions from them if needed.
 
 The JavaScript
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String[`String`] and
-https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math[`Math`
-object] are also available. The latter so you can perform mathematical
-computations using JavaScript interop syntax. For example here's how
-you would calculate stem:[2^8]:
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String[`String`]
+and
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math[`Math`]
+objects are also available. These allow you to perform additional
+operations using JavaScript interop syntax. For example here's how you
+would calculate stem:[2^8]:
 
 [source,clojure]
 (Math/pow 2 8)
@@ -82,7 +83,7 @@ also build them directly yourself and pass them to `append-svg`.
 
 
 [[char-arrow-int]]
-== char->int
+== char\->int
 
 Get the UTF-16 code unit of a character.
 

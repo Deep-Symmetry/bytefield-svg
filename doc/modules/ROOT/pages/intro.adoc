@@ -53,7 +53,7 @@ memory layouts, and similar binary structures. It sets up a drawing
 environment to facilitate that, as well as the automatic generation of
 column and row headers to help readers keep track of byte addresses.
 
-Reasonable defaults are provideded, but everything is very
+Reasonable defaults are provided, but everything is very
 configurable. Before diving into those details, it will help to look
 at some concrete examples. The main function you’ll use for drawing
 byte boxes is <<funcs.adoc#draw-box,`draw-box`>>. By default it creates a

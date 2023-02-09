@@ -91,7 +91,7 @@ But why were the column headers not drawn until we explicitly asked
 for them? That is to give us a chance to change things like the number
 of boxes per row and the left margin before we start drawing. Those
 values are set up as defaults, but can be changed by calling `def` (a
-standard Clojure function{empty}footnote:[Techincally, `def` is
+standard Clojure function{empty}footnote:[Technically, `def` is
 actually a _special form_ rather than a function, but that is further
 afield than this introduction needs to go.]) with the symbol of the
 setting we want to define or redefine, and the value we want to give

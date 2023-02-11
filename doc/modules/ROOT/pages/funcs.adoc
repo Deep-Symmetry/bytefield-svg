@@ -195,40 +195,91 @@ argument <<draw-box-attrs,(see below)>>.
 
 === Label Styles
 
-If you don’t want a label in the box, you can pass `nil` for `label`.
+* If you don’t want a label in the box, you can pass `nil` for `label`.
 
-If you pass a string, it is rendered as <<text,text>>, as if you had
+* If you pass a string, it is rendered as <<text,text>>, as if you had
 passed the result of calling `(text label)`.
++
+NOTE: There are times you want to call <<text,text>> explicitly to
+build your label, rather than using one of these shorthand approaches,
+such as when you want to adjust attributes of the text itself--like
+its font, size, color, orientation, etc. The attribute expression you
+can supply at the level of the `draw-box` call affects the box itself,
+not the label you place in it.
 
-If you pass a number, it is rendered in hexadecimal, with enough
-digits to represent all the bytes spanned by your box (see the
-discussion of the `:span` attribute below).
+* If you pass a number, it is rendered in hexadecimal (using
+<<hex-text,hex-text>>), with enough digits to represent all the bytes
+spanned by your box (see the discussion of the `:span` attribute
+below). Again, for more control over the details of how this text is
+formatted, you can call <<hex-text,hex-text>> directly.
 
-If you pass a boolean (`true` or `false`), it is rendered as a
+* If you pass a boolean (`true` or `false`), it is rendered as a
 single-digit bit value (`1` or `0`) in the same style as hexadecimal
 numbers.
 
-If you need a label with more complex structure or styling you can
-build it by calling <<text,`text`>> or <<hex-text,`hex-text`>>
-yourself and passing the results as `label`.
+* As noted above, if you need a label with more complex structure or
+styling you can build it by calling <<text,`text`>> or
+<<hex-text,`hex-text`>> yourself and passing the results as `label`.
+To make this concrete, the shorthand:
++
+```clojure
+(draw-box "hi")
+```
++
+is equivalent to:
++
+```clojure
+(draw-box (text "hi"))
+```
++
+which is in turn equivalent to:
++
+```clojure
+(draw-box (text "hi" :plain))
+```
++
+and the predefined attribute keyword `:plain` expands to:
++
+```clojure
+(draw-box
+  (text "hi"
+        {:font-size   18
+         :font-family "Palatino, Georgia, Times New Roman, Serif"}))
+```
++
+This all generates SVG like the following (the coordinates will
+differ depending on which row and column the box occupies in your
+actual diagram, and whether you have changed the settings of the
+margins, `box-width`, or `row-height`):
++
+```xml
+<line x1="40" y1="1" x2="80" y2="1" stroke="#000000" stroke-width="1" />
+<line x1="40" y1="31" x2="80" y2="31" stroke="#000000" stroke-width="1" />
+<line x1="80" y1="1" x2="80" y2="31" stroke="#000000" stroke-width="1" />
+<line x1="40" y1="1" x2="40" y2="31" stroke="#000000" stroke-width="1" />
+<text font-size="18"
+      font-family="Palatino, Georgia, Times New Roman, serif"
+      x="60" y="17" text-anchor="middle"
+      dominant-baseline="middle">hi</text>
+```
 
-Or you can draw arbitrary SVG content in the box by passing a custom
+* Or you can draw arbitrary SVG content in the box by passing a custom
 label function as `label`. Your function will be called with four
 arguments, the left and top coordinates of the box, and its width and
 height. (This is one situation where you might use
 <<append-svg,`append-svg`>>.)
-
++
 This example uses a custom label function to draw two lines in the
 box, from the top left to the bottom right, and the top right to the
 bottom left:
-
++
 [source,clojure]
 (draw-box (fn [left top width height]
             (draw-line left top (+ left width) (+ top height))
             (draw-line left (+ top height) (+ left width) top)))
-
++
 And here’s what it looks like repeated over a four-box row:
-
++
 [bytefield]
 ----
 (def boxes-per-row 4)
@@ -317,9 +368,10 @@ the keywords `:left`, `:right`, `:top`, and `:bottom`, and only the
 borders that you include will be drawn.
 
 If you want even more control, rather than a set you can pass a
-`:map`, whose keys are the keywords identifying the borders that you
-want to draw, and whose values are
-<<attrs.adoc#attribute-expressions,attribute expressions>> containing the
+Clojure https://clojure.org/reference/reader#_maps[map], whose keys
+are the keywords identifying the borders that you want to draw, and
+whose values are <<attrs.adoc#attribute-expressions,attribute
+expressions>> containing the
 https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute[SVG
 attributes] that describe the color and style of line that you want
 that border to be drawn with. There are

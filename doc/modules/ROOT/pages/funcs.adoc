@@ -1063,7 +1063,7 @@ drawn as either `0` or `1` in the hex style.
 [[number-as-bits]]
 == number-as-bits
 
-Takes a a number and transforms it into a sequence of `boolean` bit
+Takes a number and transforms it into a sequence of `boolean` bit
 values of the specified length.
 
 > Thanks to https://github.com/Swiftb0y[Swiftb0y] for this idea, and

@@ -389,6 +389,13 @@
   draw whatever it wants using analemma structures and `append-svg`),
   or `nil`, to have no label at all.
 
+  Text labels (those not drawn by passing a custom function) will
+  normally be centered horizontally in the box, but this can be
+  overridden with the `:text-anchor` attribute (passed to `draw-box`
+  itself, not during construction of the label): a value of `\"start\"`
+  will left-align the text within the box, and a value of `\"end\"` will
+  right-align it.
+
   The default size box is that of a single byte but this can be
   overridden with the `:span` attribute. Normally draws all borders,
   but you can supply the set you want drawn in `:borders`. The
@@ -402,10 +409,11 @@
   ([label attr-spec]
    (let [attrs (eval-attribute-spec attr-spec)]
      (auto-advance-row (:next-row-height attrs))
-     (let [{:keys [span borders fill height]
+     (let [{:keys [span borders fill height text-anchor margin]
             :or   {span    1
                    borders #{:left :right :top :bottom}
-                   height  @('row-height @*globals*)}} attrs
+                   height  @('row-height @*globals*)
+                   margin  4}} attrs
 
            column (:column @@('diagram-state @*globals*))
            left   (+ @('left-margin @*globals*) (* column @('box-width @*globals*)))
@@ -427,10 +435,13 @@
        (when (some? label)
          (if (fn? label)
            (label left top width height)  ; Box being drawn by custom function.
-           (let [label (xml/merge-attrs (format-box-label label span)  ; Normal label.
-                                        {:x           (/ (+ left right) 2.0)
-                                         :y           (+ top 1 (/ height 2.0))
-                                         :text-anchor "middle"})]
+           (let [[x anchor] (cond (= text-anchor "start") [(+ left margin) text-anchor]
+                                  (= text-anchor "end")   [(- right margin) text-anchor]
+                                  :else                   [(/ (+ left right) 2.0) "middle"])
+                 label      (xml/merge-attrs (format-box-label label span)  ; Normal label.
+                                             {:x           x
+                                              :y           (+ top 1 (/ height 2.0))
+                                              :text-anchor anchor})]
              (append-svg (center-baseline label)))))
        (swap! @('diagram-state @*globals*) update :column + span)))))
 

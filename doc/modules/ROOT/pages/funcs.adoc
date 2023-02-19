@@ -311,6 +311,11 @@ attributes:
  height of the box. Normally it is controlled by the
  <<values.adoc#,predefined value>> `row-height`.
 
+|:margin |4 |If you supply a value of `"start"` or `"end"` for the
+ `:text-anchor` attribute, then `:margin` will control the number of
+ pixels of margin that separate the text of your label from the
+ corresponding edge of the box.
+
 |:next-row-height |_n/a_ |If you pass a value here and this box is the
  first box to be drawn on a new row, it will set `row-height` to the
  specified value after finishing off the old row and before starting
@@ -322,6 +327,15 @@ attributes:
  supply a `:span` value ranging from 1 to the remaining columns in
  the row. If you try to go beyond the end of the row, an exception
  will be thrown.
+
+|:text-anchor |"middle" |Controls the horizontal alignment of a text
+ label within the box. By default they are centered horizontally. A
+ value of `"start"` will cause it to be left-aligned, and `"end"` will
+ right-align it. The text will start or end 4 pixels from the
+ corresponding edge of the box unless you specify a different value
+ for the `:margin` attibute. `:text-anchor` has no effect if you
+ supply a custom function to render your label.
+
 |===
 
 Here are some sample boxes:
@@ -329,6 +343,7 @@ Here are some sample boxes:
 [source,clojure]
 (draw-box 1)
 (draw-box "two" {:span 2})
+(draw-box "left" {:span 2 :text-anchor "start"})
 (draw-box nil {:fill "#a0ffa0"})
 (draw-box false)
 
@@ -336,6 +351,7 @@ Here are some sample boxes:
 ----
 (draw-box 1)
 (draw-box "two" {:span 2})
+(draw-box "left" {:span 2 :text-anchor "start"})
 (draw-box nil {:fill "#a0ffa0"})
 (draw-box false)
 ----

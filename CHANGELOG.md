@@ -8,6 +8,14 @@ This change log follows the conventions of
 
 Nothing so far.
 
+## [1.8.0] - 2023-02-19
+
+### Added
+
+- It is now possible to change the horizontal alignment of text labels
+  within `draw-box` using two new box attributes, `:text-anchor` and
+  `:margin`.
+
 ## [1.7.0] - 2022-11-15
 
 ### Added
@@ -157,7 +165,8 @@ This was the first release that actually worked when installed via
 
 Intial early release.
 
-[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.7.0...HEAD
+[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.5.0...v1.6.0

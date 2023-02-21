@@ -38,7 +38,7 @@ yourself, such as when you want to tell `draw-box` to consume the
 space normally taken by two boxes:
 
 [source,clojure]
-(draw-box 42 {:span 2}}
+(draw-box 42 {:span 2})
 
 The second argument to `draw-box` is an attribute expression. In this
 case we have told it that the `:span` attribute should have the value
@@ -93,7 +93,7 @@ diagram has called `defattrs` to set up the `:bg-purple` style), that
 takes up the space of four normal boxes:
 
 [source,clojure]
-(draw-box "Unknown" [:box-related :bg-purple {:span 4}]))
+(draw-box "Unknown" [:box-related :bg-purple {:span 4}])
 
 === No Attributes
 

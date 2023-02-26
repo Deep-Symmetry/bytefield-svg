@@ -1,0 +1,50 @@
+name: Build and publish the user guide
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_guide:
+    name: Build user guide
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.GUIDE_SSH_KEY }}
+        known_hosts: 'deepsymmetry.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMKq8T1IXQHNYLgO715YbxTXoVxEsJcha9h1lxyOXpa'
+
+    - name: Prepare Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'corretto'
+
+    - name: Install clojure tools
+      uses: DeLaGuardo/setup-clojure@10.2
+      with:
+        # The value must indicate a particular version of the tool, or use 'latest'
+        # to always provision the latest version
+        cli: 1.11.1.1224              # Clojure CLI based on tools.deps
+
+    - name: Cache clojure dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.m2/repository
+          ~/.gitlibs
+          ~/.deps.clj
+        # List all files containing dependencies:
+        key: cljdeps-${{ hashFiles('deps.edn') }}
+        restore-keys: cljdeps-
+
+    - name: Build and publish user guide
+      env:
+        GUIDE_SSH_KEY: ${{ secrets.GUIDE_SSH_KEY }}
+      run: bash .github/scripts/build_guide.sh

@@ -1,0 +1,21 @@
+site:
+  title: bytefield-svg
+  url: https://bytefield-svg.deepsymmetry.org
+  start_page: bytefield-svg::intro.adoc
+content:
+  sources:
+  - url: https://github.com/Deep-Symmetry/bytefield-svg.git
+    branches: [main, guide-*]
+    start_path: doc
+antora:
+  extensions:
+  - require: '@antora/lunr-extension'
+    index_latest_only: true
+asciidoc:
+  extensions:
+  - "@djencks/asciidoctor-mathjax"
+  - ./../extension.js
+ui:
+  bundle:
+    url: https://deepsymmetry.org/media/antora/ui-bundle-3.zip
+    snapshot: true

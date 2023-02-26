@@ -3,6 +3,9 @@
 # There is no point in doing this if we lack the SSH key to publish the guide.
 if [ "$GUIDE_SSH_KEY" != "" ]; then
 
+    # Set up node dependencies
+    npm install
+
     # If we haven't already, build bytefield-svg so we can create the
     # example diagrams.
     if [ ! -f "lib.js" ]

@@ -4,9 +4,9 @@ This holds the source for the [user
 guide](https://bytefield-svg.deepsymmetry.org/) that explains how to
 use `bytefield-svg`.
 
-It is built by [Antora](https://antora.org) using a [build
-script](build.sh) on [Netlify](https://netlify.com), which runs the
-appropriate [playbook](netlify.yml) on the [component
+It is built by [Antora](https://antora.org) by Github Actions after
+commits to the `main` branch, which runs the appropriate
+[playbook](github-actions.yml) on the [component
 descriptor](antora.yml) and [source](modules/ROOT).
 
 ## Building Locally

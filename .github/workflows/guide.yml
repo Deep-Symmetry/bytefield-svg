@@ -44,6 +44,12 @@ jobs:
         key: cljdeps-${{ hashFiles('deps.edn') }}
         restore-keys: cljdeps-
 
+    - name: Cache htmltest results
+      uses: actions/cache@v3
+      with:
+        path: tmp/.htmltest
+        key: ${{ runner.os }}-htmltest
+
     - name: Build and publish user guide
       env:
         GUIDE_SSH_KEY: ${{ secrets.GUIDE_SSH_KEY }}

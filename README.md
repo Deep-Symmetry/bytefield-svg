@@ -10,6 +10,8 @@ Small Clojure Interpreter).
 
 [![License](https://img.shields.io/badge/License-Eclipse%20Public%20License%202.0-blue.svg)](#license)
 
+![Sample Byte field image]https://deepsymmetry.org/images/test.svg
+
 ## Usage
 
 This is published to npm, so you can install it for use in a Javascript

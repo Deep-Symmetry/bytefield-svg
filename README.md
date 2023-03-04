@@ -130,10 +130,10 @@ more attractive version of the diagram shrinks to
 [this](https://github.com/Deep-Symmetry/dysentery/blob/379555f21244354c4dc0c9711c8cb3a3552bc64b/doc/modules/ROOT/examples/dbserver_shared.edn)).
 
 The [DSL documentation](https://bytefield-svg.deepsymmetry.org/) is
-hosted on netlify, and built out of the [doc](doc) folder, which
-includes build instructions. (They are slightly more complex than if
-you were using `asciidoctor-bytefield`, because they want ot build
-against the latest version of `bytefield-svg` in case they are
+hosted on deepsymmetry.org, and built out of the [doc](doc) folder,
+which includes build instructions. (They are slightly more complex
+than if you were using `asciidoctor-bytefield`, because they want to
+build against the latest version of `bytefield-svg` in case they are
 demonstrating unreleased features that haven't yet made it to the that
 extension.)
 

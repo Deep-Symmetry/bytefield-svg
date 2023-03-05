@@ -2,6 +2,9 @@ site:
   title: bytefield-svg
   url: https://bytefield-svg.deepsymmetry.org
   start_page: bytefield-svg::intro.adoc
+  robots: allow
+  keys:
+    google_analytics: G-GH4TG5EH2Q
 urls:
   redirect_facility: httpd
 content:

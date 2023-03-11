@@ -100,7 +100,7 @@ Invoking it with `-h` or `--help` displays this usage information.
 ## Getting Help
 
 <a href="http://zulip.com"><img align="right" alt="Zulip logo"
- src="doc/assets/zulip-icon-circle.svg" width="512" height="512"></a>
+ src="doc/assets/zulip-icon-circle.svg" width="200" height="200"></a>
 
 Deep Symmetry's projects are generously sponsored with hosting by <a
 href="https://zulip.com">Zulip</a>, an open-source modern team chat

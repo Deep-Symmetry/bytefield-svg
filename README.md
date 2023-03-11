@@ -10,8 +10,8 @@ Small Clojure Interpreter).
 
 [![License](https://img.shields.io/badge/License-Eclipse%20Public%20License%202.0-blue.svg)](#license)
 
-[![Sample Byte field
-image](https://deepsymmetry.org/images/SampleByteField.png)](https://deepsymmetry.org/images/test.svg)
+<a href="https://deepsymmetry.org/images/test.svg"><img alt="Sample byte field diagram"
+     src="doc/assets/sample-byte-field.png" width="698" height="375"></a>
 
 ## Usage
 
@@ -96,6 +96,19 @@ Invoking it with `-h` or `--help` displays this usage information.
     -e, --embedded        Emit a simple <svg> tag suitable for embedding in an
                           HTML document. (The default is to emit a full SVG file
                           with XML version and namespaces.)
+
+## Getting Help
+
+<a href="http://zulip.com"><img align="right" alt="Zulip logo"
+ src="doc/assets/zulip-icon-circle.svg"></a>
+
+Deep Symmetry's projects are generously sponsored with hosting by <a
+href="https://zulip.com>Zulip</a>, an open-source modern team chat app
+designed to keep both live and asynchronous conversations organized.
+Thanks to them, you can <a
+href="https://deep-symmetry.zulipchat.com/#narrow/stream/354684-other-projects">chat
+with our community</a>, ask questions, get inspiration, and share your
+own ideas.
 
 ## Background
 

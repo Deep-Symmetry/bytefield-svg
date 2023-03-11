@@ -100,12 +100,12 @@ Invoking it with `-h` or `--help` displays this usage information.
 ## Getting Help
 
 <a href="http://zulip.com"><img align="right" alt="Zulip logo"
- src="doc/assets/zulip-icon-circle.svg"></a>
+ src="doc/assets/zulip-icon-circle.svg" width="512" height="512"></a>
 
 Deep Symmetry's projects are generously sponsored with hosting by <a
-href="https://zulip.com>Zulip</a>, an open-source modern team chat app
-designed to keep both live and asynchronous conversations organized.
-Thanks to them, you can <a
+href="https://zulip.com">Zulip</a>, an open-source modern team chat
+app designed to keep both live and asynchronous conversations
+organized. Thanks to them, you can <a
 href="https://deep-symmetry.zulipchat.com/#narrow/stream/354684-other-projects">chat
 with our community</a>, ask questions, get inspiration, and share your
 own ideas.

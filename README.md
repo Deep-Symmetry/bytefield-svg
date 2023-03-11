@@ -97,10 +97,10 @@ Invoking it with `-h` or `--help` displays this usage information.
                           HTML document. (The default is to emit a full SVG file
                           with XML version and namespaces.)
 
-<a href="http://zulip.com"><img align="right" alt="Zulip logo"
- src="doc/assets/zulip-icon-circle.svg" width="200" height="200"></a>
-
 ## Getting Help
+
+<a href="http://zulip.com"><img align="right" alt="Zulip logo"
+ src="doc/assets/zulip-icon-circle.svg" width="128" height="128"></a>
 
 Deep Symmetry's projects are generously sponsored with hosting by <a
 href="https://zulip.com">Zulip</a>, an open-source modern team chat

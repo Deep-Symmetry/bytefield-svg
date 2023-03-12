@@ -116,8 +116,8 @@ The DSL has been nicely validated by porting all of the LaTeX
 documents I needed it for to an [Antora documentation
 site](https://djl-analysis.deepsymmetry.org/djl-analysis/track_metadata.html).
 
-As that site suggests, this package's main purpose is to act as an
-[Asciidoctor](https://asciidoctor.org) extension, and in fact
+As that site suggests, this package&rsquo;s main purpose is to act as
+an [Asciidoctor](https://asciidoctor.org) extension, and in fact
 [asciidoctor-bytefield](https://github.com/Deep-Symmetry/asciidoctor-bytefield)
 has now been published to enable that.
 
@@ -140,9 +140,9 @@ This will create the file `lib.js`. At that point, you can generate
 (The [`test.edn`
 file](https://github.com/Deep-Symmetry/bytefield-svg/blob/master/test.edn)
 is present in this project. It renders a diagram from the above-linked
-documentation site. With some well-designed helper
-functions in site's own include file, the source for an even
-more attractive version of the diagram shrinks to
+documentation site. With some well-designed helper functions in
+site&rsquo;s own include file, the source for an even more attractive
+version of the diagram shrinks to
 [this](https://github.com/Deep-Symmetry/dysentery/blob/379555f21244354c4dc0c9711c8cb3a3552bc64b/doc/modules/ROOT/examples/dbserver_shared.edn)).
 
 The [DSL documentation](https://bytefield-svg.deepsymmetry.org/) is
@@ -150,8 +150,8 @@ hosted on deepsymmetry.org, and built out of the [doc](doc) folder,
 which includes build instructions. (They are slightly more complex
 than if you were using `asciidoctor-bytefield`, because they want to
 build against the latest version of `bytefield-svg` in case they are
-demonstrating unreleased features that haven't yet made it to the that
-extension.)
+demonstrating unreleased features that haven&rsquo;t yet made it to
+the that extension.)
 
 To check for outdated dependencies, you can run:
 

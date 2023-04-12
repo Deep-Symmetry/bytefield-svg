@@ -10,7 +10,7 @@
 (defn draw-group-label-header
   "Creates a small borderless box used to draw the textual label headers
   used below the byte labels for remotedb message diagrams.
-  Arguments are the number of colums to span and the text of the
+  Arguments are the number of columns to span and the text of the
   label."
   [span label]
   (draw-box (text label [:math {:font-size 12}]) {:span    span

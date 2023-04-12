@@ -593,7 +593,7 @@
   The default `:gap` distance (between the slanted edges of the
   discontinuity) is 5. The default `:gap-style` used to draw these gap
   edges is `:border-related`, and `:width` over which that gap is
-  slanted defaults to 20. All these can be overriden through the
+  slanted defaults to 20. All these can be overridden through the
   optional attribute spec.
 
   The width of the edge drawn before and after the gap is calculated
@@ -770,7 +770,7 @@
                                  :top    :border-unrelated
                                  :bottom :border-unrelated}}
    :box-above         {:borders #{:left :right :top}} ; Style for box open to row below.
-   :box-above-related {:borders {:left  :border-related ; Stle for box open to row below, related to previous box.
+   :box-above-related {:borders {:left  :border-related ; Style for box open to row below, related to previous box.
                                  :right :border-unrelated
                                  :top   :border-unrelated}}
    :box-below         {:borders #{:left :right :bottom}}}) ; Style for box open to row above.

@@ -43,7 +43,7 @@ if (options.help) {
   const usage = commandLineUsage([{
       header: 'bytefield-svg',
       content: `Generate byte field diagrams in SVG format from a Clojure-based
-      domain-specific language. See the project home for the lanugage
+      domain-specific language. See the project home for the language
       definition and examples.`
     },
     {

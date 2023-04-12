@@ -99,7 +99,7 @@ Invoking it with `-h` or `--help` displays this usage information.
 
 ## Getting Help
 
-<a href="http://zulip.com"><img align="right" alt="Zulip logo"
+<a href="https://zulip.com"><img align="right" alt="Zulip logo"
  src="doc/assets/zulip-icon-circle.svg" width="128" height="128"></a>
 
 Deep Symmetry&rsquo;s projects are generously sponsored with hosting
@@ -168,10 +168,10 @@ version in `package.json`, tag and push to GitHub, then run:
 
 ## License
 
-<a href="http://deepsymmetry.org"><img align="right" alt="Deep Symmetry"
+<a href="https://deepsymmetry.org"><img align="right" alt="Deep Symmetry"
  src="doc/assets/DS-logo-github.png" width="250" height="150"></a>
 
-Copyright © 2020–2023 [Deep Symmetry, LLC](http://deepsymmetry.org)
+Copyright © 2020–2023 [Deep Symmetry, LLC](https://deepsymmetry.org)
 
 Distributed under the [Eclipse Public License
 2.0](https://opensource.org/licenses/EPL-2.0). By using this software

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 This change log follows the conventions of
-[keepachangelog.com](http://keepachangelog.com/).
+[keepachangelog.com](https://keepachangelog.com/).
 
 ## [Unreleased][unreleased]
 
@@ -163,7 +163,7 @@ This was the first release that actually worked when installed via
 
 ## 1.0.0 - 2016-03-22
 
-Intial early release.
+Initial early release.
 
 [unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.8.0...HEAD
 [1.8.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.7.0...v1.8.0

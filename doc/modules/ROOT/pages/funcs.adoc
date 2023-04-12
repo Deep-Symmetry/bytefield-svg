@@ -6,7 +6,7 @@ This section describes the drawing functions that are the main purpose
 of `bytefield-svg`. They are designed to flexibly draw the elements
 you might need in a byte field diagram. But they are also intended to
 be combined with the functions in the ClojureScript
-http://cljs.github.io/api/cljs.core/[core library], and you can dive
+https://cljs.github.io/api/cljs.core/[core library], and you can dive
 down to the https://github.com/liebke/analemma[Analemma SVG building
 functions] used by many of the functions below if you need to draw
 something unique.
@@ -14,7 +14,7 @@ something unique.
 For your coding convenience, the ClojureScript standard library
 namespaces
 https://clojure.github.io/clojure/clojure.set-api.html[`clojure.set`]
-and http://cljs.github.io/api/clojure.string[`clojure.string`] are
+and https://cljs.github.io/api/clojure.string[`clojure.string`] are
 also made available, so you can call functions from them if needed.
 
 The JavaScript
@@ -333,7 +333,7 @@ attributes:
  value of `"start"` will cause it to be left-aligned, and `"end"` will
  right-align it. The text will start or end 4 pixels from the
  corresponding edge of the box unless you specify a different value
- for the `:margin` attibute. `:text-anchor` has no effect if you
+ for the `:margin` attribute. `:text-anchor` has no effect if you
  supply a custom function to render your label.
 
 |===

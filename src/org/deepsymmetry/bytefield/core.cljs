@@ -603,7 +603,8 @@
   box width.
 
   As with `draw-box`, the row height defaults to the predefined value
-  `row-height` but can be overridden through `:height`.
+  `row-height` but can be overridden through `:height`. The background
+  can be filled with a color passed with `:fill`.
 
   Since there are no clearly defined use cases that identify where and
   how to position any label, it is the responsibility of the

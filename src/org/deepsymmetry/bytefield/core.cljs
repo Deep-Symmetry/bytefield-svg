@@ -531,33 +531,36 @@
   the standard `:box-above` style. You can change that by passing
   different attributes under the `:box-above-style` key (for example,
   use `{:box-above-style :box-above-related}` if the gap relates to
-  the preceding box)."
+  the preceding box).
+  
+  The background can be filled with a color passed with `:fill`."
   ([]
    (draw-gap nil nil))
   ([label]
    (draw-gap label nil))
   ([label attr-spec]
-   (let [{:keys [height gap edge gap-style box-above-style min-label-columns]
+   (let [attrs (eval-attribute-spec attr-spec)]
+   (let [{:keys [height gap edge gap-style box-above-style min-label-columns fill]
           :or   {height            70
                  gap               10
                  edge              15
                  gap-style         (eval-attribute-spec :dotted)
                  box-above-style   (eval-attribute-spec :box-above)
-                 min-label-columns 8}} (eval-attribute-spec attr-spec)
+                 min-label-columns 8}} attrs
 
          column (:column @@('diagram-state @*globals*))
          boxes  @('boxes-per-row @*globals*)]
      (if label
        ;; We are supposed to draw a label.
        (if (<= min-label-columns (- boxes column))
-         (draw-box label [{:span (- boxes column)} box-above-style]) ; And there is room for it on the current line.
+         (draw-box label [{:span (- boxes column)} box-above-style (if (nil? fill) {} {:fill fill})]) ; And there is room for it on the current line.
          (do ; The label doesn't fit on the current line.
-           (draw-box nil [{:span (- boxes column)} box-above-style]) ; Finish off current line with emptiness.
+           (draw-box nil [{:span (- boxes column)} box-above-style (if (nil? fill) {} {:fill fill})]) ; Finish off current line with emptiness.
            (auto-advance-row nil)
-           (draw-box label [{:span boxes :borders #{:left :right}}]))) ; Put the label on its own line.
+           (draw-box label [{:span boxes :borders #{:left :right}} (if (nil? fill) {} {:fill fill})]))) ; Put the label on its own line.
        ;; We are not supposed to draw a label, so just finish the current line if needed.
        (when (not= column boxes)
-         (draw-box nil [{:span (- boxes column)} :box-above]))) ; Finish off current line with emptiness.
+         (draw-box nil [{:span (- boxes column)} :box-above (if (nil? fill) {} {:fill fill})]))) ; Finish off current line with emptiness.
 
      ;; Move on to a new row to draw the gap.
      (auto-advance-row nil)
@@ -565,15 +568,40 @@
            top    (+ y edge)
            left   @('left-margin @*globals*)
            right  (+ left (diagram-width))
-           bottom (+ y (- height edge))]
-       (draw-line left y left top)
-       (draw-line right y right top)
-       (draw-line left top right (- bottom gap) gap-style)
-       (draw-line right y right (- bottom gap))
-       (draw-line left (+ top gap) right bottom gap-style)
-       (draw-line left (+ top gap) left bottom)
-       (draw-line left bottom left (+ y height))
-       (draw-line right bottom right (+ y height)))
+           bottom (+ y (- height edge))
+           upper-trapezoid { 
+            :top-left [left y],
+            :top-right [right y],
+            :bottom-left [left top],
+            :bottom-right [right (- bottom gap)]
+           }
+           lower-trapezoid { 
+            :top-left [left (+ top gap)], 
+            :top-right [right bottom],
+            :bottom-left [left (+ y height)],
+            :bottom-right [right (+ y height)]
+           }]
+       (when fill [
+          (append-svg (svg/polygon (concat
+            (upper-trapezoid :top-left)
+            (upper-trapezoid :top-right)
+            (upper-trapezoid :bottom-right)
+            (upper-trapezoid :bottom-left)
+            ) :fill fill
+          ))
+          (append-svg (svg/polygon (concat
+            (lower-trapezoid :top-left)
+            (lower-trapezoid :top-right)
+            (lower-trapezoid :bottom-right)
+            (lower-trapezoid :bottom-left)
+            ) :fill fill
+          ))])
+       (apply draw-line (concat (upper-trapezoid :top-left)  (upper-trapezoid :bottom-left)))
+       (apply draw-line (concat (upper-trapezoid :top-right)  (upper-trapezoid :bottom-right)))
+       (apply draw-line (concat (upper-trapezoid :bottom-left)  (upper-trapezoid :bottom-right) [gap-style]))
+       (apply draw-line (concat (lower-trapezoid :top-left)  (lower-trapezoid :top-right) [gap-style]))
+       (apply draw-line (concat (lower-trapezoid :top-left)  (lower-trapezoid :bottom-left)))
+       (apply draw-line (concat (lower-trapezoid :top-right)  (lower-trapezoid :bottom-right))))
      (let [state     (swap! @('diagram-state @*globals*)
                             (fn [current]
                               (-> current
@@ -581,7 +609,7 @@
                                   (assoc :address 0)
                                   (assoc :gap? true))))
            header-fn @('row-header-fn @*globals*)]
-       (when header-fn (draw-row-header (header-fn state)))))))
+       (when header-fn (draw-row-header (header-fn state))))))))
 
 (defn draw-gap-inline
   "Draws an indication of discontinuity for a single-row diagram. Takes

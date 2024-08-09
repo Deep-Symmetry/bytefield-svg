@@ -754,6 +754,8 @@ second argument). For example, use `{:box-above-style
  must be available in the current row if the label is to be drawn
  in it.
 
+|:fill |N/A |The fill color to use as the box background. 
+
 |===
 
 NOTE: In order to allow you to draw boxes that connect to the bottom
@@ -765,14 +767,14 @@ the gap.
 
 [source,clojure]
 (draw-box "Stuff" {:span 4})
-(draw-gap "A gap")
+(draw-gap "A gap" {:fill "#ffffa0"})
 (draw-box "More stuff")
 (draw-bottom)
 
 [bytefield]
 ----
 (draw-box "Stuff" {:span 2})
-(draw-gap "A gap")
+(draw-gap "A gap" {:fill "#ffffa0"})
 (draw-box "More stuff" {:span 4})
 (draw-bottom)
 ----
@@ -820,21 +822,24 @@ row or column headers because they will be incorrect.
 |:width |15 |The width of the gap context, which is sandwiched between
  the edges and affects the slope of the gap within it, drawn from the
  top right of this section to the bottom left.
+
+|:fill |N/A |The fill color to use as the box background.
+
 |===
 
 If you want to label the inline gap, draw an open-ended box on either
 side of it and label that:
 
 [source,clojure]
-(draw-box "name" {:span 2 :borders #{:left :top :bottom}})
-(draw-gap-inline)
+(draw-box "name" {:span 2 :borders #{:left :top :bottom :fill "#ffffa0"}})
+(draw-gap-inline {:fill "#ffffa0"})
 (draw-box "port" {:span 2})
 
 
 [bytefield]
 ----
-(draw-box "name" {:span 2 :borders #{:left :top :bottom}})
-(draw-gap-inline)
+(draw-box "name" {:span 2 :borders #{:left :top :bottom} :fill "#ffffa0"})
+(draw-gap-inline {:fill "#ffffa0"})
 (draw-box "port" {:span 2})
 ----
 

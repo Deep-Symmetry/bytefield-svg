@@ -612,7 +612,7 @@
   ([]
    (draw-gap-inline nil))
   ([attr-spec]
-   (let [{:keys [width height gap gap-style]
+   (let [{:keys [width height gap gap-style fill]
           :or   {width     15
                  height    @('row-height @*globals*)
                  gap       5
@@ -625,6 +625,10 @@
          left      (+ @('left-margin @*globals*) (* column box-width))
          bottom    (+ top height)
          right     (+ left box-width)]
+     (when fill [
+      (append-svg (svg/polygon [left top (+ left edge (- width gap)) top (+ left edge) bottom left bottom] :fill fill))
+      (append-svg (svg/polygon [right top (- right edge) top (- right edge (- width gap)) bottom right bottom] :fill fill))
+     ])
      (draw-line left top (+ left edge (- width gap)) top)
      (draw-line (+ left edge (- width gap)) top (+ left edge) bottom gap-style)
      (draw-line (+ left edge) bottom left bottom)

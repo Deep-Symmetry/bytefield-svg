@@ -8,6 +8,12 @@ This change log follows the conventions of
 
 Nothing so far.
 
+## [1.10.0] - 2024-08-11
+
+### Fixed
+
+- Compiled for release before publishing to npm.
+
 ## [1.9.0] - 2024-08-11
 
 ### Added
@@ -15,6 +21,9 @@ Nothing so far.
 - Gaps (both vertical and inline) can now be filled with a color so
   they properly attach to colored boxes, thanks to a contribution from
   [@simonarnell](https://github.com/simonarnell).
+
+> This was accidentally published as a non-release build, please use
+> 1.10 instead!
 
 ## [1.8.0] - 2023-02-19
 
@@ -173,7 +182,9 @@ This was the first release that actually worked when installed via
 
 Initial early release.
 
-[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.8.0...HEAD
+[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.9.0...v1.10.0
+[1.9.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.6.0...v1.6.1

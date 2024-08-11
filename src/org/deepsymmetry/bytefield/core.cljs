@@ -529,25 +529,25 @@
        bottom-left
        ) :fill fill))
     )
-  (if (or (= trapezoid-type "upper") (= trapezoid-type "lower"))
+  (if (or (= trapezoid-type :trapezoid-type/upper) (= trapezoid-type :trapezoid-type/lower))
     [
       (apply draw-line (concat top-left bottom-left))
       (apply draw-line (concat top-right bottom-right))
-      (if(= trapezoid-type "upper")
+      (if(= trapezoid-type :trapezoid-type/upper)
         (apply draw-line (concat bottom-left bottom-right [gap-style]))
-        (if(= trapezoid-type "lower")
+        (if(= trapezoid-type :trapezoid-type/lower)
           (apply draw-line (concat top-left top-right [gap-style]))
           ()
         )
       )
     ]
-    (if (or (= trapezoid-type "left") (= trapezoid-type "right"))
+    (if (or (= trapezoid-type :trapezoid-type/left) (= trapezoid-type :trapezoid-type/right))
       [
         (apply draw-line (concat top-left top-right))
         (apply draw-line (concat bottom-left bottom-right))
-        (if(= trapezoid-type "left")
+        (if(= trapezoid-type :trapezoid-type/left)
         (apply draw-line (concat top-right bottom-right [gap-style]))
-        (if(= trapezoid-type "right")
+        (if(= trapezoid-type :trapezoid-type/right)
           (apply draw-line (concat top-left bottom-left [gap-style]))
           ()
         )
@@ -629,7 +629,7 @@
             (upper-trapezoid :top-right)
             (upper-trapezoid :bottom-right)
             (upper-trapezoid :bottom-left)
-            "upper"
+            :trapezoid-type/upper
             fill
             gap-style)
       (draw-gap-trapezoid 
@@ -637,7 +637,7 @@
             (lower-trapezoid :top-right)
             (lower-trapezoid :bottom-right)
             (lower-trapezoid :bottom-left)
-            "lower"
+            :trapezoid-type/lower
             fill
             gap-style))
      (let [state     (swap! @('diagram-state @*globals*)
@@ -705,7 +705,7 @@
       (left-trapezoid :top-right)
       (left-trapezoid :bottom-right)
       (left-trapezoid :bottom-left)
-      "left"
+      :trapezoid-type/left
       fill
       gap-style
      )
@@ -714,7 +714,7 @@
       (right-trapezoid :top-right)
       (right-trapezoid :bottom-right)
       (right-trapezoid :bottom-left)
-      "right"
+      :trapezoid-type/right
       fill
       gap-style
      ))

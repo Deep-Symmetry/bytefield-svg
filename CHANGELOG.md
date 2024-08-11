@@ -8,6 +8,14 @@ This change log follows the conventions of
 
 Nothing so far.
 
+## [1.9.0] - 2024-08-11
+
+### Added
+
+- Gaps (both vertical and inline) can now be filled with a color so
+  they properly attach to colored boxes, thanks to a contribution from
+  [@simonarnell](https://github.com/simonarnell).
+
 ## [1.8.0] - 2023-02-19
 
 ### Added

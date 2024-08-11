@@ -585,18 +585,19 @@
                  min-label-columns 8}} attrs
 
          column (:column @@('diagram-state @*globals*))
-         boxes  @('boxes-per-row @*globals*)]
+         boxes  @('boxes-per-row @*globals*)
+         fill-style (when fill {:fill fill})]
      (if label
        ;; We are supposed to draw a label.
        (if (<= min-label-columns (- boxes column))
-         (draw-box label [{:span (- boxes column)} box-above-style (if (nil? fill) {} {:fill fill})]) ; And there is room for it on the current line.
+         (draw-box label [{:span (- boxes column)} box-above-style fill-style]) ; And there is room for it on the current line.
          (do ; The label doesn't fit on the current line.
-           (draw-box nil [{:span (- boxes column)} box-above-style (if (nil? fill) {} {:fill fill})]) ; Finish off current line with emptiness.
+           (draw-box nil [{:span (- boxes column)} box-above-style fill-style]) ; Finish off current line with emptiness.
            (auto-advance-row nil)
-           (draw-box label [{:span boxes :borders #{:left :right}} (if (nil? fill) {} {:fill fill})]))) ; Put the label on its own line.
+           (draw-box label [{:span boxes :borders #{:left :right}} fill-style]))) ; Put the label on its own line.
        ;; We are not supposed to draw a label, so just finish the current line if needed.
        (when (not= column boxes)
-         (draw-box nil [{:span (- boxes column)} :box-above (if (nil? fill) {} {:fill fill})]))) ; Finish off current line with emptiness.
+         (draw-box nil [{:span (- boxes column)} :box-above fill-style]))) ; Finish off current line with emptiness.
 
      ;; Move on to a new row to draw the gap.
      (auto-advance-row nil)

@@ -513,6 +513,13 @@
    (draw-related-boxes (repeat (- address (next-address)) label) attr-spec)))
 
 (defn- draw-gap-trapezoid
+  "A private function used by draw-gap and draw-inline-gap for drawing
+  trapezoids. The first four arguments specifies the trapezoid's
+  vertices. The fifth argument is the trapezoid's 'type' e.g. upper, 
+  lower, left or right. This type is used to calculate on which edge
+  the 'gap' should appear. The sixth argument is the fill parameter 
+  for the trapezoid. The seventh parameter is the specification for
+  styling the gap."  
   ([top-left top-right bottom-right bottom-left trapezoid-type fill gap-style]
    (when fill 
      (append-svg (svg/polygon (concat
@@ -586,7 +593,7 @@
                  gap-style         (eval-attribute-spec :dotted)
                  box-above-style   (eval-attribute-spec :box-above)
                  min-label-columns 8}} attrs
-                 
+
          column (:column @@('diagram-state @*globals*))
          boxes  @('boxes-per-row @*globals*)
          fill-style (when fill {:fill fill})]

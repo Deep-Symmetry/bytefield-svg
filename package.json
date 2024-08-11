@@ -1,6 +1,6 @@
 {
   "name": "bytefield-svg",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Generate byte field diagrams in SVG format from a Clojure/EDN DSL",
   "main": "lib.js",
   "bin": "cli.js",

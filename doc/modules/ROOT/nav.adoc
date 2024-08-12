@@ -2,3 +2,4 @@
 * xref:values.adoc[Predefined Values]
 * xref:attrs.adoc[Attributes]
 * xref:funcs.adoc[Functions]
+* xref:examples.adoc[Examples]

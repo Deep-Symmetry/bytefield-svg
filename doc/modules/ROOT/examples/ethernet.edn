@@ -1,0 +1,10 @@
+(defattrs :vertical [:plain {:writing-mode "vertical-rl"}])
+(draw-column-headers)
+(draw-box "Destination MAC" {:span 6})
+(draw-box "Source MAC" {:span 6})
+(draw-box "(802.1Q tag)" {:span 4})
+
+(draw-box "Ethertype" {:span 2})
+(draw-gap "Payload")
+(draw-bottom)
+(draw-box "FCS" {:span 4})

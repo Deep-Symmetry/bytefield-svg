@@ -1,0 +1,23 @@
+(defattrs :vertical [:plain {:writing-mode "vertical-rl"}])
+
+(def row-height 60)
+(draw-column-headers)
+(draw-box "version" {:span 3})
+(draw-box (text "type" :vertical) {:span 1})
+(draw-box "dfh" {:span 1})
+(draw-box "apid" {:span 11})
+
+(draw-box "seq. flags" {:span 2 :next-row-height 30})
+(draw-box "sequence count" {:span 14})
+
+(draw-box "packet length" {:span 16})
+
+(draw-box "shf" {:span 1})
+(draw-box "pusvers" {:span 3})
+(draw-box "ack" {:span 4})
+(draw-box "service type" {:span 8})
+(draw-box "service subtype" {:span 8})
+
+(draw-gap)
+
+(draw-box "packet error control" {:span 16})

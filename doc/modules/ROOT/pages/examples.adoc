@@ -1,44 +1,45 @@
 = Examples
-James Elliott <james@deepsymmetry.org>; Simon Arnell <simon.arnell@configuredthings.com>; Mattias Holm
+James Elliott <james@deepsymmetry.org>; Simon Arnell <simon.arnell@configuredthings.com>
 
-The following are some examples of protocol contributed by the community.
 
-## User Datagram protocol
+##  Mattias Holm (https://github.com/lorrden[@lorrden])
+
+### User Datagram Protocol header (https://www.ietf.org/rfc/rfc768.txt[RFC768])
 
 [bytefield]
 ----
 include::example$udp.edn[]
 ----
 
-## Transmission Control Protocol
+### Transmission Control Protocol header (https://www.ietf.org/rfc/rfc793.txt[RFC793])
 
 [bytefield]
 ----
 include::example$tcp.edn[]
 ----
 
-## Internet Protocol Version 4
+### Internet Protocol Version 4 header (https://www.ietf.org/rfc/rfc791.txt[RFC791])
 
 [bytefield]
 ----
 include::example$ipv4.edn[]
 ----
 
-## Internet Protocol Version 6
+### Internet Protocol Version 6 header (https://www.ietf.org/rfc/rfc2460.txt[RFC2460])
 
 [bytefield]
 ----
 include::example$ipv6.edn[]
 ----
 
-## Ethernet
+### Ethernet II frame (DIX v2.0)
 
 [bytefield]
 ----
 include::example$ethernet.edn[]
 ----
 
-## Consultative Committee for Space Data Systems Space Packet Standard - Packet Utilisation Standard A
+### Consultative Committee for Space Data Systems Space Packet Standard - Packet Utilisation Standard A (https://ecss.nl/standard/ecss-e-70-41a-ground-systems-and-operations-telemetry-and-telecommand-packet-utilization/[ECSS-E-70-41A])
 
 [bytefield]
 ----

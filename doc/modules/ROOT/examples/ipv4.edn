@@ -1,4 +1,3 @@
-(defattrs :vertical [:plain {:writing-mode "vertical-rl"}])
 (draw-column-headers)
 (draw-box "Version" {:span 4})
 (draw-box "IHL" {:span 4})

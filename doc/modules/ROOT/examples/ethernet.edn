@@ -1,4 +1,3 @@
-(defattrs :vertical [:plain {:writing-mode "vertical-rl"}])
 (draw-column-headers)
 (draw-box "Destination MAC" {:span 6})
 (draw-box "Source MAC" {:span 6})

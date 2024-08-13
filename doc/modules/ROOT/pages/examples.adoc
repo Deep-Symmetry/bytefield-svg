@@ -1,6 +1,7 @@
 = Examples
 James Elliott <james@deepsymmetry.org>; Simon Arnell <simon.arnell@configuredthings.com>
 
+The following are some examples of protocols contributed by the community.
 
 ##  Mattias Holm (https://github.com/lorrden[@lorrden])
 

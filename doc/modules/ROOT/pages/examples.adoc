@@ -12,9 +12,19 @@ The following are some examples of protocols contributed by the community.
 include::example$udp.edn[]
 ----
 
+[source, clojure]
+----
+include::example$udp.edn[]
+----
+
 ### Transmission Control Protocol header (https://www.ietf.org/rfc/rfc793.txt[RFC793])
 
 [bytefield]
+----
+include::example$tcp.edn[]
+----
+
+[source, clojure]
 ----
 include::example$tcp.edn[]
 ----
@@ -26,9 +36,19 @@ include::example$tcp.edn[]
 include::example$ipv4.edn[]
 ----
 
+[source, clojure]
+----
+include::example$ipv4.edn[]
+----
+
 ### Internet Protocol Version 6 header (https://www.ietf.org/rfc/rfc2460.txt[RFC2460])
 
 [bytefield]
+----
+include::example$ipv6.edn[]
+----
+
+[source, clojure]
 ----
 include::example$ipv6.edn[]
 ----
@@ -40,9 +60,19 @@ include::example$ipv6.edn[]
 include::example$ethernet.edn[]
 ----
 
+[source, clojure]
+----
+include::example$ethernet.edn[]
+----
+
 ### Consultative Committee for Space Data Systems Space Packet Standard - Packet Utilisation Standard A (https://ecss.nl/standard/ecss-e-70-41a-ground-systems-and-operations-telemetry-and-telecommand-packet-utilization/[ECSS-E-70-41A])
 
 [bytefield]
+----
+include::example$ccsds.edn[]
+----
+
+[source, clojure]
 ----
 include::example$ccsds.edn[]
 ----

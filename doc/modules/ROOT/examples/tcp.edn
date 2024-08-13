@@ -1,4 +1,4 @@
-(def column-labels (mapv str (range 32)))
+(def column-labels (mapv #(number-as-hex % 2) (range 32)))
 (def boxes-per-row 32)
 (defattrs :vertical [:plain {:writing-mode "vertical-rl"}])
 (draw-column-headers)

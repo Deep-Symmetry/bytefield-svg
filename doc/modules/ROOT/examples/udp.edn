@@ -1,4 +1,4 @@
-(def column-labels (mapv str (range 32)))   ;; creates column labels 0 .. 31
+(def column-labels (mapv #(number-as-hex % 2) (range 32)))   ;; creates column labels 0 .. 1f
 (def boxes-per-row 32)
 (draw-column-headers)
 (draw-box "Source port" {:span 16})

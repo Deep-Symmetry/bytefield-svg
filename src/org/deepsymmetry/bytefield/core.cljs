@@ -326,6 +326,13 @@
   [number length]
   (map #(normalize-bit (bit-test number %)) (reverse (range length))))
 
+(defn number-as-hex
+  "Takes a number and transforms it into a hexadecimal value of the specified
+  length."
+  [number length]
+  (let [fmt (str "~" length ",'0x")]
+  (pprint/cl-format nil fmt number)))
+
 (defn- center-baseline
   "Recursively ensures that the a tag and any content tags it contains
   have their dominant baseline set to center them vertically, so
@@ -793,6 +800,7 @@
                       next-row
                       normalize-bit
                       number-as-bits
+                      number-as-hex
                       text
                       tspan
                       wrap-link
@@ -885,7 +893,7 @@
     'bottom-margin 1  ; Space at bottom, currently just enough to avoid clipping bottom box edges.
     'box-width     40 ; How much room each byte (or bit) box takes up.
 
-    'column-labels (str/split "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f" #",") ; The default column headers.
+    'column-labels (mapv #(number-as-hex % 1) (range 16)) ; The default column headers.
     'boxes-per-row 16 ; How many individual byte/bit boxes fit on each row.
     'row-height    30 ; The height of a standard row of boxes.
     'svg-attrs     {} ; Allows arbitrary customization of the top-level SVG node attributes.

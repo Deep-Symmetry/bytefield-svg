@@ -264,45 +264,6 @@
                 (update :y + height)
                 (assoc :column 0))))))
 
-(defn hex-text
-  "Formats a number as an SVG text object containing a hexadecimal
-  string with the specified number of digits (defaults to 2 if no
-  length is specified), styled using the `:hex` predefined attributes.
-  This styling can be overridden by passing `attr-spec`."
-  ([n]
-   (hex-text n 2))
-  ([n length]
-   (hex-text n length :hex))
-  ([n length attr-spec]
-   (let [fmt (str "~" length ",'0x")]
-     (text (pprint/cl-format nil fmt n) [:hex attr-spec]))))
-
-(defn format-box-label
-  "Builds an appropriate SVG text object to label a box spanning the
-  specified number of byte cells. If `label` is a number the content
-  will be a hexadecimal string with two digits for each byte cell the
-  box spans styled using the `:hex` predefined attributes. If it is a
-  list or a vector, it is assumed to represent an already-formatted
-  SVG text object, and returned unchanged. If it is a string, it is
-  used as the content of a text object that is styled using the
-  `:plain` predefined attributes."
-  [label span]
-  (cond
-    (number? label) ; A number, format it as hexadecimal.
-    (hex-text label (* span 2))
-
-    (boolean? label) ; A bit, format it as a single hex digit.
-    (hex-text (if label 1 0) 1)
-
-    (sequential? label) ; A list or vector, assume it is pre-rendered.
-    label
-
-    (string? label) ; A string, format it as plain text.
-    (text label)
-
-    :else
-    (throw (js/Error. (str "Don't know how to format box label: " label)))))
-
 (defn char->int
   "Yields the UTF-16 code unit of a character. E.g. `(char->int \\A) ;; => 65`."
   [char]
@@ -331,7 +292,45 @@
   length."
   [number length]
   (let [fmt (str "~" length ",'0x")]
-  (pprint/cl-format nil fmt number)))
+    (pprint/cl-format nil fmt number)))
+
+(defn hex-text
+  "Formats a number as an SVG text object containing a hexadecimal
+  string with the specified number of digits (defaults to 2 if no
+  length is specified), styled using the `:hex` predefined attributes.
+  This styling can be overridden by passing `attr-spec`."
+  ([n]
+   (hex-text n 2))
+  ([n length]
+   (hex-text n length :hex))
+  ([n length attr-spec]
+   (text (number-as-hex n length) [:hex attr-spec])))
+
+(defn format-box-label
+  "Builds an appropriate SVG text object to label a box spanning the
+  specified number of byte cells. If `label` is a number the content
+  will be a hexadecimal string with two digits for each byte cell the
+  box spans styled using the `:hex` predefined attributes. If it is a
+  list or a vector, it is assumed to represent an already-formatted
+  SVG text object, and returned unchanged. If it is a string, it is
+  used as the content of a text object that is styled using the
+  `:plain` predefined attributes."
+  [label span]
+  (cond
+    (number? label) ; A number, format it as hexadecimal.
+    (hex-text label (* span 2))
+
+    (boolean? label) ; A bit, format it as a single hex digit.
+    (hex-text (if label 1 0) 1)
+
+    (sequential? label) ; A list or vector, assume it is pre-rendered.
+    label
+
+    (string? label) ; A string, format it as plain text.
+    (text label)
+
+    :else
+    (throw (js/Error. (str "Don't know how to format box label: " label)))))
 
 (defn- center-baseline
   "Recursively ensures that the a tag and any content tags it contains
@@ -531,20 +530,20 @@
    (when fill
      (append-svg (svg/polygon (concat top-left top-right bottom-right bottom-left)
                               :fill fill)))
-  (if (#{:trapezoid-type/upper :trapezoid-type/lower} trapezoid-type)
-    [(apply draw-line (concat top-left bottom-left))
-     (apply draw-line (concat top-right bottom-right))
-     (if (= trapezoid-type :trapezoid-type/upper)
-       (apply draw-line (concat bottom-left bottom-right [gap-style]))
-       (when (= trapezoid-type :trapezoid-type/lower)
-         (apply draw-line (concat top-left top-right [gap-style]))))]
-    (when (#{:trapezoid-type/left :trapezoid-type/right} trapezoid-type)
-      [(apply draw-line (concat top-left top-right))
-       (apply draw-line (concat bottom-left bottom-right))
-       (if (= trapezoid-type :trapezoid-type/left)
-         (apply draw-line (concat top-right bottom-right [gap-style]))
-         (when (= trapezoid-type :trapezoid-type/right)
-           (apply draw-line (concat top-left bottom-left [gap-style]))))]))))
+   (if (#{:trapezoid-type/upper :trapezoid-type/lower} trapezoid-type)
+     [(apply draw-line (concat top-left bottom-left))
+      (apply draw-line (concat top-right bottom-right))
+      (if (= trapezoid-type :trapezoid-type/upper)
+        (apply draw-line (concat bottom-left bottom-right [gap-style]))
+        (when (= trapezoid-type :trapezoid-type/lower)
+          (apply draw-line (concat top-left top-right [gap-style]))))]
+     (when (#{:trapezoid-type/left :trapezoid-type/right} trapezoid-type)
+       [(apply draw-line (concat top-left top-right))
+        (apply draw-line (concat bottom-left bottom-right))
+        (if (= trapezoid-type :trapezoid-type/left)
+          (apply draw-line (concat top-right bottom-right [gap-style]))
+          (when (= trapezoid-type :trapezoid-type/right)
+            (apply draw-line (concat top-left bottom-left [gap-style]))))]))))
 
 (defn draw-gap
   "Draws an indication of discontinuity. Takes a full row, the default
@@ -612,20 +611,20 @@
                             :top-right    [right bottom]
                             :bottom-left  [left (+ y height)]
                             :bottom-right [right (+ y height)]}]
-      (draw-gap-trapezoid (upper-trapezoid :top-left)
-                          (upper-trapezoid :top-right)
-                          (upper-trapezoid :bottom-right)
-                          (upper-trapezoid :bottom-left)
-                          :trapezoid-type/upper
-                          fill
-                          gap-style)
-      (draw-gap-trapezoid (lower-trapezoid :top-left)
-                          (lower-trapezoid :top-right)
-                          (lower-trapezoid :bottom-right)
-                          (lower-trapezoid :bottom-left)
-                          :trapezoid-type/lower
-                          fill
-                          gap-style))
+       (draw-gap-trapezoid (upper-trapezoid :top-left)
+                           (upper-trapezoid :top-right)
+                           (upper-trapezoid :bottom-right)
+                           (upper-trapezoid :bottom-left)
+                           :trapezoid-type/upper
+                           fill
+                           gap-style)
+       (draw-gap-trapezoid (lower-trapezoid :top-left)
+                           (lower-trapezoid :top-right)
+                           (lower-trapezoid :bottom-right)
+                           (lower-trapezoid :bottom-left)
+                           :trapezoid-type/lower
+                           fill
+                           gap-style))
      (let [state     (swap! @('diagram-state @*globals*)
                             (fn [current]
                               (-> current
@@ -912,8 +911,8 @@
   "Creates the sci vars to populate the symbol table for the
   interpreter."
   []
-  (reduce  (fn [acc [k v]]
-             (assoc acc k (sci/new-var k v)))
+  (reduce (fn [acc [k v]]
+            (assoc acc k (sci/new-var k v)))
           {}
           (build-initial-globals)))
 

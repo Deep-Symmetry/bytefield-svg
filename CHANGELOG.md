@@ -6,7 +6,14 @@ This change log follows the conventions of
 
 ## [Unreleased][unreleased]
 
-Nothing so far.
+### Added
+
+- A nice examples section to the user guide, for showcasing community
+  contributions, was set up by
+  [@simonarnell](https://github.com/simonarnell), starting with
+  content submitted a while ago by
+  [@lorrden](https://github.com/lorrden), which I had never found the
+  time to review and incorporate.
 
 ## [1.10.0] - 2024-08-11
 

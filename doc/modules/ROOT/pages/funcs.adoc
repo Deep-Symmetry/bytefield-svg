@@ -1114,6 +1114,43 @@ by passing the result to <<draw-boxes,`draw-boxes`>> or
 (draw-related-boxes (number-as-bits 0xd3 8))
 ----
 
+[[number-as-hex]]
+== number-as-hex
+
+Takes a number and transforms it into a hexadecimal value of the specified
+length.
+
+.Arguments
+[source,clojure]
+----
+[number length]
+----
+
+This can be used as a helper function for generating hexadecimal column 
+labels by passing the function to `mapv` in order to run the function over
+a list of numbers produced by a call to `range`. The result returned from 
+`mapv` will be a list of hexadecimal numbers encoded as strings.
+
+[TIP]
+====
+As the result of `range` would be passed by `mapv` to `number-as-hex` on
+its right-hand side, one must make the call to `number-as-hex` via an
+anonymous function using the `#()` syntax below. The `%` character is used
+express which argument is used to pass in the list produced by `range`.
+====
+
+[source,clojure]
+(def column-labels (mapv #(number-as-hex % 2) (range 32)))  ; 00..1f
+(def boxes-per-row 32)
+(draw-column-headers)
+
+[bytefield]
+----
+(def column-labels (mapv #(number-as-hex % 2) (range 32)))  ; 00..1f
+(def boxes-per-row 32)
+(draw-column-headers)
+----
+
 [[text]]
 == text
 

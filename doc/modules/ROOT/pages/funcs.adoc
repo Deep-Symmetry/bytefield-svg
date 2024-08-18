@@ -1127,27 +1127,16 @@ length.
 ----
 
 This can be used as a helper function for generating hexadecimal column 
-labels by passing the function to `mapv` in order to run the function over
-a list of numbers produced by a call to `range`. The result returned from 
-`mapv` will be a list of hexadecimal numbers encoded as strings.
-
-[TIP]
-====
-As the result of `range` would be passed by `mapv` to `number-as-hex` on
-its right-hand side, one must make the call to `number-as-hex` via an
-anonymous function using the `#(..)` syntax below. The `%` character is
-used express which argument is used to pass in the list produced by
-`range`.
-====
+labels.
 
 [source,clojure]
-(def column-labels (mapv #(number-as-hex % 2) (range 16)))  ; 00..0f
+(def column-labels (mapv (fn [n] (number-as-hex n 2)) (range 16))) ; 00..0f
 (def boxes-per-row 16)
 (draw-column-headers)
 
 [bytefield]
 ----
-(def column-labels (mapv #(number-as-hex % 2) (range 16)))  ; 00..0f
+(def column-labels (mapv (fn [n] (number-as-hex n 2)) (range 16))) ; 00..0f
 (def boxes-per-row 16)
 (draw-column-headers)
 ----

@@ -831,7 +831,7 @@ If you want to label the inline gap, draw an open-ended box on either
 side of it and label that:
 
 [source,clojure]
-(draw-box "name" {:span 2 :borders #{:left :top :bottom :fill "#ffffa0"}})
+(draw-box "name" {:span 2 :borders #{:left :top :bottom} :fill "#ffffa0"})
 (draw-gap-inline {:fill "#ffffa0"})
 (draw-box "port" {:span 2})
 

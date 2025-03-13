@@ -171,7 +171,7 @@ version in `package.json`, tag and push to GitHub, then run:
 <a href="https://deepsymmetry.org"><img align="right" alt="Deep Symmetry"
  src="doc/assets/DS-logo-github.png" width="250" height="150"></a>
 
-Copyright © 2020–2023 [Deep Symmetry, LLC](https://deepsymmetry.org)
+Copyright © 2020–2025 [Deep Symmetry, LLC](https://deepsymmetry.org)
 
 Distributed under the [Eclipse Public License
 2.0](https://opensource.org/licenses/EPL-2.0). By using this software

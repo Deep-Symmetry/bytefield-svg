@@ -6,6 +6,10 @@ This change log follows the conventions of
 
 ## [Unreleased][unreleased]
 
+Nothing so far.
+
+## [1.11.0] - 2025-03-13
+
 ### Added
 
 - A nice examples section to the user guide, for showcasing community
@@ -189,7 +193,8 @@ This was the first release that actually worked when installed via
 
 Initial early release.
 
-[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.10.0...HEAD
+[unreleased]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/Deep-Symmetry/bytefield-svg/compare/v1.7.0...v1.8.0

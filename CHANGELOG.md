@@ -8,6 +8,16 @@ This change log follows the conventions of
 
 Nothing so far.
 
+
+## [1.12.0] - 2026-11-09
+
+### Changed
+
+- Updated many dependencies, most importantly the SCI interpreter, so
+  that code runs more efficiently, while migrating to a more rigorous
+  mechanism for preventing infinte loops in diagram code.
+
+
 ## [1.11.0] - 2025-03-13
 
 ### Added

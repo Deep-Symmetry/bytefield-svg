@@ -16,6 +16,9 @@ namespaces
 https://clojure.github.io/clojure/clojure.set-api.html[`clojure.set`]
 and https://cljs.github.io/api/clojure.string[`clojure.string`] are
 also made available, so you can call functions from them if needed.
+And, as is a common practice, the `clojure.string` namespace is
+aliased to `str`, so you can call the `split` function as simply
+`(str/split …)`.
 
 The JavaScript
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String[`String`]
@@ -754,7 +757,7 @@ second argument). For example, use `{:box-above-style
  must be available in the current row if the label is to be drawn
  in it.
 
-|:fill |N/A |The fill color to use as the box background. 
+|:fill |N/A |The fill color to use as the box background.
 
 |===
 
@@ -1126,7 +1129,7 @@ length.
 [number length]
 ----
 
-This can be used as a helper function for generating hexadecimal column 
+This can be used as a helper function for generating hexadecimal column
 labels.
 
 [source,clojure]
